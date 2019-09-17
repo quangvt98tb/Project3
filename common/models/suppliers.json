@@ -1,0 +1,47 @@
+{
+  "name": "Suppliers",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+  	"validateUpsert": true,
+    "mydb": {
+      "table": "suppliers"
+    }
+  },
+  "properties": {
+    "uid": {
+      "type": "String",
+      "required": true,
+      "index": { "unique": true }
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+     "email": {
+      "type": "string",
+      "required": false 
+    },
+     "address": {
+      "type": "string",
+      "required": false
+      
+    },
+     "phone": {
+      "type": "string",
+      "required": false     
+    },
+      "createdAt": {
+      "type": "Date",
+      "required": true     
+    },
+    "enable": {
+      "type": "Boolean",
+      "default": 0
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

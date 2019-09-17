@@ -1,0 +1,68 @@
+{
+  "name": "Users",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+  	"validateUpsert": true,
+    "mydb": {
+      "table": "users"
+    }
+  },
+  "properties": {
+    "uid": {
+      "type": "String",
+      "required": true,
+      "index": { "unique": true }
+    },
+    "username": {
+      "type": "string",
+      "required": true
+    },
+    "password": {
+      "type": "string",
+      "required": true
+    },
+     "email": {
+      "type": "string",
+      "required": false 
+    },
+    "birthday": {
+      "type": "Date",
+      "required": false
+    },
+     "gender": {
+      "type": "string",
+      "required": false    
+    },
+     "address": {
+      "type": "string",
+      "required": false
+      
+    },
+     "phone": {
+      "type": "string",
+      "required": false     
+    },
+      "createdAt": {
+      "type": "Date",
+      "required": true     
+    },
+
+    "updatedAt": {
+      "type": "Date",
+      "required": false  
+    },
+    "role": {
+      "type": "Boolean",
+      "default": 1
+    },
+    "enable": {
+      "type": "Boolean",
+      "default": 0
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

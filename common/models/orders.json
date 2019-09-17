@@ -1,0 +1,55 @@
+{
+  "name": "Orders",
+  "base": "Model",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true,
+    "mydb": {
+      "table": "orders"
+    }
+  },
+  "properties": {
+    "uid": {
+      "type": "String",
+      "required": true,
+      "index": { "unique": true }
+    },
+    "userId": {
+      "type": "number",
+      "required": true
+    },
+    "bookId": {
+      "type": ["number"],
+      "required": true
+    },
+    "quantity": {
+      "type": ["number"],
+      "required": true
+    },
+    "price": {
+      "type": ["number"],
+      "required": true
+    },
+    "total": {
+      "type": "number",
+      "required": true
+    },
+    "createdAt": {
+      "type": "date",
+      "required": true
+    },
+    "payment": {
+      "type": "string",
+      "required": true
+    },
+    "status": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

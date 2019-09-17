@@ -1,0 +1,26 @@
+{
+  "name": "Category",
+  "base": "Model",
+  "idInjection": true,
+  "options": {
+  	"validateUpsert": true,
+    "mydb": {
+      "table": "category"
+    }
+  },
+  "properties": {
+    "uid": {
+      "type": "String",
+      "required": true,
+      "index": { "unique": true }
+    },
+    "nameCategory": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

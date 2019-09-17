@@ -1,0 +1,65 @@
+{
+  "name": "Books",
+  "base": "Model",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true,
+    "mydb": {
+      "table": "books"
+    }
+  },
+  "properties": {
+    "uid": {
+      "type": "String",
+      "required": true,
+      "index": { "unique": true }
+    },
+    "bookName": {
+      "type": "string",
+      "required": true   
+    },
+    "categoryId": {
+      "type": "number",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "required": true     
+    },
+    "imgURL": {
+      "type": "string",
+      "required": true   
+    },
+    "publisher": {
+      "type": "string",
+      "required": false
+    },
+    "author": {
+      "type": "string",
+      "required": true,
+      "default": "unknow"
+    },
+    "quantity": {
+      "type": "number",
+      "required": true
+      
+    },
+    "price": {
+      "type": "number",
+      "required": true
+    },
+    "publishedAt": {
+      "type": "Date",
+      "required": false
+      
+    },
+    "enable": {
+      "type": "Boolean",
+      "default": 0 
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

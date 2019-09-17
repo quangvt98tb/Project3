@@ -1,0 +1,12 @@
+ {
+    "mydb": {
+      "host": "localhost",
+      "port": 27017,
+      "url":  "",
+      "database": "BookStore",
+      "password": "123456",
+      "name": "mydb",
+      "user": "sylphy",
+      "connector": "mongodb"
+}
+}

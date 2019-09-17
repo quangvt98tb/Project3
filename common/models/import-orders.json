@@ -1,0 +1,46 @@
+{
+  "name": "ImportOrders",
+  "base": "Model",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true,
+    "mydb": {
+      "table": "import_orders"
+    }
+  },
+  "properties": {
+    "uid": {
+      "type": "String",
+      "required": true,
+      "index": { "unique": true }
+    },
+    "supplierId": {
+      "type": "number",
+      "required": true
+    },
+    "bookId": {
+      "type": ["number"],
+      "required": true
+    },
+    "quantity": {
+      "type": ["number"],
+      "required": true
+    },
+    "price": {
+      "type": ["number"],
+      "required": true
+    },
+    "status": {
+      "type": "boolean",
+      "required": false
+    },
+    "total": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

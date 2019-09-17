@@ -1,0 +1,38 @@
+{
+  "name": "Comments",
+  "base": "Model",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true,
+    "mydb": {
+      "table": "comments"
+    }
+  },
+  "properties": {
+    "uid": {
+      "type": "String",
+      "required": true,
+      "index": { "unique": true }
+    },
+    "userId": {
+      "type": "number",
+      "required": true
+    },
+    "bookId": {
+      "type": "number",
+      "required": true
+    },
+    "content": {
+      "type": "string",
+      "required": false
+    },
+    "createdAt": {
+      "type": "Date",
+      "required": false
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
