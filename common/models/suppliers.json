@@ -37,9 +37,13 @@
       "type": "Date",
       "required": true     
     },
+     "updatedAt": {
+      "type": "Date",
+      "required": false     
+    },
     "enable": {
       "type": "Boolean",
-      "default": 0
+      "default": 1
     }
   },
   "validations": [],
