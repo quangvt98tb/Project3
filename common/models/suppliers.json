@@ -20,20 +20,20 @@
       "type": "string",
       "required": true
     },
-     "email": {
+    "email": {
       "type": "string",
-      "required": false 
+      "required": true 
     },
-     "address": {
+    "address": {
       "type": "string",
       "required": false
       
     },
-     "phone": {
+    "phone": {
       "type": "string",
       "required": false     
     },
-      "createdAt": {
+    "createdAt": {
       "type": "Date",
       "required": true     
     },
@@ -43,7 +43,13 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "importorder": {
+      "type": "hasMany",
+      "model": "ImportOrder",
+      "foreignKey": "supplierId"
+    }
+  },
   "acls": [],
   "methods": {}
 }

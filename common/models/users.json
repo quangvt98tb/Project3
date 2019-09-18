@@ -65,6 +65,21 @@
   },
   "validations": [],
   "relations": {
+    "cart": {
+      "type": "hasMany",
+      "model": "Cart",
+      "foreignKey": "userId"
+    },
+     "order": {
+      "type": "hasMany",
+      "model": "Order",
+      "foreignKey": "userId"
+    },
+    "comment": {
+      "type": "hasMany",
+      "model": "Comment",
+      "foreignKey": "userId"
+    }
   },
   "acls": [],
   "methods": {}

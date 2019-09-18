@@ -42,7 +42,18 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "supplier": {
+      "type": "belongsTo",
+      "model": "Supplier",
+      "foreignKey": "supplierId"
+    },
+    "book": {
+      "type": "belongsTo",
+      "model": "Book",
+      "foreignKey": "bookId"
+    }
+  },
   "acls": [],
   "methods": {}
 }

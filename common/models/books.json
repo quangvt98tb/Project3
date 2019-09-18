@@ -21,7 +21,7 @@
       "required": true   
     },
     "categoryId": {
-      "type": "number",
+      "type": ["number"],
       "required": true
     },
     "description": {
@@ -29,7 +29,7 @@
       "required": true     
     },
     "imgURL": {
-      "type": "string",
+      "type": ["string"],
       "required": true   
     },
     "publisher": {
@@ -37,7 +37,7 @@
       "required": false
     },
     "author": {
-      "type": "string",
+      "type": ["string"],
       "required": true,
       "default": "unknow"
     },
@@ -62,10 +62,30 @@
   },
   "validations": [],
   "relations": {
-     "category": {
+    "category": {
       "type": "belongsTo",
       "model": "Category",
-      "foreignKey": "categoryId",
+      "foreignKey": "categoryId"
+    },
+    "cart": {
+      "type": "hasMany",
+      "model": "Cart",
+      "foreignKey": "bookId"
+    },
+    "order": {
+      "type": "hasMany",
+      "model": "Order",
+      "foreignKey": "bookId"
+    },
+    "comment": {
+      "type": "hasMany",
+      "model": "Comment",
+      "foreignKey": "bookId"
+    },
+    "import-order": {
+      "type": "hasMany",
+      "model": "ImportOrder",
+      "foreignKey": "bookId"
     }
   },
   "acls": [],

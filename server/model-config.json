@@ -14,7 +14,7 @@
     ]
   },
   
-  "Books": {
+  "Book": {
     "dataSource": "mydb",
     "public": true,
     "options": {
@@ -26,7 +26,7 @@
     }
   },
 
-  "Carts": {
+  "Cart": {
     "dataSource": "mydb",
     "public": true,
     "options": {
@@ -50,7 +50,7 @@
     }
   },
 
-  "Comments": {
+  "Comment": {
     "dataSource": "mydb",
     "public": true,
     "options": {
@@ -62,7 +62,7 @@
     }
   },
 
-  "ImportOrders": {
+  "ImportOrder": {
     "dataSource": "mydb",
     "public": true,
     "options": {
@@ -74,7 +74,7 @@
     }
   },
 
-  "Orders": {
+  "Order": {
     "dataSource": "mydb",
     "public": true,
     "options": {
@@ -98,7 +98,7 @@
     }
   },
 
-  "Suppliers": {
+  "Supplier": {
     "dataSource": "mydb",
     "public": true,
     "options": {
@@ -110,7 +110,7 @@
     }
   },
 
-  "Users": {
+  "User": {
     "dataSource": "mydb",
     "public": true,
     "options": {
