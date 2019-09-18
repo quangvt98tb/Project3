@@ -1,9 +1,11 @@
 {
   "name": "Category",
+  "plural": "categorys",
   "base": "Model",
   "idInjection": true,
   "options": {
   	"validateUpsert": true,
+    "strictObjectIDCoercion": true,
     "mydb": {
       "table": "category"
     }

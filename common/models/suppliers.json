@@ -1,9 +1,11 @@
 {
-  "name": "Suppliers",
+  "name": "Supplier",
+  "plural": "suppliers",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
   	"validateUpsert": true,
+    "strictObjectIDCoercion": true,
     "mydb": {
       "table": "suppliers"
     }

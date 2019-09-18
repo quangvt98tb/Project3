@@ -1,9 +1,11 @@
 {
-  "name": "Books",
+  "name": "Book",
+  "plural": "books",
   "base": "Model",
   "idInjection": true,
   "options": {
     "validateUpsert": true,
+    "strictObjectIDCoercion": true,
     "mydb": {
       "table": "books"
     }
@@ -59,7 +61,13 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+     "category": {
+      "type": "belongsTo",
+      "model": "Category",
+      "foreignKey": "categoryId",
+    }
+  },
   "acls": [],
   "methods": {}
 }

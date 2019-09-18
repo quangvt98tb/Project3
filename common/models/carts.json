@@ -1,9 +1,11 @@
 {
-  "name": "Carts",
+  "name": "Cart",
+  "plural": "carts",
   "base": "Model",
   "idInjection": true,
   "options": {
     "validateUpsert": true,
+    "strictObjectIDCoercion": true,
     "mydb": {
       "table": "carts"
     }

@@ -1,9 +1,11 @@
 {
-  "name": "Users",
+  "name": "User",
+  "plural": "users",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
   	"validateUpsert": true,
+    "strictObjectIDCoercion": true,
     "mydb": {
       "table": "users"
     }
@@ -62,7 +64,8 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+  },
   "acls": [],
   "methods": {}
 }

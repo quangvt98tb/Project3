@@ -1,9 +1,11 @@
 {
   "name": "Promotion",
+  "plural": "promotions",
   "base": "Model",
   "idInjection": true,
   "options": {
     "validateUpsert": true,
+    "strictObjectIDCoercion": true,
     "mydb": {
       "table": "promotion"
     }

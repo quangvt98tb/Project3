@@ -1,7 +1,9 @@
 {
-  "name": "ImportOrders",
+  "name": "ImportOrder",
+  "plural": "importorders",
   "base": "Model",
   "idInjection": true,
+  "strictObjectIDCoercion": true,
   "options": {
     "validateUpsert": true,
     "mydb": {
