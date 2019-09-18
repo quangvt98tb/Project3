@@ -1,7 +1,7 @@
 {
   "name": "Supplier",
   "plural": "suppliers",
-  "base": "PersistedModel",
+  "base": "Model",
   "idInjection": true,
   "options": {
   	"validateUpsert": true,

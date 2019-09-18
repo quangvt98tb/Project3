@@ -11,11 +11,6 @@
     }
   },
   "properties": {
-    "uid": {
-      "type": "String",
-      "required": true,
-      "index": { "unique": true }
-    },
     "userId": {
       "type": "number",
       "required": true

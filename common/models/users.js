@@ -2,105 +2,120 @@ let to = require('await-to-js').to;
 
 'use_strict';
 
-module.exports = function(Supplier) {
+module.exports = function(User) {
   const Promise = require('bluebird')
-	  //create Supplier
-	  Supplier.createSupplier = async function(
+  const bcrypt = require('bcrypt')
+	  //create User
+	  User.createUser = async function(
         uid, 
-        name, 
+        username,
+        password, 
         email, 
         address,
-        phone) {
+        phone,
+        birthday,
+        gender,
+        role) {
 
-        const SupplierData = {
+        const UserData = {
             uid: uid,
-            name: name,
+            username: username,
+            password: bcrypt.hashSync(password,2),
             email: email,
             address: address,
             phone: phone,
+            birthday: birthday,
+            gender: gender,
+            role: role,
             createdAt: new Date(),
             enable: 1
         }
         try {
-            const data = await Supplier.create(SupplierData)
+            const data = await User.create(UserData)
             return data
           } catch (err) {
-            console.log('create Supplier', err)
+            console.log('create User', err)
             throw err
           }
         }
     
-    //read Supplier
-    Supplier.readSupplier = async function(id) {
+    //read User
+    User.readUser = async function(id) {
         try {
-            const data = await Supplier.findById(id, {
+            const data = await User.findById(id, {
                 where: {
                 enable: 1
                 }
             });
             return data;
         } catch (err) {
-            console.log('read Supplier', err)
+            console.log('read User', err)
             throw err
         }
     }
 
-    //update Supplier
-    Supplier.updateSupplier = async function(
+    //update User
+    User.updateUser = async function(
         id, 
-        name, 
+        username,
+        password, 
         email, 
         address,
-        phone) {
+        phone,
+        birthday,
+        gender) {
     	
-        const SupplierData = {
-            name: name,
+        const UserData = {
+            username: username,
             email: email,
             address: address,
             phone: phone,
+            birthday: birthday,
+            gender: gender,
             updatedAt: new Date(),
         }
 
         try {
-            const data = await Supplier.upsertWithWhere(
+            const data = await User.upsertWithWhere(
               {
-                id: Supplier.id
+                id: User.id
               },
-              SupplierData
+              UserData
             )
             return data
           } catch (err) {
-            console.log('update Supplier', err)
+            console.log('update User', err)
             throw err
           }
     }
 
-    //delete Supplier 
-    Supplier.deleteSupplier = async function(id) {
-        let [err, supplier] = await to(Supplier.findOne({where: {id: id}}))
-        if (supplier == null) {
-            return [200, 'can not find supplier']
+    //delete User 
+    User.deleteUser = async function(id) {
+        let [err, user] = await to(User.findOne({where: {id: id}}))
+        if (user == null) {
+            return [200, 'can not find User']
         }
-        Supplier.destroyById(supplier.id)
-        return [200, 'delete supplier sucess']
+        User.destroyById(user.id)
+        return [200, 'delete User sucess']
     }
 
-    // list Suppliers paganation(4)
-    Supplier.listSupplier = async function(page, pageSize) {
+    // list Users paganation(4)
+    User.listUser = async function(page, pageSize) {
         try {
           const [data, total] = await Promise.all([
-            Supplier.find({
+            User.find({
               where: {
                 enable: 1
               },
               fields: {
-                name: true,
+                username: true,
                 email: true,
                 address: true,
                 phone: true,
+                gender:true
               }
             }),
-            Supplier.count({
+            User.count({
               enable: 1
             })
           ])
@@ -112,26 +127,30 @@ module.exports = function(Supplier) {
             total: total
           }
         } catch (err) {
-          console.log('list Supplier', err)
+          console.log('list User', err)
           throw err
         }
     }
     
-    Supplier.remoteMethod('createSupplier', 
+    User.remoteMethod('createUser', 
       {
         http: {path: '/create', verb: 'post'},
         accepts: [
           {arg: 'uid', type: 'string', required: true},
-          {arg: 'name', type: 'string', required: true},
+          {arg: 'username', type: 'string', required: true},
+          {arg: 'password', type: 'string', required: true},
           {arg: 'email', type: 'string', required: true},
           {arg: 'address', type: 'string', required: false},
           {arg: 'phone', type: 'string', required: false},
+          {arg: 'birthday', type: 'date', required: false},
+          {arg: 'gender', type: 'string', required: false},
+          {arg: 'role', type: 'boolean', required: true}
         ],
         returns: { arg: 'data' },
       }
     )
 
-    Supplier.remoteMethod('readSupplier', 
+    User.remoteMethod('readUser', 
       {
         http: {path: '/read', verb: 'post'},
         accepts: [
@@ -140,21 +159,24 @@ module.exports = function(Supplier) {
       },
     )
 
-    Supplier.remoteMethod('updateSupplier', 
+    User.remoteMethod('updateUser', 
       {
         http: {path: '/update', verb: 'post'},
         accepts: [
           {arg: 'id', type: 'string', required: true},
-          {arg: 'name', type: 'string', required: false},
+          {arg: 'username', type: 'string', required: false},
+          // {arg: 'password', type: 'string', required: true},
           {arg: 'email', type: 'string', required: false},
           {arg: 'address', type: 'string', required: false},
           {arg: 'phone', type: 'string', required: false},
+          {arg: 'birthday', type: 'date', required: false},
+          {arg: 'gender', type: 'string', required: false}
         ],
         returns: { arg: 'data' }
       },
     )
 
-    Supplier.remoteMethod('deleteSupplier', 
+    User.remoteMethod('deleteUser', 
       {
         http: {path: '/delete', verb: 'delete'},
         accepts: [
@@ -166,7 +188,7 @@ module.exports = function(Supplier) {
       }
     )
 
-    Supplier.remoteMethod('listSupplier', 
+    User.remoteMethod('listUser', 
       {
         http: {verb: 'post', path: '/list' },
         accepts: [
