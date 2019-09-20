@@ -7,7 +7,7 @@
     "validateUpsert": true,
     "strictObjectIDCoercion": true,
     "mydb": {
-      "table": "suppliers"
+      "table": "supplier"
     }
   },
   "properties": {

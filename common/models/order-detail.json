@@ -1,0 +1,41 @@
+{
+    "name": "OrderDetail",
+    "base": "PersistedModel",
+    "idInjection": true,
+    "options": {
+      "validateUpsert": true,
+      "strictObjectIDCoercion": true,
+      "mydb": {
+        "table": "order_detail"
+      }
+    },
+    "properties": {
+      "orderId": {
+        "type": "string",
+        "required": true
+      },
+      "bookId": {
+        "type": "string",
+        "required": true
+      },
+      "quantity": {
+        "type": "number",
+        "required": true
+      },
+      "price": {
+        "type": "number",
+        "required": true
+      }
+    },
+    "validations": [],
+    "relations": {
+      "book": {
+        "type": "hasOne",
+        "model": "Book",
+        "foreignKey": "bookId"
+      }
+    },
+    "acls": [],
+    "methods": {}
+  }
+  

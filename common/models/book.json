@@ -7,7 +7,7 @@
     "validateUpsert": true,
     "strictObjectIDCoercion": true,
     "mydb": {
-      "table": "books"
+      "table": "book"
     }
   },
   "properties": {
@@ -23,7 +23,9 @@
       "required": true
     },
     "categoryId": {
-      "type": ["string"],
+      "type": [
+        "string"
+      ],
       "required": true
     },
     "description": {
@@ -69,12 +71,19 @@
     "comments": {
       "type": "hasMany",
       "model": "Comment",
-      "foreignKey": "commentId",
-      "options": {
-        "nestRemoting": true
-      },
-      "through": "Comment"
+      "foreignKey": "bookId"
+    },
+    "categories": {
+      "type": "hasMany",
+      "model": "Category",
+      "foreignKey": ""
+    },
+    "orderDetail": {
+      "type": "hasAndBelongsToMany",
+      "model": "OrderDetail",
+      "foreignKey": ""
     }
+  
   },
   "acls": [],
   "methods": {}

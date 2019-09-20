@@ -57,6 +57,17 @@
       }
     }
   },
+  "ExportOrder": {
+    "dataSource": "mydb",
+    "public": true,
+    "options": {
+      "remoting": {
+        "sharedMethods": {
+          "*": true
+        }
+      }
+    }
+  },
   "ImportOrder": {
     "dataSource": "mydb",
     "public": true,
@@ -68,7 +79,7 @@
       }
     }
   },
-  "Order": {
+  "OrderDetail": {
     "dataSource": "mydb",
     "public": true,
     "options": {

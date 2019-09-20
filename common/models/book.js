@@ -6,15 +6,21 @@ module.exports = function(Book) {
     Book.createBook = async function(uid, name, catID, des, img, publisher, author, quantity, price, publishAt){
         let [err, book] = await to(Book.findOne({where: {uid : uid}}))
         if (err||book != null){
-            return [400, 'Ma sach nay da ton tai']
+            return {
+                statusCode: 400, 
+                message: 'ma sach nay da ton tai'
+            }
         }
         let Category = app.models.Category
         let i
-        for (i=0; i< catID.length; i++){
+        for (i = 0; i< catID.length; i++){
             let [errCat, category] = await to(Category.findOne({where: {id : catID[i]}}))
             console.log(i, errCat, category)
             if (errCat||category == null){
-                return [400, 'Ma the loai sach nay khong ton tai']
+                return {
+                    statusCode: 404, 
+                    message: 'Ma the loai sach nay khong ton tai'
+                }
             }
         }
         let bookData = {
@@ -38,7 +44,7 @@ module.exports = function(Book) {
             }
         }
         return {
-            statusCode: 400, 
+            statusCode: 200, 
             message: 'Create success'
         }
     }

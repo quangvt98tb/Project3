@@ -7,16 +7,16 @@
     "validateUpsert": true,
     "strictObjectIDCoercion": true,
     "mydb": {
-      "table": "comments"
+      "table": "comment"
     }
   },
   "properties": {
     "userId": {
-      "type": "number",
+      "type": "string",
       "required": true
     },
     "bookId": {
-      "type": "number",
+      "type": "string",
       "required": true
     },
     "content": {

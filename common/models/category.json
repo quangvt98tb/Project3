@@ -27,7 +27,7 @@
   "validations": [],
   "relations": {
     "books": {
-      "type": "hasMany",
+      "type": "hasAndBelongsToMany",
       "model": "Book",
       "foreignKey": "categoryId",
       "options": {

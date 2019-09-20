@@ -7,7 +7,7 @@
     "validateUpsert": true,
     "strictObjectIDCoercion": true,
     "mydb": {
-      "table": "carts"
+      "table": "cart"
     }
   },
   "properties": {
@@ -36,7 +36,7 @@
       "foreignKey": "userId"
     },
     "book": {
-      "type": "hasOne",
+      "type": "belongsTo",
       "model": "Book",
       "foreignKey": "bookId"
     }

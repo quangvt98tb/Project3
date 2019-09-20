@@ -1,13 +1,13 @@
 {
-  "name": "Order",
-  "plural": "orders",
+  "name": "ExportOrder",
+  "plural": "exportorders",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true,
     "strictObjectIDCoercion": true,
     "mydb": {
-      "table": "orders"
+      "table": "export_order"
     }
   },
   "properties": {
@@ -15,21 +15,9 @@
       "type": "number",
       "required": true
     },
-    "quantity": {
-      "type": [
-        "number"
-      ],
-      "required": true
-    },
-    "price": {
-      "type": [
-        "number"
-      ],
-      "required": true
-    },
     "total": {
       "type": "number",
-      "required": true
+      "required": false
     },
     "promotionId": {
       "type": "number",
@@ -38,6 +26,10 @@
     "createdAt": {
       "type": "date",
       "required": true
+    },
+    "finishAt": {
+      "type": "date",
+      "required": false
     },
     "paymentMethod": {
       "type": "string",
@@ -50,6 +42,11 @@
     "status": {
       "type": "string",
       "required": true
+    },
+    "bStatus": {
+      "type": "boolean",
+      "required": true,
+      "default": 0
     }
   },
   "validations": [],
@@ -63,6 +60,11 @@
       "type": "belongsTo",
       "model": "Promotion",
       "foreignKey": "promotionId"
+    },
+    "exportOrderDetail": {
+      "type": "hasMany",
+      "model": "OrderDetail",
+      "foreignKey": "orderId"
     }
   },
   "acls": [],
