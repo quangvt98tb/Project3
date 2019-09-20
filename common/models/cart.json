@@ -16,21 +16,15 @@
       "required": true
     },
     "bookId": {
-      "type": [
-        "number"
-      ],
+      "type": "number",
       "required": true
     },
     "quantity": {
-      "type": [
-        "number"
-      ],
+      "type": "number",
       "required": true
     },
     "price": {
-      "type": [
-        "number"
-      ],
+      "type": "number",
       "required": true
     }
   },
@@ -42,7 +36,7 @@
       "foreignKey": "userId"
     },
     "book": {
-      "type": "hasMany",
+      "type": "hasOne",
       "model": "Book",
       "foreignKey": "bookId"
     }

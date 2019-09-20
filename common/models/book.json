@@ -74,14 +74,6 @@
         "nestRemoting": true
       },
       "through": "Comment"
-    },
-    "category": {
-      "type": "hasAndBelongsToMany",
-      "model": "Category",
-      "foreignKey": "categoryId",
-      "options": {
-        "nestRemoting": true
-      }
     }
   },
   "acls": [],

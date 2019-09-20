@@ -45,7 +45,7 @@
     },
     "addressShip": {
       "type": "string",
-      "required": false
+      "required": true
     },
     "status": {
       "type": "string",

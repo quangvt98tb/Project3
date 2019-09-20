@@ -66,7 +66,7 @@
   "validations": [],
   "relations": {
     "cart": {
-      "type": "hasOne",
+      "type": "hasMany",
       "model": "Cart",
       "foreignKey": "userId"
     },
