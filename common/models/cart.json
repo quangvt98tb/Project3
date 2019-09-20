@@ -1,7 +1,7 @@
 {
   "name": "Cart",
   "plural": "carts",
-  "base": "Model",
+  "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true,
@@ -16,15 +16,21 @@
       "required": true
     },
     "bookId": {
-      "type": ["number"],
+      "type": [
+        "number"
+      ],
       "required": true
     },
     "quantity": {
-      "type": ["number"],
+      "type": [
+        "number"
+      ],
       "required": true
     },
     "price": {
-      "type": ["number"],
+      "type": [
+        "number"
+      ],
       "required": true
     }
   },
@@ -36,7 +42,7 @@
       "foreignKey": "userId"
     },
     "book": {
-      "type": "belongsTo",
+      "type": "hasMany",
       "model": "Book",
       "foreignKey": "bookId"
     }

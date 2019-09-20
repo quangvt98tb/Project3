@@ -1,7 +1,7 @@
 {
   "name": "Comment",
   "plural": "comments",
-  "base": "Model",
+  "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true,
@@ -11,11 +11,6 @@
     }
   },
   "properties": {
-    "uid": {
-      "type": "String",
-      "required": true,
-      "index": { "unique": true }
-    },
     "userId": {
       "type": "number",
       "required": true
@@ -26,7 +21,7 @@
     },
     "content": {
       "type": "string",
-      "required": false
+      "required": true
     },
     "createdAt": {
       "type": "Date",

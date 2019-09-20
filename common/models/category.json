@@ -1,10 +1,10 @@
 {
   "name": "Category",
   "plural": "categorys",
-  "base": "Model",
+  "base": "PersistedModel",
   "idInjection": true,
   "options": {
-  	"validateUpsert": true,
+    "validateUpsert": true,
     "strictObjectIDCoercion": true,
     "mydb": {
       "table": "category"
@@ -14,19 +14,25 @@
     "uid": {
       "type": "String",
       "required": true,
-      "index": { "unique": true }
+      "index": {
+        "unique": true
+      }
     },
-    "nameCategory": {
+    "name": {
       "type": "string",
-      "required": true
+      "required": true,
+      "default": "unknow"
     }
   },
   "validations": [],
   "relations": {
-    "book": {
+    "books": {
       "type": "hasMany",
       "model": "Book",
-      "foreignKey": "categoryId"
+      "foreignKey": "categoryId",
+      "options": {
+        "nestRemoting": true
+      }
     }
   },
   "acls": [],

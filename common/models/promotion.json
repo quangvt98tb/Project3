@@ -1,7 +1,7 @@
 {
   "name": "Promotion",
   "plural": "promotions",
-  "base": "Model",
+  "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true,
@@ -14,7 +14,9 @@
     "uid": {
       "type": "String",
       "required": true,
-      "index": { "unique": true }
+      "index": {
+        "unique": true
+      }
     },
     "name": {
       "type": "string",
@@ -34,13 +36,7 @@
     }
   },
   "validations": [],
-  "relations": {
-    "order": {
-      "type": "hasMany",
-      "model": "Order",
-      "foreignKey": "promotionId"
-    }
-  },
+  "relations": {},
   "acls": [],
   "methods": {}
 }

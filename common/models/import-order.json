@@ -3,33 +3,35 @@
   "plural": "importorders",
   "base": "Model",
   "idInjection": true,
-  "strictObjectIDCoercion": true,
   "options": {
     "validateUpsert": true,
     "mydb": {
       "table": "import_orders"
     }
   },
+  "strictObjectIDCoercion": true,
   "properties": {
     "uid": {
       "type": "String",
       "required": true,
-      "index": { "unique": true }
+      "index": {
+        "unique": true
+      }
     },
     "supplierId": {
       "type": "number",
       "required": true
     },
-    "bookId": {
-      "type": ["number"],
-      "required": true
-    },
     "quantity": {
-      "type": ["number"],
+      "type": [
+        "number"
+      ],
       "required": true
     },
     "price": {
-      "type": ["number"],
+      "type": [
+        "number"
+      ],
       "required": true
     },
     "status": {
@@ -47,11 +49,6 @@
       "type": "belongsTo",
       "model": "Supplier",
       "foreignKey": "supplierId"
-    },
-    "book": {
-      "type": "belongsTo",
-      "model": "Book",
-      "foreignKey": "bookId"
     }
   },
   "acls": [],

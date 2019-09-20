@@ -1,7 +1,7 @@
 {
   "name": "Book",
   "plural": "books",
-  "base": "Model",
+  "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true,
@@ -14,78 +14,74 @@
     "uid": {
       "type": "String",
       "required": true,
-      "index": { "unique": true }
+      "index": {
+        "unique": true
+      }
     },
-    "bookName": {
+    "name": {
       "type": "string",
-      "required": true   
+      "required": true
     },
     "categoryId": {
-      "type": ["number"],
+      "type": ["string"],
       "required": true
     },
     "description": {
       "type": "string",
-      "required": true     
+      "required": false
     },
     "imgURL": {
-      "type": ["string"],
-      "required": true   
-    },
-    "publisher": {
       "type": "string",
       "required": false
     },
+    "publisher": {
+      "type": "string",
+      "required": true,
+      "default": "unknow"
+    },
     "author": {
-      "type": ["string"],
+      "type": [
+        "string"
+      ],
       "required": true,
       "default": "unknow"
     },
     "quantity": {
       "type": "number",
-      "required": true
-      
+      "required": true,
+      "default": 0
     },
-    "price": {
+    "sellPrice": {
       "type": "number",
       "required": true
     },
     "publishedAt": {
       "type": "Date",
       "required": false
-      
     },
     "enable": {
       "type": "Boolean",
-      "default": 1 
+      "default": 1
     }
   },
   "validations": [],
   "relations": {
-    "category": {
-      "type": "belongsTo",
-      "model": "Category",
-      "foreignKey": "categoryId"
-    },
-    "cart": {
-      "type": "hasMany",
-      "model": "Cart",
-      "foreignKey": "bookId"
-    },
-    "order": {
-      "type": "hasMany",
-      "model": "Order",
-      "foreignKey": "bookId"
-    },
-    "comment": {
+    "comments": {
       "type": "hasMany",
       "model": "Comment",
-      "foreignKey": "bookId"
+      "foreignKey": "commentId",
+      "options": {
+        "nestRemoting": true
+      },
+      "through": "Comment"
     },
-    "import-order": {
-      "type": "hasMany",
-      "model": "ImportOrder",
-      "foreignKey": "bookId"
+    "category": {
+      "type": "hasAndBelongsToMany",
+      "model": "Category",
+      "foreignKey": "categoryId",
+      "options": {
+        "nestRemoting": true
+      }
     }
   },
   "acls": [],

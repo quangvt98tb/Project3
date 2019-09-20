@@ -13,7 +13,6 @@
       "./mixins"
     ]
   },
-  
   "Book": {
     "dataSource": "mydb",
     "public": true,
@@ -25,7 +24,6 @@
       }
     }
   },
-
   "Cart": {
     "dataSource": "mydb",
     "public": true,
@@ -37,7 +35,6 @@
       }
     }
   },
-
   "Category": {
     "dataSource": "mydb",
     "public": true,
@@ -49,7 +46,6 @@
       }
     }
   },
-
   "Comment": {
     "dataSource": "mydb",
     "public": true,
@@ -61,7 +57,6 @@
       }
     }
   },
-
   "ImportOrder": {
     "dataSource": "mydb",
     "public": true,
@@ -73,7 +68,6 @@
       }
     }
   },
-
   "Order": {
     "dataSource": "mydb",
     "public": true,
@@ -85,7 +79,6 @@
       }
     }
   },
-
   "Promotion": {
     "dataSource": "mydb",
     "public": true,
@@ -97,7 +90,6 @@
       }
     }
   },
-
   "Supplier": {
     "dataSource": "mydb",
     "public": true,
@@ -109,7 +101,6 @@
       }
     }
   },
-
   "User": {
     "dataSource": "mydb",
     "public": true,

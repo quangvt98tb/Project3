@@ -1,7 +1,7 @@
 {
   "name": "Order",
   "plural": "orders",
-  "base": "Model",
+  "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true,
@@ -11,25 +11,20 @@
     }
   },
   "properties": {
-    "uid": {
-      "type": "String",
-      "required": true,
-      "index": { "unique": true }
-    },
     "userId": {
       "type": "number",
       "required": true
     },
-    "bookId": {
-      "type": ["number"],
-      "required": true
-    },
     "quantity": {
-      "type": ["number"],
+      "type": [
+        "number"
+      ],
       "required": true
     },
     "price": {
-      "type": ["number"],
+      "type": [
+        "number"
+      ],
       "required": true
     },
     "total": {
@@ -45,7 +40,7 @@
       "required": true
     },
     "paymentMethod": {
-      "type": ["string"],
+      "type": "string",
       "required": true
     },
     "addressShip": {
@@ -53,9 +48,8 @@
       "required": false
     },
     "status": {
-      "type": "boolean",
-      "required": true,
-      "default": false
+      "type": "string",
+      "required": true
     }
   },
   "validations": [],
@@ -64,11 +58,6 @@
       "type": "belongsTo",
       "model": "User",
       "foreignKey": "userId"
-    },
-    "book": {
-      "type": "belongsTo",
-      "model": "Book",
-      "foreignKey": "bookId"
     },
     "promotion": {
       "type": "belongsTo",
