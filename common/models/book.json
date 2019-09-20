@@ -1,6 +1,5 @@
 {
   "name": "Book",
-  "plural": "books",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -72,18 +71,7 @@
       "type": "hasMany",
       "model": "Comment",
       "foreignKey": "bookId"
-    },
-    "categories": {
-      "type": "hasMany",
-      "model": "Category",
-      "foreignKey": ""
-    },
-    "orderDetail": {
-      "type": "hasAndBelongsToMany",
-      "model": "OrderDetail",
-      "foreignKey": ""
     }
-  
   },
   "acls": [],
   "methods": {}

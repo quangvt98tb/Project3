@@ -1,6 +1,5 @@
 {
     "name": "OrderDetail",
-    "base": "PersistedModel",
     "idInjection": true,
     "options": {
       "validateUpsert": true,
@@ -10,10 +9,6 @@
       }
     },
     "properties": {
-      "orderId": {
-        "type": "string",
-        "required": true
-      },
       "bookId": {
         "type": "string",
         "required": true
@@ -30,7 +25,7 @@
     "validations": [],
     "relations": {
       "book": {
-        "type": "hasOne",
+        "type": "belongsTo",
         "model": "Book",
         "foreignKey": "bookId"
       }

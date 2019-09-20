@@ -1,6 +1,5 @@
 {
   "name": "Comment",
-  "plural": "comments",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {

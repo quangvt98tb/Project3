@@ -1,6 +1,5 @@
 {
   "name": "Promotion",
-  "plural": "promotions",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -24,6 +23,14 @@
     },
     "description": {
       "type": "string",
+      "required": false
+    },
+    "minus": {
+      "type": "number",
+      "required": false
+    },
+    "divide": {
+      "type": "number",
       "required": false
     },
     "beginAt": {

@@ -1,6 +1,5 @@
 {
   "name": "ImportOrder",
-  "plural": "importorders",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -31,10 +30,14 @@
       "model": "Supplier",
       "foreignKey": "supplierId"
     },
-    "importOrderDetail": {
-      "type": "hasMany",
+    "books": {
+      "type": "embedsMany",
       "model": "OrderDetail",
-      "foreignKey": "orderId"
+      "property": "bookList",
+      "options": {
+        "validate": false,
+        "forceId": false
+      }
     }
   },
   "acls": [],

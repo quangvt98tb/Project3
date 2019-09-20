@@ -1,6 +1,5 @@
 {
   "name": "ExportOrder",
-  "plural": "exportorders",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -61,10 +60,14 @@
       "model": "Promotion",
       "foreignKey": "promotionId"
     },
-    "exportOrderDetail": {
-      "type": "hasMany",
+    "books": {
+      "type": "embedsMany",
       "model": "OrderDetail",
-      "foreignKey": "orderId"
+      "property": "bookList",
+      "options": {
+        "validate": false,
+        "forceId": false
+      }
     }
   },
   "acls": [],

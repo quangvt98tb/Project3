@@ -7,10 +7,10 @@ module.exports = function(User) {
   const bcrypt = require('bcrypt')
 	  //create User
 	  User.createUser = async function(
-        uid, 
         username,
         password, 
-        email, 
+        email,
+        fullname,  
         address,
         phone,
         birthday,
@@ -18,10 +18,10 @@ module.exports = function(User) {
         role) {
 
         const UserData = {
-            uid: uid,
             username: username,
             password: bcrypt.hashSync(password,2),
             email: email,
+            fullname: fullname,
             address: address,
             phone: phone,
             birthday: birthday,
@@ -58,21 +58,21 @@ module.exports = function(User) {
     User.updateUser = async function(
         id, 
         username,
-        password, 
-        email, 
+        email,
+        fullname,  
         address,
         phone,
         birthday,
-        gender) {
+        gender,) {
     	
         const UserData = {
             username: username,
             email: email,
+            fullname: fullname,
             address: address,
             phone: phone,
             birthday: birthday,
-            gender: gender,
-            updatedAt: new Date(),
+            gender: gender
         }
 
         try {
@@ -109,6 +109,7 @@ module.exports = function(User) {
               },
               fields: {
                 username: true,
+                fullname: true,
                 email: true,
                 address: true,
                 phone: true,
@@ -136,10 +137,10 @@ module.exports = function(User) {
       {
         http: {path: '/create', verb: 'post'},
         accepts: [
-          {arg: 'uid', type: 'string', required: true},
           {arg: 'username', type: 'string', required: true},
           {arg: 'password', type: 'string', required: true},
           {arg: 'email', type: 'string', required: true},
+          {arg: 'fullName', type: 'string', required: false},
           {arg: 'address', type: 'string', required: false},
           {arg: 'phone', type: 'string', required: false},
           {arg: 'birthday', type: 'date', required: false},
@@ -167,6 +168,7 @@ module.exports = function(User) {
           {arg: 'username', type: 'string', required: false},
           // {arg: 'password', type: 'string', required: true},
           {arg: 'email', type: 'string', required: false},
+          {arg: 'fullName', type: 'string', required: false},
           {arg: 'address', type: 'string', required: false},
           {arg: 'phone', type: 'string', required: false},
           {arg: 'birthday', type: 'date', required: false},

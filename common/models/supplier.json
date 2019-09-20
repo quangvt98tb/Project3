@@ -1,6 +1,5 @@
 {
   "name": "Supplier",
-  "plural": "suppliers",
   "base": "Model",
   "idInjection": true,
   "options": {
@@ -45,7 +44,7 @@
   },
   "validations": [],
   "relations": {
-    "importOder": {
+    "importOders": {
       "type": "hasMany",
       "model": "ImportOrder",
       "foreignKey": "supplierId"
