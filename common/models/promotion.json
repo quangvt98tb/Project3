@@ -40,6 +40,18 @@
     "endAt": {
       "type": "Date",
       "required": false
+    },
+    "createdAt": {
+      "type": "Date",
+      "required": true
+    },
+    "updatedAt": {
+      "type": "Date",
+      "required": false
+    },
+    "enable": {
+      "type": "Boolean",
+      "default": 1
     }
   },
   "validations": [],
