@@ -1,12 +1,12 @@
 {
-  "name": "Supplier",
+  "name": "Promotion",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true,
     "strictObjectIDCoercion": true,
     "mydb": {
-      "table": "supplier"
+      "table": "promotion"
     }
   },
   "properties": {
@@ -21,21 +21,33 @@
       "type": "string",
       "required": true
     },
-    "email": {
-      "type": "string",
-      "required": true
-    },
-    "address": {
+    "description": {
       "type": "string",
       "required": false
     },
-    "phone": {
-      "type": "string",
+    "minus": {
+      "type": "number",
+      "required": false
+    },
+    "divide": {
+      "type": "number",
+      "required": false
+    },
+    "beginAt": {
+      "type": "Date",
+      "required": false
+    },
+    "endAt": {
+      "type": "Date",
       "required": false
     },
     "createdAt": {
       "type": "Date",
       "required": true
+    },
+    "updatedAt": {
+      "type": "Date",
+      "required": false
     },
     "enable": {
       "type": "Boolean",
@@ -43,13 +55,7 @@
     }
   },
   "validations": [],
-  "relations": {
-    "importOders": {
-      "type": "hasMany",
-      "model": "ImportOrder",
-      "foreignKey": "supplierId"
-    }
-  },
+  "relations": {},
   "acls": [],
   "methods": {}
 }

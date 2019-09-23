@@ -1,5 +1,4 @@
 let to = require('await-to-js').to;
-
 'use_strict';
 
 module.exports = function(User) {
@@ -16,6 +15,11 @@ module.exports = function(User) {
         birthday,
         gender,
         role) {
+        
+        let [err, user] = await to(User.findOne({where: {email: email}}))
+        if (user != null) {
+            return [200, 'Email exsited']
+        }
 
         const UserData = {
             username: username,
@@ -113,6 +117,7 @@ module.exports = function(User) {
                 email: true,
                 address: true,
                 phone: true,
+                birthday:true,
                 gender:true
               }
             }),
@@ -133,9 +138,23 @@ module.exports = function(User) {
         }
     }
     
+    // Login function
+    User.loginUser = async function(email, password){
+      //console.log("hi1");
+      let [err,user] = await to(User.findOne({where: {email: email}}))
+      if (user == null) {
+        return [200,"Account have not register!"]} 
+      else {
+        const match = await bcrypt.compare(password, user.password);
+        if (match)
+               {return [200, "Login sucess!"] }
+        else 
+               {return [200,"Password error"] }
+    }}
+
     User.remoteMethod('createUser', 
       {
-        http: {path: '/create', verb: 'post'},
+        http: {path: '/createUser', verb: 'post'},
         accepts: [
           {arg: 'username', type: 'string', required: true},
           {arg: 'password', type: 'string', required: true},
@@ -153,7 +172,7 @@ module.exports = function(User) {
 
     User.remoteMethod('readUser', 
       {
-        http: {path: '/read', verb: 'post'},
+        http: {path: '/readUser', verb: 'post'},
         accepts: [
             {arg: 'id', type: 'string', required: true}],
         returns: { arg: 'data' }
@@ -162,7 +181,7 @@ module.exports = function(User) {
 
     User.remoteMethod('updateUser', 
       {
-        http: {path: '/update', verb: 'post'},
+        http: {path: '/updateUser', verb: 'post'},
         accepts: [
           {arg: 'id', type: 'string', required: true},
           {arg: 'username', type: 'string', required: false},
@@ -180,7 +199,7 @@ module.exports = function(User) {
 
     User.remoteMethod('deleteUser', 
       {
-        http: {path: '/delete', verb: 'delete'},
+        http: {path: '/deleteUser', verb: 'delete'},
         accepts: [
             {arg: 'id', type: 'string', required: true}
         ],
@@ -192,11 +211,23 @@ module.exports = function(User) {
 
     User.remoteMethod('listUser', 
       {
-        http: {verb: 'post', path: '/list' },
+        http: {verb: 'post', path: '/listUsers' },
         accepts: [
           { arg: 'page', type: 'number', default: '0'},
           { arg: 'pageSize', type: 'number', default: '10'}],
         returns: { arg: 'data' },
       }
     )
+
+    User.remoteMethod('loginUser',
+    {
+      http: {verb: 'post', path: '/loginUser' },
+      accepts: [
+        { arg: 'email', type: 'string', required: true,},
+        { arg: 'password', type: 'string', required: true }],
+      returns: [
+        {arg: 'status', type: 'number'},
+        {arg: 'message', type: 'string'}]
+    }
+  )
 };

@@ -1,7 +1,5 @@
 let to = require('await-to-js').to;
-
 'use_strict';
-
 module.exports = function(Supplier) {
   const Promise = require('bluebird')
 	  //create Supplier
