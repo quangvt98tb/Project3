@@ -22,9 +22,7 @@
       "required": true
     },
     "categoryId": {
-      "type": [
-        "string"
-      ],
+      "type": "string",
       "required": true
     },
     "description": {
@@ -71,6 +69,24 @@
       "type": "hasMany",
       "model": "Comment",
       "foreignKey": "bookId"
+    },
+    "categories": {
+      "type": "belongsTo",
+      "model": "Category",
+      "foreignKey": "categoryId"
+    }, 
+    "orderDetails": {
+      "type": "hasMany",
+      "model": "Comment",
+      "foreignKey": "bookId"
+    }
+  },
+  "foreignKeys": {
+    "categoryId": {
+      "name": "book_category",
+      "foreignKey": "categoryId",
+      "entityKey": "id",
+      "entity": "Category"
     }
   },
   "acls": [],

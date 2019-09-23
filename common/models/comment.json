@@ -40,6 +40,20 @@
       "foreignKey": "bookId"
     }
   },
+  "foreignKeys": {
+    "userId": {
+      "name": "comment_user",
+      "foreignKey": "userId",
+      "entityKey": "id",
+      "entity": "User"
+    },
+    "bookId": {
+      "name": "comment_book",
+      "foreignKey": "bookId",
+      "entityKey": "id",
+      "entity": "Book"
+    }
+  },
   "acls": [],
   "methods": {}
 }

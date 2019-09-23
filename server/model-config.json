@@ -90,17 +90,6 @@
       }
     }
   },
-  "Promotion": {
-    "dataSource": "mydb",
-    "public": true,
-    "options": {
-      "remoting": {
-        "sharedMethods": {
-          "*": true
-        }
-      }
-    }
-  },
   "Supplier": {
     "dataSource": "mydb",
     "public": true,

@@ -13,6 +13,14 @@
         "type": "string",
         "required": true
       },
+      "bookName": {
+        "type": "string",
+        "required": false
+      },
+      "imgURL": {
+        "type": "string",
+        "required": false
+      },
       "quantity": {
         "type": "number",
         "required": true
@@ -27,7 +35,10 @@
       "book": {
         "type": "belongsTo",
         "model": "Book",
-        "foreignKey": "bookId"
+        "foreignKey": "bookId",
+        "options": {
+          "nestRemoting": true
+        }
       }
     },
     "acls": [],

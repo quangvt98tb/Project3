@@ -18,9 +18,13 @@
       "type": "boolean",
       "required": false
     },
-    "total": {
+    "subtotal": {
       "type": "number",
       "required": false
+    },
+    "createdAt": {
+      "type": "date",
+      "required": true
     }
   },
   "validations": [],
@@ -35,7 +39,7 @@
       "model": "OrderDetail",
       "property": "bookList",
       "options": {
-        "validate": false,
+        "validate": true,
         "forceId": false
       }
     }

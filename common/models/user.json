@@ -25,16 +25,15 @@
       "index": { "unique": true }
     },
     "fullName": {
-      "type": "Date",
+      "type": "String",
       "required": false
     },
     "address": {
-      "type": "string",
+      "type": "String",
       "required": false
-      
     },
     "phone": {
-      "type": "string",
+      "type": "String",
       "required": false     
     },
     "birthday": {
@@ -42,7 +41,7 @@
       "required": false
     },
     "gender": {
-      "type": "string",
+      "type": "String",
       "required": false    
     },
     "createdAt": {
@@ -61,13 +60,13 @@
   "validations": [],
   "relations": {
     "cart": {
-      "type": "hasMany",
+      "type": "hasOne",
       "model": "Cart",
       "foreignKey": "userId"
     },
      "orders": {
       "type": "hasMany",
-      "model": "Order",
+      "model": "ExportOrder",
       "foreignKey": "userId"
     },
     "comments": {

@@ -22,7 +22,7 @@
       "model": "User",
       "foreignKey": "userId"
     },
-    "books": {
+    "orderDetail": {
       "type": "embedsMany",
       "model": "OrderDetail",
       "property": "bookList",

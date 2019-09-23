@@ -10,28 +10,20 @@
     }
   },
   "properties": {
-    "uid": {
+    "name": {
       "type": "String",
       "required": true,
       "index": {
         "unique": true
       }
-    },
-    "name": {
-      "type": "string",
-      "required": true,
-      "default": "unknow"
     }
   },
   "validations": [],
   "relations": {
     "books": {
-      "type": "hasAndBelongsToMany",
+      "type": "hasMany",
       "model": "Book",
-      "foreignKey": "categoryId",
-      "options": {
-        "nestRemoting": true
-      }
+      "foreignKey": "categoryId"
     }
   },
   "acls": [],

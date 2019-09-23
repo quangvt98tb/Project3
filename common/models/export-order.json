@@ -14,20 +14,8 @@
       "type": "number",
       "required": true
     },
-    "total": {
+    "subtotal": {
       "type": "number",
-      "required": false
-    },
-    "promotionId": {
-      "type": "number",
-      "required": false
-    },
-    "createdAt": {
-      "type": "date",
-      "required": true
-    },
-    "finishAt": {
-      "type": "date",
       "required": false
     },
     "paymentMethod": {
@@ -42,10 +30,13 @@
       "type": "string",
       "required": true
     },
-    "bStatus": {
-      "type": "boolean",
-      "required": true,
-      "default": 0
+    "createdAt": {
+      "type": "date",
+      "required": true
+    },
+    "updatedAt": {
+      "type": "date",
+      "required": false
     }
   },
   "validations": [],
@@ -55,17 +46,12 @@
       "model": "User",
       "foreignKey": "userId"
     },
-    "promotion": {
-      "type": "belongsTo",
-      "model": "Promotion",
-      "foreignKey": "promotionId"
-    },
     "books": {
       "type": "embedsMany",
       "model": "OrderDetail",
       "property": "bookList",
       "options": {
-        "validate": false,
+        "validate": true,
         "forceId": false
       }
     }

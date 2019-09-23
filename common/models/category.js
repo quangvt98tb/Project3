@@ -1,40 +1,86 @@
+let to = require('await-to-js').to;
 app = require('../../server/server')
-let to = require('await-to-js').to
 'use_strict';
 
 module.exports = function(Category) {
-    Category.findBook = async function(id){
-        let [err, category] = await to(Category.findOne({where: {id : id}}))
-        if (err||category == null){
-            return {
-                statusCode: 404, 
-                message: 'Ma the loai sach nay khong ton tai'
-            }
+    const Promise = require('bluebird')
+
+    Category.showCategory = async function(id) {
+        try {
+            const data = await Category.findById(id, {fields: {name: true}});
+            return data
+        } catch (err) {
+            console.log('show Category', err)
+            throw err
         }
-        let Book = app.models.Book
-        let [errBook, bookArr] = await to(Book.find({where: {categoryId : id}}))
-        if (errBook||bookArr == null){
+    }
+
+    Category.listCategory = async function(page, pageSize) {
+        try {
+            const [data, total] = await Promise.all([
+                Category.find({fields: {name: true}}),
+                Category.count()
+            ])
             return {
-                statusCode: 404, 
-                message: 'Khong co sach thuoc the loai nay'
+                rows: data,
+                page: page,
+                pageSize: pageSize,
+                total: total
             }
+        } catch (err) {
+            console.log('list Category', err)
+            throw err
         }
-        return {
-            statusCode: 200, 
-            message: 'Danh sach sach thuoc the loai',
-            result: bookArr
+    }
+
+    Category.listBook = async function(id, page, pageSize) {
+        try {
+            let Book = app.models.Book
+            const [data, total] = await Promise.all([
+                Book.find({
+                    where: {categoryId : id, enable: 1}, 
+                    fields: {name: true, imgURL: true, sellPrice: true}
+                }),
+                Book.count({categoryId : id, enable: 1})
+            ])
+            return {
+                rows: data,
+                page: page,
+                pageSize: pageSize,
+                total: total
+            }
+        } catch (err) {
+            console.log('list Book of Category', err)
+            throw err
         }
     }
 
     Category.remoteMethod(
-        'findBook', {
-            http: {path: '/:id/listBook', verb: 'post'},
-            accepts: [
-                {arg: 'id', type: 'string', required: true}
-            ],
-            returns: [
-                {arg: 'data', type: 'object'}
-            ],
+        'showCategory', {
+            http: {path: '/show', verb: 'post'},
+            accepts: [{arg: 'id', type: 'string', required: true}],
+            returns: {arg: 'data', type: 'object'}
         }
+    )
+
+    Category.remoteMethod(
+        'listCategory', {
+            http: {path: '/list', verb: 'post' },
+            accepts: [
+                {arg: 'page', type: 'number', default: '0'},
+                {arg: 'pageSize', type: 'number', default: '10'}],
+            returns: {arg: 'data', type: 'object'}
+      }
+    )
+
+    Category.remoteMethod(
+        'listBook', {
+            http: {path: '/listBook', verb: 'post' },
+            accepts: [
+                {arg: 'id', type: 'string', required: true},
+                {arg: 'page', type: 'number', default: '0'},
+                {arg: 'pageSize', type: 'number', default: '10'}],
+            returns: {arg: 'data', type: 'object'}
+      }
     )
 }
