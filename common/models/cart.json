@@ -19,7 +19,7 @@
   "relations": {
     "users": {
       "type": "belongsTo",
-      "model": "User",
+      "model": "Customer",
       "foreignKey": "userId"
     },
     "orderDetail": {

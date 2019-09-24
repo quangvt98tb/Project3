@@ -89,6 +89,34 @@
       "entity": "Category"
     }
   },
-  "acls": [],
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone,",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$everyone, $unauthenticated",
+      "permission": "ALLOW",
+      "property": ["showBook", "listBook"]
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW",
+      "property": ["find", "findById"]
+    },
+    {
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW",
+      "property": ["create", "upsert", "updateAttributes"]
+    }
+  ],
   "methods": {}
 }

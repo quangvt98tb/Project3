@@ -101,7 +101,7 @@
       }
     }
   },
-  "User": {
+  "Customer": {
     "dataSource": "mydb",
     "public": true,
     "options": {
@@ -111,5 +111,27 @@
         }
       }
     }
+  }, 
+
+  
+  "User": {
+    "dataSource": "mydb",
+    "public": false
+  },
+  "AccessToken": {
+    "dataSource": "mydb",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "mydb",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "mydb",
+    "public": false
+  },
+  "Role": {
+    "dataSource": "mydb",
+    "public": false
   }
 }
