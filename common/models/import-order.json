@@ -27,14 +27,15 @@
       "required": true
     }
   },
+  "protected": ["id"],
   "validations": [],
   "relations": {
-    "supplier": {
+    "belongsToSupplier": {
       "type": "belongsTo",
       "model": "Supplier",
       "foreignKey": "supplierId"
     },
-    "books": {
+    "embedsManyOrderDetail": {
       "type": "embedsMany",
       "model": "OrderDetail",
       "property": "bookList",

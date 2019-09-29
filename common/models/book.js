@@ -6,7 +6,8 @@ module.exports = function(Book) {
     const Promise = require('bluebird')
     Book.showBook = async function(id) {
         try {
-            const data = await Book.findById(id, {fields: {
+            const data = await Book.findById(id, 
+                {fields: {
                 name: true, 
                 categoryId: true, 
                 description: true,
@@ -16,7 +17,9 @@ module.exports = function(Book) {
                 sellPrice: true,
                 publishedAt: true,
                 enable: true
-            }});
+                }, 
+                include: ['belongsToCategory']
+            });
             return data
         } catch (err) {
             console.log('show Book', err)
@@ -38,7 +41,8 @@ module.exports = function(Book) {
                         author: true,
                         sellPrice: true,
                         publishedAt: true
-                    }
+                    }, 
+                    include: ['belongsToCategory']
                 }),
                 Book.count({enable: 1})
             ])

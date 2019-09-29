@@ -13,14 +13,6 @@
         "type": "string",
         "required": true
       },
-      "bookName": {
-        "type": "string",
-        "required": false
-      },
-      "imgURL": {
-        "type": "string",
-        "required": false
-      },
       "quantity": {
         "type": "number",
         "required": true
@@ -30,9 +22,10 @@
         "required": true
       }
     },
+    "protected": ["id"],
     "validations": [],
     "relations": {
-      "book": {
+      "belongsToBook": {
         "type": "belongsTo",
         "model": "Book",
         "foreignKey": "bookId",

@@ -15,14 +15,15 @@
       "required": true
     }
   },
+  "protcted": ["id", "userId"],
   "validations": [],
   "relations": {
-    "users": {
+    "belongsToUser": {
       "type": "belongsTo",
       "model": "Customer",
       "foreignKey": "userId"
     },
-    "orderDetail": {
+    "embedsManyOrderDetail": {
       "type": "embedsMany",
       "model": "OrderDetail",
       "property": "bookList",

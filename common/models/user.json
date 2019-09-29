@@ -43,19 +43,20 @@
       "default": 1
     }
   },
+  "protected": ["birthday", "gender", "createdAt", "role", "enable"],
   "validations": [],
   "relations": {
-    "cart": {
+    "hasOneCart": {
       "type": "hasOne",
       "model": "Cart",
       "foreignKey": "userId"
     },
-     "orders": {
+     "hasManyOrder": {
       "type": "hasMany",
       "model": "ExportOrder",
       "foreignKey": "userId"
     },
-    "comments": {
+    "hasManyComment": {
       "type": "hasMany",
       "model": "Comment",
       "foreignKey": "userId"

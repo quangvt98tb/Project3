@@ -39,14 +39,15 @@
       "required": false
     }
   },
+  "protected": ["id"],
   "validations": [],
   "relations": {
-    "user": {
+    "belongsToUser": {
       "type": "belongsTo",
       "model": "Customer",
       "foreignKey": "userId"
     },
-    "books": {
+    "embedsManyOrderDetail": {
       "type": "embedsMany",
       "model": "OrderDetail",
       "property": "bookList",
@@ -68,21 +69,28 @@
       "principalType": "ROLE",
       "principalId": "$authenticated",
       "permission": "ALLOW",
-      "property": ["showForUser", "cancelOrderByUser"]
+      "property": ["UserRead", "UserList"]
+    },
+    {
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": ["UserCancelOrder"]
     },
     {
       "accessType": "READ",
       "principalType": "ROLE",
       "principalId": "admin",
       "permission": "ALLOW",
-      "property": ["find", "findById", "listOfUser", "listByStatus"]
+      "property": ["find", "findById", "AdminListByUser", "AdminListByStatus"]
     },
     {
       "accessType": "WRITE",
       "principalType": "ROLE",
       "principalId": "admin",
       "permission": "ALLOW",
-      "property": ["create", "upsert", "updateAttributes", "updateStatus"]
+      "property": ["create", "upsert", "updateAttributes", "AdminUpdateStatus"]
     }
   ],
   "methods": {}

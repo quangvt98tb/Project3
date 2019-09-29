@@ -18,12 +18,16 @@
       }
     }
   },
+  "protected": ["id"],
   "validations": [],
   "relations": {
-    "books": {
+    "hasManyBook": {
       "type": "hasMany",
       "model": "Book",
-      "foreignKey": "categoryId"
+      "foreignKey": "categoryId", 
+      "options": {
+        "nestRemoting": true
+      }
     }
   },
   "acls": [

@@ -39,7 +39,7 @@ module.exports = function(Category) {
             const [data, total] = await Promise.all([
                 Book.find({
                     where: {categoryId : id, enable: 1}, 
-                    fields: {name: true, imgURL: true, sellPrice: true}
+                    fields: {id: true, name: true, imgURL: true, sellPrice: true}
                 }),
                 Book.count({categoryId : id, enable: 1})
             ])

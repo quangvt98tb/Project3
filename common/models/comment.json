@@ -27,14 +27,15 @@
       "required": false
     }
   },
+  "protected": ["id", "userId", "bookId"],
   "validations": [],
   "relations": {
-    "user": {
+    "belongsToUser": {
       "type": "belongsTo",
       "model": "User",
       "foreignKey": "userId"
     },
-    "book": {
+    "belongsToBook": {
       "type": "belongsTo",
       "model": "Book",
       "foreignKey": "bookId"

@@ -63,19 +63,20 @@
       "default": 1
     }
   },
+  "protected" : ["id", "uid", "categoryId", "quantity"],
   "validations": [],
   "relations": {
-    "comments": {
+    "hasManyComment": {
       "type": "hasMany",
       "model": "Comment",
       "foreignKey": "bookId"
     },
-    "categories": {
+    "belongsToCategory": {
       "type": "belongsTo",
       "model": "Category",
       "foreignKey": "categoryId"
     }, 
-    "orderDetails": {
+    "hasManyOrderDetail": {
       "type": "hasMany",
       "model": "Comment",
       "foreignKey": "bookId"
