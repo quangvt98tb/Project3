@@ -12,7 +12,11 @@
   "properties": {
     "fullName": {
       "type": "String",
-      "required": false
+      "required": true
+    },
+    "password": {
+      "type": "String",
+      "required": true
     },
     "address": {
       "type": "String",
@@ -36,7 +40,7 @@
     },
     "role": {
       "type": "Boolean",
-      "default": 1
+      "default": false
     },
     "enable": {
       "type": "Boolean",

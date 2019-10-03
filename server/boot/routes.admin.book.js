@@ -1,7 +1,6 @@
-const passport = require('passport')
-const bookModel = app.models.Book
 
 module.exports = function (app) {
+    var bookModel = app.models.Book
     var router = app.loopback.Router()
 
     router.get('/book', async function (req, res){
@@ -9,12 +8,12 @@ module.exports = function (app) {
         return res.json(listBook.rows)
     })
 
-    router.get('/book/:bookId', function (req, res){
+    router.get('/book/:bookId', async function (req, res){
         book = await bookModel.findById(req.body.bookId)
         return res.json(book)
     })
 
-    router.post('/book/:bookId/update', function (req, res){
+    router.post('/book/:bookId/update', async function (req, res){
         const bookData = {}
         bookData.uid = req.body.uid
         bookData.name = req.body.name
@@ -34,7 +33,7 @@ module.exports = function (app) {
         }
     })
 
-    router.post('/book/:bookId/deltete', function (req, res){
+    router.post('/book/:bookId/deltete', async function (req, res){
         try{
             book = await bookModel.destroyById({id: req.body.bookId})
             return res.json(book)

@@ -3,7 +3,7 @@ let to = require('await-to-js').to;
 
 module.exports = function(User) {
   const Promise = require('bluebird')
-  const bcrypt = require('bcrypt')
+  //const bcrypt = require('bcrypt')
 	  //create User
 	  User.createUser = async function(
         username,
@@ -23,7 +23,7 @@ module.exports = function(User) {
 
         const UserData = {
             username: username,
-            password: bcrypt.hashSync(password,2),
+            password: password,
             email: email,
             fullname: fullname,
             address: address,
@@ -145,7 +145,6 @@ module.exports = function(User) {
       if (user == null) {
         return [200,"Account have not register!"]} 
       else {
-        const match = await bcrypt.compare(password, user.password);
         if (match)
                {return [200, "Login sucess!"] }
         else 
@@ -185,7 +184,7 @@ module.exports = function(User) {
         accepts: [
           {arg: 'id', type: 'string', required: true},
           {arg: 'username', type: 'string', required: false},
-          // {arg: 'password', type: 'string', required: true},
+          {arg: 'password', type: 'string', required: false},
           {arg: 'email', type: 'string', required: false},
           {arg: 'fullName', type: 'string', required: false},
           {arg: 'address', type: 'string', required: false},
