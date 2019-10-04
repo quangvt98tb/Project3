@@ -16,6 +16,10 @@
       "index": {
         "unique": true
       }
+    },
+    "enable": {
+      "type":"boolean",
+      "default": 1
     }
   },
   "protected": ["id"],

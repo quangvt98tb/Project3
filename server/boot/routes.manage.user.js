@@ -18,7 +18,7 @@ module.exports = function (app) {
             return res.json(listUser) 
         } catch (err) {
             console.log('show list Users', err)
-            throw err
+            return res.status(400).json(err)
         }
     })
 
@@ -37,7 +37,31 @@ module.exports = function (app) {
             return res.json(userData) 
         } catch (err) {
             console.log('show User', err)
-            throw err
+            return res.status(400).json(err)
+        }
+    })
+    
+    router.post('/api/manage-user/create', async function(req, res){
+        const userData = {
+            uid: req.body.uid,
+            fullName: req.body.fullName,
+            password: req.body.password,
+            address: req.body.address,
+            phone: req.body.phone,
+            birthday: req.body.birthday,
+            gender: req.body.gender
+        }
+        try {
+            let [err, user] = await to(User.findOne({where: {email: req.body.email, phone: req.body.phone}}))
+            if (user != null) {
+                //return [200, 'Email or Phone exsited']
+                return res.status(400).json(err)
+            }
+            userData = await User.create(userData)
+            return res.json(userData)
+        } catch (error) {
+            console.log('create User', error)
+            return res.status(400).json(error)
         }
     })
 
@@ -56,7 +80,7 @@ module.exports = function (app) {
             return res.json(userData)
         } catch (err) {
             console.log('update User', err)
-            throw err
+            return res.status(400).json(err)
         }
     })
 
@@ -66,7 +90,7 @@ module.exports = function (app) {
             return res.json(userData)
         } catch (err){
             console.log('delelte User', err)
-            throw err
+            return res.status(400).json(err)
         }
     })
 
