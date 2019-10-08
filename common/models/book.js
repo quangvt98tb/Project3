@@ -1,22 +1,21 @@
-let to = require('await-to-js').to;
-
+let to = require('await-to-js').to
 'use_strict';
 
 module.exports = function(Book) {
     const Promise = require('bluebird')
     Book.showBook = async function(id) {
         try {
-            const data = await Book.findById(id, 
-                {fields: {
-                name: true, 
-                categoryId: true, 
-                description: true,
-                imgURL: true, 
-                publisher: true, 
-                author: true,
-                sellPrice: true,
-                publishedAt: true,
-                enable: true
+            const data = await Book.findById({id, 
+                fields: {
+                    name: true, 
+                    categoryId: true, 
+                    description: true,
+                    imgURL: true, 
+                    publisher: true, 
+                    author: true,
+                    sellPrice: true,
+                    publishedAt: true,
+                    enable: true
                 }, 
                 include: ['belongsToCategory']
             });

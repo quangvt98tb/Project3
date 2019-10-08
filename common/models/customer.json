@@ -1,6 +1,6 @@
 {
   "name": "Customer",
-  "base": "PersistedModel",
+  "base": "User",
   "idInjection": true,
   "options": {
   	"validateUpsert": true,
@@ -74,6 +74,8 @@
       "foreignKey": "userId"
     }
   },
+  "restrictResetPasswordTokenScope": true,
+  "emailVerificationRequired": true,
   "acls": [],
   "methods": {}
 }

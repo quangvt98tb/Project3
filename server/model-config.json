@@ -111,6 +111,10 @@
         }
       }
     }
+  }, 
+  "User": {
+    "dataSource": "mydb",
+    "public": false
   },
   "AccessToken": {
     "dataSource": "mydb",
@@ -127,5 +131,8 @@
   "Role": {
     "dataSource": "mydb",
     "public": false
+  },
+  "Email": {
+    "dataSource": "emailDs"
   }
 }
