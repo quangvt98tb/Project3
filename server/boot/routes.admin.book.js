@@ -33,7 +33,7 @@ module.exports = function (app) {
         }
     })
 
-    router.post('/book/:id/deltete', async function (req, res){
+    router.post('/book/:id/delete', async function (req, res){
         try{
             book = await bookModel.destroyById({id: req.body.id})
             return res.json(book)
