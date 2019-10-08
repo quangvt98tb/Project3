@@ -1,127 +1,128 @@
 let to = require('await-to-js').to;
 'use_strict';
 
-module.exports = function(User) {
+module.exports = function(Customer) {
   const Promise = require('bluebird')
-  //const bcrypt = require('bcrypt')
-	  //create User
-	  User.createUser = async function(
-        username,
+	  //create Customer
+	  Customer.createCustomer = async function(
+        fullName,    
         password, 
         email,
-        fullname,  
         address,
         phone,
-        birthday,
+        dateOfBirth,
         gender,
+        receiveDistrict,
         role) {
         
-        let [err, user] = await to(User.findOne({where: {email: email}}))
+        let [err, user] = await to(Customer.findOne({where: {email: email}}))
         if (user != null) {
             return [200, 'Email exsited']
         }
 
-        const UserData = {
-            username: username,
+        const CustomerData = {
+            fullName: fullName,
             password: password,
             email: email,
-            fullname: fullname,
             address: address,
             phone: phone,
-            birthday: birthday,
+            dateOfBirth: dateOfBirth,
             gender: gender,
+            receiveDistrict: receiveDistrict,
             role: role,
             createdAt: new Date(),
             enable: 1
         }
         try {
-            const data = await User.create(UserData)
+            const data = await Customer.create(CustomerData)
             return data
           } catch (err) {
-            console.log('create User', err)
+            console.log('create Customer', err)
             throw err
           }
         }
     
-    //read User
-    User.readUser = async function(id) {
+    //read Customer
+    Customer.readCustomer = async function(id) {
         try {
-            const data = await User.findById(id, {
+            const data = await Customer.findById(id, {
                 where: {
                 enable: 1
                 }
             });
             return data;
         } catch (err) {
-            console.log('read User', err)
+            console.log('read Customer', err)
             throw err
         }
     }
 
-    //update User
-    User.updateUser = async function(
+    //update Customer
+    Customer.updateCustomer = async function(
         id, 
-        username,
         email,
-        fullname,  
+        fullName,  
         address,
         phone,
         birthday,
-        gender,) {
+        gender,
+        receiveDistrict) {
     	
-        const UserData = {
-            username: username,
+        const CustomerData = {
             email: email,
-            fullname: fullname,
+            fullName: fullName,
             address: address,
             phone: phone,
             birthday: birthday,
-            gender: gender
+            gender: gender,
+            receiveDistrict: receiveDistrict
         }
 
         try {
-            const data = await User.upsertWithWhere(
+            const data = await Customer.upsertWithWhere(
               {
-                id: User.id
+                id: Customer.id
               },
-              UserData
+              CustomerData
             )
             return data
           } catch (err) {
-            console.log('update User', err)
+            console.log('update Customer', err)
             throw err
           }
     }
 
-    //delete User 
-    User.deleteUser = async function(id) {
-        let [err, user] = await to(User.findOne({where: {id: id}}))
+    //delete Customer 
+    Customer.deleteCustomer = async function(id) {
+        let [err, user] = await to(Customer.findOne({where: {id: id}}))
         if (user == null) {
-            return [200, 'can not find User']
+            return [200, 'can not find Customer']
         }
-        User.destroyById(user.id)
-        return [200, 'delete User sucess']
+        Customer.destroyById(user.id)
+        return [200, 'delete Customer sucess']
     }
 
-    // list Users paganation(4)
-    User.listUser = async function(page, pageSize) {
+    // list Customers paganation
+    Customer.listCustomer = async function(page, pageSize) {
         try {
           const [data, total] = await Promise.all([
-            User.find({
+            Customer.find({
               where: {
-                enable: 1
+                enable: 1,
+                role: false
               },
-              fields: {
-                username: true,
-                fullname: true,
+              fields: { 
+                fullName: true, 
                 email: true,
-                address: true,
+                password:true,
+                address: true, 
                 phone: true,
-                birthday:true,
-                gender:true
+                dateOfBirth: true, 
+                gender: true, 
+                receiveDistrict: true,
               }
             }),
-            User.count({
+            Customer.count({
               enable: 1
             })
           ])
@@ -133,15 +134,15 @@ module.exports = function(User) {
             total: total
           }
         } catch (err) {
-          console.log('list User', err)
+          console.log('list Customer', err)
           throw err
         }
     }
     
     // Login function
-    User.loginUser = async function(email, password){
+    Customer.loginCustomer = async function(email, password){
       //console.log("hi1");
-      let [err,user] = await to(User.findOne({where: {email: email}}))
+      let [err,user] = await to(Customer.findOne({where: {email: email}}))
       if (user == null) {
         return [200,"Account have not register!"]} 
       else {
@@ -151,43 +152,42 @@ module.exports = function(User) {
                {return [200,"Password error"] }
     }}
 
-    User.remoteMethod('createUser', 
+    Customer.remoteMethod('createCustomer', 
       {
-        http: {path: '/createUser', verb: 'post'},
+        http: {path: '/createCustomer', verb: 'post'},
         accepts: [
-          {arg: 'username', type: 'string', required: true},
-          {arg: 'password', type: 'string', required: true},
-          {arg: 'email', type: 'string', required: true},
           {arg: 'fullName', type: 'string', required: false},
-          {arg: 'address', type: 'string', required: false},
+          {arg: 'password', type: 'string', required: true},
+          {arg: 'email', type: 'string', required: true}, 
+          {arg: 'address', type: 'object', required: false},
           {arg: 'phone', type: 'string', required: false},
           {arg: 'birthday', type: 'date', required: false},
           {arg: 'gender', type: 'string', required: false},
-          {arg: 'role', type: 'boolean', required: true}
+          {arg: 'receiveDistrict', type: 'array', required: false},
+          {arg: 'role', type: 'boolean'}
         ],
         returns: { arg: 'data' },
       }
     )
 
-    User.remoteMethod('readUser', 
+    Customer.remoteMethod('readCustomer', 
       {
-        http: {path: '/readUser', verb: 'post'},
+        http: {path: '/readCustomer', verb: 'post'},
         accepts: [
             {arg: 'id', type: 'string', required: true}],
         returns: { arg: 'data' }
       },
     )
 
-    User.remoteMethod('updateUser', 
+    Customer.remoteMethod('updateCustomer', 
       {
-        http: {path: '/updateUser', verb: 'post'},
+        http: {path: '/updateCustomer', verb: 'post'},
         accepts: [
           {arg: 'id', type: 'string', required: true},
-          {arg: 'username', type: 'string', required: false},
           {arg: 'password', type: 'string', required: false},
           {arg: 'email', type: 'string', required: false},
           {arg: 'fullName', type: 'string', required: false},
-          {arg: 'address', type: 'string', required: false},
+          {arg: 'address', type: 'object', required: false},
           {arg: 'phone', type: 'string', required: false},
           {arg: 'birthday', type: 'date', required: false},
           {arg: 'gender', type: 'string', required: false}
@@ -196,9 +196,9 @@ module.exports = function(User) {
       },
     )
 
-    User.remoteMethod('deleteUser', 
+    Customer.remoteMethod('deleteCustomer', 
       {
-        http: {path: '/deleteUser', verb: 'delete'},
+        http: {path: '/deleteCustomer', verb: 'delete'},
         accepts: [
             {arg: 'id', type: 'string', required: true}
         ],
@@ -208,9 +208,9 @@ module.exports = function(User) {
       }
     )
 
-    User.remoteMethod('listUser', 
+    Customer.remoteMethod('listCustomer', 
       {
-        http: {verb: 'post', path: '/listUsers' },
+        http: {verb: 'get', path: '/listCustomers' },
         accepts: [
           { arg: 'page', type: 'number', default: '0'},
           { arg: 'pageSize', type: 'number', default: '10'}],
@@ -218,9 +218,9 @@ module.exports = function(User) {
       }
     )
 
-    User.remoteMethod('loginUser',
+    Customer.remoteMethod('loginCustomer',
     {
-      http: {verb: 'post', path: '/loginUser' },
+      http: {verb: 'post', path: '/loginCustomer' },
       accepts: [
         { arg: 'email', type: 'string', required: true,},
         { arg: 'password', type: 'string', required: true }],

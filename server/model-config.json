@@ -111,12 +111,6 @@
         }
       }
     }
-  }, 
-
-  
-  "User": {
-    "dataSource": "mydb",
-    "public": false
   },
   "AccessToken": {
     "dataSource": "mydb",

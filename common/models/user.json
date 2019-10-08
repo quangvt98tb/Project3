@@ -1,6 +1,6 @@
 {
   "name": "Customer",
-  "base": "User",
+  "base": "PersistedModel",
   "idInjection": true,
   "options": {
   	"validateUpsert": true,
@@ -12,27 +12,35 @@
   "properties": {
     "fullName": {
       "type": "String",
-      "required": true
+      "required": false
     },
     "password": {
       "type": "String",
-      "required": true
+      "required": false
+    },
+    "email": {
+      "type": "String",
+      "required": false
     },
     "address": {
-      "type": "String",
+      "type": [ "Object" ],
       "required": false
     },
     "phone": {
       "type": "String",
       "required": false     
     },
-    "birthday": {
+    "dateOfBirth": {
       "type": "Date",
       "required": false
     },
     "gender": {
       "type": "String",
       "required": false    
+    },
+    "receiveDistrict": {
+      "type": "array",
+      "default": []
     },
     "createdAt": {
       "type": "Date",

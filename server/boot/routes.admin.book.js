@@ -3,17 +3,17 @@ module.exports = function (app) {
     var bookModel = app.models.Book
     var router = app.loopback.Router()
 
-    router.get('/book', async function (req, res){
+    router.get('api/manage-book/list-books', async function (req, res){
         listBook = await bookModel.find()
         return res.json(listBook.rows)
     })
 
-    router.get('/book/:bookId', async function (req, res){
-        book = await bookModel.findById(req.body.bookId)
+    router.get('api/manage-book/:id', async function (req, res){
+        book = await bookModel.findById(req.body.id)
         return res.json(book)
     })
 
-    router.post('/book/:bookId/update', async function (req, res){
+    router.post('api/manage-book/:id/update', async function (req, res){
         const bookData = {}
         bookData.uid = req.body.uid
         bookData.name = req.body.name
@@ -26,16 +26,16 @@ module.exports = function (app) {
         bookData.sellPrice = req.body.sellPrice
         bookData.publishedAt = req.body.publishedAt
         try{
-            book = await bookModel.findByIdAndUpdate({id: req.body.bookId}, bookData)
+            book = await bookModel.findByIdAndUpdate({id: req.body.id}, bookData)
             return res.json(book)
         } catch (error) {
             return res.status(400).json(error)
         }
     })
 
-    router.post('/book/:bookId/deltete', async function (req, res){
+    router.post('/book/:id/deltete', async function (req, res){
         try{
-            book = await bookModel.destroyById({id: req.body.bookId})
+            book = await bookModel.destroyById({id: req.body.id})
             return res.json(book)
         } catch (error) {
             return res.status(400).json(error)
