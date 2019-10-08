@@ -2,12 +2,11 @@
   "mydb": {
     "host": "localhost",
     "port": 27017,
-    "url": "",
+    "url":  "",
     "database": "BookStore",
-    "password": "26121997",
+    "password": "123456",
     "name": "mydb",
-    "user": "ngocanh",
-    "authSource": "admin",
+    "user": "sylphy",
     "connector": "mongodb"
-  }
+}
 }
