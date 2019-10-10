@@ -1,13 +1,7 @@
 {
   "mydb": {
-    "host": "localhost",
-    "port": 27017,
-    "url":  "",
-    "database": "BookStore",
-    "password": "123456",
-    "name": "mydb",
-    "user": "sylphy",
-    "connector": "mongodb"
+    "connector": "loopback-connector-mongodb",
+    "url": "mongodb+srv://ngocanh2162:26121997@project3-wz8nw.mongodb.net/Project3?retryWrites=true&w=majority"
   },
   "emailDs": {
     "name": "emailDs",
@@ -28,5 +22,4 @@
       }
     ]
   }
-}
 }

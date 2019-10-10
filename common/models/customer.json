@@ -6,19 +6,14 @@
   	"validateUpsert": true,
     "strictObjectIDCoercion": true,
     "mydb": {
-      "table": "user"
+      "table": "customer"
     }
+  },
+  "http": {
+    "path": "customer"
   },
   "properties": {
     "fullName": {
-      "type": "String",
-      "required": false
-    },
-    "password": {
-      "type": "String",
-      "required": false
-    },
-    "email": {
       "type": "String",
       "required": false
     },
@@ -46,16 +41,12 @@
       "type": "Date",
       "required": false     
     },
-    "role": {
-      "type": "Boolean",
-      "default": false
-    },
     "enable": {
       "type": "Boolean",
       "default": 1
     }
   },
-  "protected": ["birthday", "gender", "createdAt", "role", "enable"],
+  "protected": ["dateOfBirth", "gender", "createdAt", "role", "enable"],
   "validations": [],
   "relations": {
     "hasOneCart": {

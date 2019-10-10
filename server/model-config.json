@@ -57,6 +57,17 @@
       }
     }
   },
+  "Customer": {
+    "dataSource": "mydb",
+    "public": true,
+    "options": {
+      "remoting": {
+        "sharedMethods": {
+          "*": true
+        }
+      }
+    }
+  }, 
   "ExportOrder": {
     "dataSource": "mydb",
     "public": true,
@@ -101,20 +112,9 @@
       }
     }
   },
-  "Customer": {
-    "dataSource": "mydb",
-    "public": true,
-    "options": {
-      "remoting": {
-        "sharedMethods": {
-          "*": true
-        }
-      }
-    }
-  }, 
   "User": {
     "dataSource": "mydb",
-    "public": false
+    "public": true
   },
   "AccessToken": {
     "dataSource": "mydb",
@@ -122,15 +122,15 @@
   },
   "ACL": {
     "dataSource": "mydb",
-    "public": false
+    "public": true
   },
   "RoleMapping": {
     "dataSource": "mydb",
-    "public": false
+    "public": true
   },
   "Role": {
     "dataSource": "mydb",
-    "public": false
+    "public": true
   },
   "Email": {
     "dataSource": "emailDs"

@@ -1,8 +1,12 @@
-let to = require('await-to-js').to;
+let to = require('await-to-js').to
+var config = require('../../server/config.json');
+var path = require('path');
+var senderAddress = 'ngocanh2162@gmail.com'; 
 'use_strict';
 
 module.exports = function(Customer) {
-  const Promise = require('bluebird')
+    const Promise = require('bluebird')
+
 	  //create Customer
 	  Customer.createCustomer = async function(
         fullName,    
@@ -39,9 +43,9 @@ module.exports = function(Customer) {
           } catch (err) {
             console.log('create Customer', err)
             throw err
-          }
         }
-    
+    }
+
     //read Customer
     Customer.readCustomer = async function(id) {
         try {
@@ -153,7 +157,7 @@ module.exports = function(Customer) {
     }}
 
     Customer.remoteMethod('createCustomer', 
-      {
+    {
         http: {path: '/createCustomer', verb: 'post'},
         accepts: [
           {arg: 'fullName', type: 'string', required: false},
@@ -167,20 +171,18 @@ module.exports = function(Customer) {
           {arg: 'role', type: 'boolean'}
         ],
         returns: { arg: 'data' },
-      }
-    )
+    })
 
     Customer.remoteMethod('readCustomer', 
-      {
+    {
         http: {path: '/readCustomer', verb: 'post'},
         accepts: [
             {arg: 'id', type: 'string', required: true}],
         returns: { arg: 'data' }
-      },
-    )
+    })
 
     Customer.remoteMethod('updateCustomer', 
-      {
+    {
         http: {path: '/updateCustomer', verb: 'post'},
         accepts: [
           {arg: 'id', type: 'string', required: true},
@@ -193,11 +195,10 @@ module.exports = function(Customer) {
           {arg: 'gender', type: 'string', required: false}
         ],
         returns: { arg: 'data' }
-      },
-    )
+    })
 
     Customer.remoteMethod('deleteCustomer', 
-      {
+    {
         http: {path: '/deleteCustomer', verb: 'delete'},
         accepts: [
             {arg: 'id', type: 'string', required: true}
@@ -205,18 +206,16 @@ module.exports = function(Customer) {
         returns: [
             {arg: 'status', type: 'number'},
             {arg: 'message', type: 'string'}]
-      }
-    )
+    })
 
     Customer.remoteMethod('listCustomer', 
-      {
+    {
         http: {verb: 'get', path: '/listCustomers' },
         accepts: [
           { arg: 'page', type: 'number', default: '0'},
           { arg: 'pageSize', type: 'number', default: '10'}],
         returns: { arg: 'data' },
-      }
-    )
+    })
 
     Customer.remoteMethod('loginCustomer',
     {
@@ -227,6 +226,81 @@ module.exports = function(Customer) {
       returns: [
         {arg: 'status', type: 'number'},
         {arg: 'message', type: 'string'}]
-    }
-  )
+    })
+
+    //send verification email after registration    
+    Customer.afterRemote('createCustomer', function(context, user, next) {
+      var options = {
+        type: 'email',
+        to: user.email,
+        from: senderAddress,
+        subject: 'Thanks for registering.',
+        template: path.resolve(__dirname, '../../server/views/verify.ejs'), //check lai
+        redirect: '/verified',
+        user: user
+      };
+
+      user.verify(options, function(err, response) {
+        if (err) {
+          Customer.deleteById(user.id);
+          return next(err);
+        }
+        context.res.render('response', {
+          title: 'Signed up successfully',
+          content: 'Please check your email and click on the verification link ' +
+              'before logging in.',
+          redirectTo: '/',
+          redirectToLinkText: 'Log in'
+        });
+      });
+    }); 
+
+    // Method to render
+    Customer.afterRemote('prototype.verify', function(context, user, next) {
+      context.res.render('response', {
+        title: 'A Link to reverify your identity has been sent '+
+          'to your email successfully',
+        content: 'Please check your email and click on the verification link '+
+          'before logging in',
+        redirectTo: '/',
+        redirectToLinkText: 'Log in'
+      });
+    });
+
+    //send password reset link when requested
+    Customer.on('resetPasswordRequest', function(info) {
+      var url = 'http://' + config.host + ':' + config.port + '/reset-password';
+      var html = 'Click <a href="' + url + '?access_token=' +
+          info.accessToken.id + '">here</a> to reset your password';
+
+      Customer.app.models.Email.send({
+        to: info.email,
+        from: senderAddress,
+        subject: 'Password reset',
+        html: html
+      }, function(err) {
+        if (err) return console.log('> error sending password reset email');
+        console.log('> sending password reset email to:', info.email);
+      });
+    });
+
+    //render UI page after password change
+    Customer.afterRemote('changePassword', function(context, user, next) {
+      context.res.render('response', {
+        title: 'Password changed successfully',
+        content: 'Please login again with new password',
+        redirectTo: '/',
+        redirectToLinkText: 'Log in'
+      })
+    })
+    
+    //render UI page after password reset
+    Customer.afterRemote('setPassword', function(context, user, next) {
+      context.res.render('response', {
+        title: 'Password reset success',
+        content: 'Your password has been reset successfully',
+        redirectTo: '/',
+        redirectToLinkText: 'Log in'
+      })
+    })
 };
