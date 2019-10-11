@@ -21,6 +21,7 @@
     "loopback-component-explorer": "^6.2.0",
     "loopback-connector-mongodb": "^5.0.0",
     "nodemon": "^1.19.2",
+    "passport": "^0.4.0",
     "saslprep": "^1.0.3",
     "serve-favicon": "^2.0.1",
     "strong-error-handler": "^3.0.0"
