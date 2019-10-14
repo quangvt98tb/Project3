@@ -4,13 +4,50 @@ module.exports = function (app) {
     var router = app.loopback.Router()
 
     router.get('api/manage-book/list-books', async function (req, res){
-        listBook = await bookModel.find()
-        return res.json(listBook.rows)
+        try{
+            listBook = await bookModel.find()
+            return res.json(listBook.rows)
+        } catch (error) {
+            console.log('list Book', err)
+            return res.status(400).json(err)
+        }
     })
 
     router.get('api/manage-book/:id', async function (req, res){
-        book = await bookModel.findById(req.body.id)
-        return res.json(book)
+        try{
+            book = await bookModel.findById(req.body.id)
+            return res.json(book)
+        } catch (error) {
+            console.log('show Book', err)
+            return res.status(400).json(err)
+        }
+        
+    })
+
+    router.post('/api/manage-book/create', async function(req, res){
+        const bookData = {
+            uid : req.body.uid,
+            name : req.body.name,
+            categoryId : req.body.categoryId,
+            description : req.body.description,
+            imgURL : req.body.imgURL,
+            publisher : req.body.publisher,
+            author : req.body.author,
+            quantity : req.body.quantity,
+            sellPrice : req.body.sellPrice,
+            publishedAt : req.body.publishedAt
+        }
+        try {
+            let [err, book] = await to(Book.findOne({where: {uid: req.body.uid}}))
+            if (book != null) {
+                return res.status(400).json(err)
+            }
+            bookCreate = await Book.create(bookData)
+            return res.json(bookCreate)
+        } catch (error) {
+            console.log('create Book', error)
+            return res.status(400).json(error)
+        }
     })
 
     router.post('api/manage-book/:id/update', async function (req, res){

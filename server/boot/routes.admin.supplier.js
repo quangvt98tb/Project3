@@ -6,11 +6,13 @@ module.exports = function (app) {
     router.get('/api/manage-supplier/list-suppliers', async function (req, res){
         try {    
             listSupplier = await Supplier.find({
-                where: {enable: 1}, 
                 fields: {
+                    uid: true,
                     name: true, 
+                    email: true,
                     address: true, 
                     phone: true, 
+                    enable: true
                 }, 
             })
             return res.json(listSupplier) 
@@ -23,11 +25,13 @@ module.exports = function (app) {
     router.get('/api/manage-supplier/:id', async function (req, res){
         try {
             supplierData = await Supplier.findById(req.params.id, {
-                where: { enable: 1}, 
                 fields: {
+                    uid: true,
                     name: true, 
+                    email: true,
                     address: true, 
-                    phone: true
+                    phone: true, 
+                    enable: true
                 }, 
             })
             return res.json(supplierData) 
@@ -41,16 +45,18 @@ module.exports = function (app) {
         const supplierData = {
             uid: req.body.uid,
             name: req.body.name,
+            email: req.body.name,
             address: req.body.address,
-            phone: req.body.phone
+            phone: req.body.phone,
+            enable: 1
         }
         try {
-            let [err, supplier] = await to(Supplier.findOne({where: {email: req.body.email, phone: req.body.phone}}))
+            let [err, supplier] = await to(Supplier.findOne({where: {uid: req.body.uid}}))
             if (supplier != null) {
                 return res.status(400).json(err)
             }
-            supplierData = await Supplier.create(supplierData)
-            return res.json(supplierData)
+            supplierCreate = await Supplier.create(supplierData)
+            return res.json(supplierCreate)
         } catch (error) {
             console.log('create Supplier', error)
             return res.status(400).json(error)
@@ -61,13 +67,14 @@ module.exports = function (app) {
         const supplierData = {
             uid: req.body.uid,
             name: req.body.name,
+            email: req.body.name,
             address: req.body.address,
             phone: req.body.phone,
+            enable: req.body.enable
         }
         try {
-            
-            supplierData = await Supplier.findByIdAndUpdate({id: req.params.id}, supplierData)
-            return res.json(supplierData)
+            supplierUpdate = await Supplier.findByIdAndUpdate({id: req.params.id}, supplierData)
+            return res.json(supplierUpdate)
         } catch (err) {
             console.log('update Supplier', err)
             return res.status(400).json(err)
@@ -76,8 +83,8 @@ module.exports = function (app) {
 
     router.delete('/api/manage-supplier/:id/delete', async function(req, res){
         try {
-            supplierData = await Supplier.destroyById({id: req.params.id})
-            return res.json(supplierData)
+            supplierDelete = await Supplier.destroyById({id: req.params.id})
+            return res.json(supplierDelete)
         } catch (err){
             console.log('delelte Supplier', err)
             return res.status(400).json(err)

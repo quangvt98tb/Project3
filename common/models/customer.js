@@ -1,7 +1,7 @@
 let to = require('await-to-js').to
-var config = require('../../server/config.json');
-var path = require('path');
-var senderAddress = 'ngocanh2162@gmail.com'; 
+var config = require('../../server/config.json')
+var path = require('path')
+var senderAddress = 'ngocanh2162@gmail.com'
 'use_strict';
 
 module.exports = function(Customer) {
@@ -16,8 +16,7 @@ module.exports = function(Customer) {
         phone,
         dateOfBirth,
         gender,
-        receiveDistrict,
-        role) {
+        receiveDistrict) {
         
         let [err, user] = await to(Customer.findOne({where: {email: email}}))
         if (user != null) {
@@ -33,12 +32,15 @@ module.exports = function(Customer) {
             dateOfBirth: dateOfBirth,
             gender: gender,
             receiveDistrict: receiveDistrict,
-            role: role,
             createdAt: new Date(),
             enable: 1
         }
         try {
             const data = await Customer.create(CustomerData)
+            let Cart = app.models.Cart
+            var CartData = {}
+            CartData.userId = data.id
+            data2 = Cart.create(CartData)
             return data
           } catch (err) {
             console.log('create Customer', err)
@@ -50,8 +52,16 @@ module.exports = function(Customer) {
     Customer.readCustomer = async function(id) {
         try {
             const data = await Customer.findById(id, {
-                where: {
-                enable: 1
+                where: {enable: 1},
+                fields: { 
+                  fullName: true, 
+                  email: true,
+                  address: true, 
+                  phone: true,
+                  dateOfBirth: true, 
+                  gender: true, 
+                  receiveDistrict: true,
+                  createdAt: true
                 }
             });
             return data;
@@ -68,7 +78,7 @@ module.exports = function(Customer) {
         fullName,  
         address,
         phone,
-        birthday,
+        dateOfBirth,
         gender,
         receiveDistrict) {
     	
@@ -77,7 +87,7 @@ module.exports = function(Customer) {
             fullName: fullName,
             address: address,
             phone: phone,
-            birthday: birthday,
+            dateOfBirth: dateOfBirth,
             gender: gender,
             receiveDistrict: receiveDistrict
         }
@@ -85,7 +95,7 @@ module.exports = function(Customer) {
         try {
             const data = await Customer.upsertWithWhere(
               {
-                id: Customer.id
+                id: id
               },
               CustomerData
             )
@@ -96,39 +106,24 @@ module.exports = function(Customer) {
           }
     }
 
-    //delete Customer 
-    Customer.deleteCustomer = async function(id) {
-        let [err, user] = await to(Customer.findOne({where: {id: id}}))
-        if (user == null) {
-            return [200, 'can not find Customer']
-        }
-        Customer.destroyById(user.id)
-        return [200, 'delete Customer sucess']
-    }
-
     // list Customers paganation
     Customer.listCustomer = async function(page, pageSize) {
         try {
           const [data, total] = await Promise.all([
             Customer.find({
-              where: {
-                enable: 1,
-                role: false
-              },
               fields: { 
                 fullName: true, 
                 email: true,
-                password:true,
                 address: true, 
                 phone: true,
                 dateOfBirth: true, 
                 gender: true, 
                 receiveDistrict: true,
+                createdAt: true,
+                enable: true
               }
             }),
-            Customer.count({
-              enable: 1
-            })
+            Customer.count()
           ])
 
           return {
@@ -142,19 +137,7 @@ module.exports = function(Customer) {
           throw err
         }
     }
-    
-    // Login function
-    Customer.loginCustomer = async function(email, password){
-      //console.log("hi1");
-      let [err,user] = await to(Customer.findOne({where: {email: email}}))
-      if (user == null) {
-        return [200,"Account have not register!"]} 
-      else {
-        if (match)
-               {return [200, "Login sucess!"] }
-        else 
-               {return [200,"Password error"] }
-    }}
+  
 
     Customer.remoteMethod('createCustomer', 
     {
@@ -165,17 +148,16 @@ module.exports = function(Customer) {
           {arg: 'email', type: 'string', required: true}, 
           {arg: 'address', type: 'object', required: false},
           {arg: 'phone', type: 'string', required: false},
-          {arg: 'birthday', type: 'date', required: false},
+          {arg: 'dateOfBirth', type: 'date', required: false},
           {arg: 'gender', type: 'string', required: false},
-          {arg: 'receiveDistrict', type: 'array', required: false},
-          {arg: 'role', type: 'boolean'}
+          {arg: 'receiveDistrict', type: 'array', required: false}
         ],
         returns: { arg: 'data' },
     })
 
     Customer.remoteMethod('readCustomer', 
     {
-        http: {path: '/readCustomer', verb: 'post'},
+        http: {path: '/readCustomer', verb: 'get'},
         accepts: [
             {arg: 'id', type: 'string', required: true}],
         returns: { arg: 'data' }
@@ -186,28 +168,17 @@ module.exports = function(Customer) {
         http: {path: '/updateCustomer', verb: 'post'},
         accepts: [
           {arg: 'id', type: 'string', required: true},
-          {arg: 'password', type: 'string', required: false},
           {arg: 'email', type: 'string', required: false},
           {arg: 'fullName', type: 'string', required: false},
           {arg: 'address', type: 'object', required: false},
           {arg: 'phone', type: 'string', required: false},
-          {arg: 'birthday', type: 'date', required: false},
-          {arg: 'gender', type: 'string', required: false}
+          {arg: 'dateOfBirth', type: 'date', required: false},
+          {arg: 'gender', type: 'string', required: false},
+          {arg: 'receiveDistrict', type: 'string', required: false}
         ],
         returns: { arg: 'data' }
     })
-
-    Customer.remoteMethod('deleteCustomer', 
-    {
-        http: {path: '/deleteCustomer', verb: 'delete'},
-        accepts: [
-            {arg: 'id', type: 'string', required: true}
-        ],
-        returns: [
-            {arg: 'status', type: 'number'},
-            {arg: 'message', type: 'string'}]
-    })
-
+    
     Customer.remoteMethod('listCustomer', 
     {
         http: {verb: 'get', path: '/listCustomers' },
@@ -216,56 +187,6 @@ module.exports = function(Customer) {
           { arg: 'pageSize', type: 'number', default: '10'}],
         returns: { arg: 'data' },
     })
-
-    Customer.remoteMethod('loginCustomer',
-    {
-      http: {verb: 'post', path: '/loginCustomer' },
-      accepts: [
-        { arg: 'email', type: 'string', required: true,},
-        { arg: 'password', type: 'string', required: true }],
-      returns: [
-        {arg: 'status', type: 'number'},
-        {arg: 'message', type: 'string'}]
-    })
-
-    //send verification email after registration    
-    Customer.afterRemote('createCustomer', function(context, user, next) {
-      var options = {
-        type: 'email',
-        to: user.email,
-        from: senderAddress,
-        subject: 'Thanks for registering.',
-        template: path.resolve(__dirname, '../../server/views/verify.ejs'), //check lai
-        redirect: '/verified',
-        user: user
-      };
-
-      user.verify(options, function(err, response) {
-        if (err) {
-          Customer.deleteById(user.id);
-          return next(err);
-        }
-        context.res.render('response', {
-          title: 'Signed up successfully',
-          content: 'Please check your email and click on the verification link ' +
-              'before logging in.',
-          redirectTo: '/',
-          redirectToLinkText: 'Log in'
-        });
-      });
-    }); 
-
-    // Method to render
-    Customer.afterRemote('prototype.verify', function(context, user, next) {
-      context.res.render('response', {
-        title: 'A Link to reverify your identity has been sent '+
-          'to your email successfully',
-        content: 'Please check your email and click on the verification link '+
-          'before logging in',
-        redirectTo: '/',
-        redirectToLinkText: 'Log in'
-      });
-    });
 
     //send password reset link when requested
     Customer.on('resetPasswordRequest', function(info) {
@@ -285,7 +206,7 @@ module.exports = function(Customer) {
     });
 
     //render UI page after password change
-    Customer.afterRemote('changePassword', function(context, user, next) {
+    Customer.afterRemote('changePassword', function(context, Customer, next) {
       context.res.render('response', {
         title: 'Password changed successfully',
         content: 'Please login again with new password',
@@ -295,7 +216,7 @@ module.exports = function(Customer) {
     })
     
     //render UI page after password reset
-    Customer.afterRemote('setPassword', function(context, user, next) {
+    Customer.afterRemote('setPassword', function(context, Customer, next) {
       context.res.render('response', {
         title: 'Password reset success',
         content: 'Your password has been reset successfully',

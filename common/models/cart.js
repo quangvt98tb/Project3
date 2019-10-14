@@ -5,7 +5,7 @@ app = require('../../server/server')
 module.exports = function(Cart) {
     const Promise = require('bluebird')
 
-    Cart.checkOut = async function(id) {
+    Cart.checkOut = async function(id, paymentMethod, addressShip, status) {
         try {
             const data = await Cart.findById(id)
             try {

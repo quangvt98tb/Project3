@@ -11,11 +11,10 @@
   },
   "properties": {
     "userId": {
-      "type": "number",
+      "type": "string",
       "required": true
     }
   },
-  "protcted": ["id", "userId"],
   "validations": [],
   "relations": {
     "belongsToUser": {

@@ -46,7 +46,7 @@
       "default": 1
     }
   },
-  "protected": ["dateOfBirth", "gender", "createdAt", "role", "enable"],
+  "protected": ["dateOfBirth", "gender", "createdAt",  "enable"],
   "validations": [],
   "relations": {
     "hasOneCart": {
@@ -66,7 +66,47 @@
     }
   },
   "restrictResetPasswordTokenScope": true,
-  "emailVerificationRequired": true,
-  "acls": [],
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "DENY",
+      "property": "listCustomer"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW",
+      "property": "listCustomer"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "ALLOW",
+      "property": "createCustomer"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "updateCustomer"
+    }
+  ],
   "methods": {}
 }

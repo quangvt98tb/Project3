@@ -94,29 +94,20 @@
     {
       "accessType": "*",
       "principalType": "ROLE",
-      "principalId": "$everyone,",
+      "principalId": "$everyone",
       "permission": "DENY"
     },
     {
       "accessType": "READ",
       "principalType": "ROLE",
-      "principalId": "$everyone, $unauthenticated",
-      "permission": "ALLOW",
-      "property": ["showBook", "listBook"]
+      "principalId": "$everyone",
+      "permission": "ALLOW"
     },
     {
-      "accessType": "READ",
+      "accessType": "EXECUTE",
       "principalType": "ROLE",
       "principalId": "admin",
-      "permission": "ALLOW",
-      "property": ["find", "findById"]
-    },
-    {
-      "accessType": "WRITE",
-      "principalType": "ROLE",
-      "principalId": "admin",
-      "permission": "ALLOW",
-      "property": ["create", "upsert", "updateAttributes"]
+      "permission": "ALLOW"
     }
   ],
   "methods": {}

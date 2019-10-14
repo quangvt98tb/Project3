@@ -98,4 +98,8 @@ module.exports = function(ImportOrder) {
             returns: {arg: 'data', type: 'object'}
       }
     )
+
+    ImportOrder.afterRemote('create', function(context, user, next) {
+        
+    })
 }

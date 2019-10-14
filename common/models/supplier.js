@@ -32,9 +32,13 @@ module.exports = function(Supplier) {
     Supplier.readSupplier = async function(id) {
         try {
             const data = await Supplier.findById(id, {
-                where: {
-                enable: 1
-                }
+              fields: {
+                name: true,
+                email: true,
+                address: true,
+                phone: true,
+                enable: true,
+              }
             });
             return data;
         } catch (err) {
@@ -88,14 +92,12 @@ module.exports = function(Supplier) {
         try {
           const [data, total] = await Promise.all([
             Supplier.find({
-              where: {
-                enable: 1
-              },
               fields: {
                 name: true,
                 email: true,
                 address: true,
                 phone: true,
+                enable: true,
               }
             }),
             Supplier.count({
