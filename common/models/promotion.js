@@ -136,7 +136,7 @@ module.exports = function(Promotion){
           {arg: 'beginAt', type: 'date', required: false},
           {arg: 'endAt', type: 'date', required: false},
         ],
-        returns: { arg: 'data' },
+        returns: { arg: 'data', root: true }
       }
     )
 
@@ -145,7 +145,7 @@ module.exports = function(Promotion){
         http: {path: '/read', verb: 'post'},
         accepts: [
             {arg: 'id', type: 'string', required: true}],
-        returns: { arg: 'data' }
+        returns: { arg: 'data', root: true }
       },
     )
 
@@ -161,7 +161,7 @@ module.exports = function(Promotion){
           {arg: 'beginAt', type: 'date', required: false},
           {arg: 'endAt', type: 'date', required: false},
         ],
-        returns: { arg: 'data' }
+        returns: { arg: 'data', root: true },
       },
     )
 
@@ -183,7 +183,7 @@ module.exports = function(Promotion){
         accepts: [
           { arg: 'page', type: 'number', default: '0'},
           { arg: 'pageSize', type: 'number', default: '10'}],
-        returns: { arg: 'data' },
+        returns: { arg: 'data', root: true }
       }
     )
 }

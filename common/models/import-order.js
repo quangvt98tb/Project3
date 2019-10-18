@@ -99,7 +99,4 @@ module.exports = function(ImportOrder) {
       }
     )
 
-    ImportOrder.afterRemote('create', function(context, user, next) {
-        
-    })
 }

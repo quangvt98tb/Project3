@@ -22,13 +22,12 @@
       "model": "Customer",
       "foreignKey": "userId"
     },
-    "embedsManyOrderDetail": {
+    "bookList": {
       "type": "embedsMany",
       "model": "OrderDetail",
       "property": "bookList",
       "options": {
-        "validate": true,
-        "forceId": false
+        "forceId": true
       }
     }
   },

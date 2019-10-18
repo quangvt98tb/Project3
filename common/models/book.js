@@ -26,11 +26,10 @@ module.exports = function(Book) {
         }
     }
 
-    Book.listBook = async function(page, pageSize) {
+    Book.listBook = async function(queryData, page, pageSize) {
         try {
             const [data, total] = await Promise.all([
                 Book.find({
-                    where: {enable: 1}, 
                     fields: {
                         name: true, 
                         categoryId: true, 
@@ -42,8 +41,7 @@ module.exports = function(Book) {
                         publishedAt: true
                     }, 
                     include: ['belongsToCategory']
-                }),
-                Book.count({enable: 1})
+                })
             ])
             return {
                 rows: data,
@@ -69,6 +67,7 @@ module.exports = function(Book) {
         'listBook', {
             http: {path: '/list', verb: 'post' },
             accepts: [
+                {arg: 'queryData', type: 'object'},
                 {arg: 'page', type: 'number', default: '0'},
                 {arg: 'pageSize', type: 'number', default: '10'}],
             returns: {arg: 'data', type: 'object'}

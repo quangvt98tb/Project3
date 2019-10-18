@@ -1,5 +1,6 @@
 {
     "name": "OrderDetail",
+    "base": "PersistedModel",
     "idInjection": true,
     "options": {
       "validateUpsert": true,

@@ -35,7 +35,7 @@
       "model": "Supplier",
       "foreignKey": "supplierId"
     },
-    "embedsManyOrderDetail": {
+    "bookList": {
       "type": "embedsMany",
       "model": "OrderDetail",
       "property": "bookList",

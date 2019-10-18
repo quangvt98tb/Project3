@@ -52,7 +52,6 @@ module.exports = function(Customer) {
     Customer.readCustomer = async function(id) {
         try {
             const data = await Customer.findById(id, {
-                where: {enable: 1},
                 fields: { 
                   fullName: true, 
                   email: true,
@@ -107,7 +106,7 @@ module.exports = function(Customer) {
     }
 
     // list Customers paganation
-    Customer.listCustomer = async function(page, pageSize) {
+    Customer.listCustomer = async function(queryData, page, pageSize) {
         try {
           const [data, total] = await Promise.all([
             Customer.find({
@@ -138,7 +137,6 @@ module.exports = function(Customer) {
         }
     }
   
-
     Customer.remoteMethod('createCustomer', 
     {
         http: {path: '/createCustomer', verb: 'post'},
@@ -152,7 +150,7 @@ module.exports = function(Customer) {
           {arg: 'gender', type: 'string', required: false},
           {arg: 'receiveDistrict', type: 'array', required: false}
         ],
-        returns: { arg: 'data' },
+        returns: { arg: 'data', root: true },
     })
 
     Customer.remoteMethod('readCustomer', 
@@ -160,7 +158,7 @@ module.exports = function(Customer) {
         http: {path: '/readCustomer', verb: 'get'},
         accepts: [
             {arg: 'id', type: 'string', required: true}],
-        returns: { arg: 'data' }
+        returns: { arg: 'data', root: true }
     })
 
     Customer.remoteMethod('updateCustomer', 
@@ -176,16 +174,17 @@ module.exports = function(Customer) {
           {arg: 'gender', type: 'string', required: false},
           {arg: 'receiveDistrict', type: 'string', required: false}
         ],
-        returns: { arg: 'data' }
+        returns: { arg: 'data', root: true}
     })
     
     Customer.remoteMethod('listCustomer', 
     {
         http: {verb: 'get', path: '/listCustomers' },
         accepts: [
+          { arg: 'queryData', type: 'string'},
           { arg: 'page', type: 'number', default: '0'},
           { arg: 'pageSize', type: 'number', default: '10'}],
-        returns: { arg: 'data' },
+        returns: { arg: 'data', root: true },
     })
 
     //send password reset link when requested
@@ -224,4 +223,4 @@ module.exports = function(Customer) {
         redirectToLinkText: 'Log in'
       })
     })
-};
+}

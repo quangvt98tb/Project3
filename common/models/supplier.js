@@ -33,6 +33,7 @@ module.exports = function(Supplier) {
         try {
             const data = await Supplier.findById(id, {
               fields: {
+                uid: true,
                 name: true,
                 email: true,
                 address: true,
@@ -49,7 +50,8 @@ module.exports = function(Supplier) {
 
     //update Supplier
     Supplier.updateSupplier = async function(
-        id, 
+        id,
+        uid, 
         name, 
         email, 
         address,
@@ -127,7 +129,7 @@ module.exports = function(Supplier) {
           {arg: 'address', type: 'string', required: false},
           {arg: 'phone', type: 'string', required: false},
         ],
-        returns: { arg: 'data' },
+        returns: { arg: 'data', root: true }
       }
     )
 
@@ -136,7 +138,7 @@ module.exports = function(Supplier) {
         http: {path: '/read', verb: 'post'},
         accepts: [
             {arg: 'id', type: 'string', required: true}],
-        returns: { arg: 'data' }
+        returns: { arg: 'data', root: true }
       },
     )
 
@@ -150,7 +152,7 @@ module.exports = function(Supplier) {
           {arg: 'address', type: 'string', required: false},
           {arg: 'phone', type: 'string', required: false},
         ],
-        returns: { arg: 'data' }
+        returns: { arg: 'data', root: true }
       },
     )
 
@@ -160,9 +162,7 @@ module.exports = function(Supplier) {
         accepts: [
             {arg: 'id', type: 'string', required: true}
         ],
-        returns: [
-            {arg: 'status', type: 'number'},
-            {arg: 'message', type: 'string'}]
+        returns: { arg: 'data', root: true }
       }
     )
 
@@ -172,7 +172,7 @@ module.exports = function(Supplier) {
         accepts: [
           { arg: 'page', type: 'number', default: '0'},
           { arg: 'pageSize', type: 'number', default: '10'}],
-        returns: { arg: 'data' },
+        returns: { arg: 'data', root: true }
       }
     )
 };

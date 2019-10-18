@@ -83,8 +83,6 @@ module.exports = function(ExportOrder) {
                     fields: {
                         userId: true,
                         subtotal: true,
-                        paymentMethod: true,
-                        addressShip: true,
                         createdAt: true,
                         updatedAt: true, 
                         status: true
@@ -125,16 +123,6 @@ module.exports = function(ExportOrder) {
             }
         } catch (err) {
             console.log('list ExportOrder By Status', err)
-            throw err
-        }
-    }
-
-    ExportOrder.AdminUpdateStatus = async function(id, status) {
-        try {
-            const data = await ExportOrder.upsertWithWhere({id: id}, {status: status})
-            return data
-        } catch (err) {
-            console.log('update ExportOrderStatus', err)
             throw err
         }
     }
@@ -184,16 +172,6 @@ module.exports = function(ExportOrder) {
                 {arg: 'status', type: 'string', required: true},
                 {arg: 'page', type: 'number', default: '0'},
                 {arg: 'pageSize', type: 'number', default: '10'}],
-            returns: {arg: 'data', type: 'object'}
-      }
-    )
-
-    ExportOrder.remoteMethod(
-        'AdminUpdateStatus', {
-            http: {path: '/updateStatus', verb: 'post' },
-            accepts: [
-                {arg: 'id', type: 'string', required: true},
-                {arg: 'status', type: 'string', required: true}],
             returns: {arg: 'data', type: 'object'}
       }
     )
