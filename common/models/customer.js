@@ -7,47 +7,6 @@ var senderAddress = 'ngocanh2162@gmail.com'
 module.exports = function(Customer) {
     const Promise = require('bluebird')
 
-	  //create Customer
-	  Customer.createCustomer = async function(
-        fullName,    
-        password, 
-        email,
-        address,
-        phone,
-        dateOfBirth,
-        gender,
-        receiveDistrict) {
-        
-        let [err, user] = await to(Customer.findOne({where: {email: email}}))
-        if (user != null) {
-            return [200, 'Email exsited']
-        }
-
-        const CustomerData = {
-            fullName: fullName,
-            password: password,
-            email: email,
-            address: address,
-            phone: phone,
-            dateOfBirth: dateOfBirth,
-            gender: gender,
-            receiveDistrict: receiveDistrict,
-            createdAt: new Date(),
-            enable: 1
-        }
-        try {
-            const data = await Customer.create(CustomerData)
-            let Cart = app.models.Cart
-            var CartData = {}
-            CartData.userId = data.id
-            data2 = Cart.create(CartData)
-            return data
-          } catch (err) {
-            console.log('create Customer', err)
-            throw err
-        }
-    }
-
     //read Customer
     Customer.readCustomer = async function(id) {
         try {
@@ -70,42 +29,7 @@ module.exports = function(Customer) {
         }
     }
 
-    //update Customer
-    Customer.updateCustomer = async function(
-        id, 
-        email,
-        fullName,  
-        address,
-        phone,
-        dateOfBirth,
-        gender,
-        receiveDistrict) {
-    	
-        const CustomerData = {
-            email: email,
-            fullName: fullName,
-            address: address,
-            phone: phone,
-            dateOfBirth: dateOfBirth,
-            gender: gender,
-            receiveDistrict: receiveDistrict
-        }
-
-        try {
-            const data = await Customer.upsertWithWhere(
-              {
-                id: id
-              },
-              CustomerData
-            )
-            return data
-          } catch (err) {
-            console.log('update Customer', err)
-            throw err
-          }
-    }
-
-    // list Customers paganation
+    //Admin list Customers paganation
     Customer.listCustomer = async function(queryData, page, pageSize) {
         try {
           const [data, total] = await Promise.all([
@@ -136,22 +60,6 @@ module.exports = function(Customer) {
           throw err
         }
     }
-  
-    Customer.remoteMethod('createCustomer', 
-    {
-        http: {path: '/createCustomer', verb: 'post'},
-        accepts: [
-          {arg: 'fullName', type: 'string', required: false},
-          {arg: 'password', type: 'string', required: true},
-          {arg: 'email', type: 'string', required: true}, 
-          {arg: 'address', type: 'object', required: false},
-          {arg: 'phone', type: 'string', required: false},
-          {arg: 'dateOfBirth', type: 'date', required: false},
-          {arg: 'gender', type: 'string', required: false},
-          {arg: 'receiveDistrict', type: 'array', required: false}
-        ],
-        returns: { arg: 'data', root: true },
-    })
 
     Customer.remoteMethod('readCustomer', 
     {
@@ -159,22 +67,6 @@ module.exports = function(Customer) {
         accepts: [
             {arg: 'id', type: 'string', required: true}],
         returns: { arg: 'data', root: true }
-    })
-
-    Customer.remoteMethod('updateCustomer', 
-    {
-        http: {path: '/updateCustomer', verb: 'post'},
-        accepts: [
-          {arg: 'id', type: 'string', required: true},
-          {arg: 'email', type: 'string', required: false},
-          {arg: 'fullName', type: 'string', required: false},
-          {arg: 'address', type: 'object', required: false},
-          {arg: 'phone', type: 'string', required: false},
-          {arg: 'dateOfBirth', type: 'date', required: false},
-          {arg: 'gender', type: 'string', required: false},
-          {arg: 'receiveDistrict', type: 'string', required: false}
-        ],
-        returns: { arg: 'data', root: true}
     })
     
     Customer.remoteMethod('listCustomer', 

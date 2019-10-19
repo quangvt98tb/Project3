@@ -24,7 +24,7 @@ module.exports = function (app) {
         //     console.log('show list Customers', err)
         //     return res.status(400).json(err)
         // }
-        return Customer.listCustomer()
+        return res.json(Customer.listCustomer())
     })
 
     router.get('/api/manage-customer/:id', async function (req, res){
@@ -48,30 +48,6 @@ module.exports = function (app) {
             return res.status(400).json(err)
         }
     })
-    
-    // router.post('/api/manage-customer/create', async function(req, res){
-    //     const customerData = {
-    //         fullName: req.body.fullName,
-    //         email: req.body.email,
-    //         password: req.body.password,
-    //         address: req.body.address,
-    //         phone: req.body.phone,
-    //         dateOfBirth: req.body.dateOfBirth,
-    //         gender: req.body.gender,
-    //         receiveDistrict: req.body.receiveDistrict
-    //     }
-    //     try {
-    //         let [err, customer] = await to(Customer.findOne({where: {email: req.body.email, phone: req.body.phone}}))
-    //         if (customer != null) {
-    //             return res.status(400).json(err)
-    //         }
-    //         customerData = await Customer.create(customerData)
-    //         return res.json(customerData)
-    //     } catch (error) {
-    //         console.log('create Customer', error)
-    //         return res.status(400).json(error)
-    //     }
-    // })
 
     router.post('/api/manage-customer/:id/block', async function(req, res){
         const customerData = {
@@ -85,16 +61,6 @@ module.exports = function (app) {
             return res.status(400).json(err)
         }
     })
-
-    // router.delete('/api/manage-customer/:id/delete', async function(req, res){
-    //     try {
-    //         customerDelete = await Customer.destroyById({id: req.params.id})
-    //         return res.json(customerDelete)
-    //     } catch (err){
-    //         console.log('delelte User', err)
-    //         return res.status(400).json(err)
-    //     }
-    // })
 
     router.post('/api/manage-customer/createAdmin', async function(req, res){
         const adminData = {

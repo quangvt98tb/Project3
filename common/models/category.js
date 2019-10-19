@@ -1,10 +1,10 @@
-let to = require('await-to-js').to;
+// let to = require('await-to-js').to;
 app = require('../../server/server')
 'use_strict';
 
 module.exports = function(Category) {
     const Promise = require('bluebird')
-
+    // User
     Category.showCategory = async function(id) {
         try {
             const data = await Category.findById(id, {fields: {name: true}});
@@ -14,7 +14,7 @@ module.exports = function(Category) {
             throw err
         }
     }
-
+    // User
     Category.listCategory = async function(page, pageSize) {
         try {
             const [data, total] = await Promise.all([
@@ -32,7 +32,7 @@ module.exports = function(Category) {
             throw err
         }
     }
-
+    // User
     Category.listBook = async function(id, page, pageSize) {
         try {
             let Book = app.models.Book

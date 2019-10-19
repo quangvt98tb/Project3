@@ -48,6 +48,7 @@ module.exports = function (app) {
             email: req.body.name,
             address: req.body.address,
             phone: req.body.phone,
+            createdAt: Date(),
             enable: 1
         }
         try {

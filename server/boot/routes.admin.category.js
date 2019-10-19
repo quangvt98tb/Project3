@@ -6,8 +6,7 @@ module.exports = function (app) {
         try {    
             listCategory = await Category.find({
                 fields: {
-                    name: true,
-                    enable: true
+                    name: true
                 }, 
             })
             return res.json(listCategory) 
@@ -21,8 +20,7 @@ module.exports = function (app) {
         try {
             categoryData = await Category.findById(req.params.id, {
                 fields: {
-                    name: true,
-                    enable: true
+                    name: true
                 }, 
             })
             return res.json(categoryData) 
@@ -34,8 +32,7 @@ module.exports = function (app) {
     
     router.post('/api/manage-category/create', async function(req, res){
         const categoryData = {
-            name: req.body.name,
-            enable: 1
+            name: req.body.name
         }
         try {
             let [err, category] = await to(Category.findOne({where: {name: req.body.name}}))
@@ -52,8 +49,7 @@ module.exports = function (app) {
 
     router.post('/api/manage-category/:id/update', async function(req, res){
         const categoryData = {
-            name: req.body.name,
-            enable: req.body.enable
+            name: req.body.name
         }
         try {
             categoryUpdate = await Category.findByIdAndUpdate({id: req.params.id}, categoryData)
