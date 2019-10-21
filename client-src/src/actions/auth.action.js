@@ -18,11 +18,10 @@ export const registerUser = (userData, history) => dispatch => {
 
 export const loginUser = userData => dispatch => {
   axios
-    .post('api/users/login', userData)
+    .post('/users/login', userData)
     .then(res => {
       // save to LocalStorage
-      const { token } = res.accessToken;
-      // const { userData } = res.userData;
+      const { token } = res.data;
       //set token to ls
       localStorage.setItem('jwtToken', token);
       // set token to Auth header
@@ -40,7 +39,6 @@ export const loginUser = userData => dispatch => {
         payload: err.response.data,
       });
     });
-
   // //const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
   // //set token to ls
   // localStorage.setItem('jwtToken', token);

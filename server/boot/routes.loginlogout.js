@@ -22,10 +22,12 @@ module.exports = function (app) {
     // });
 
     //log a customer in
-    router.post('api/users/login', function(req, res) {
+    router.post('/api/users/login', function(req, res) {
+        console.log(1)
+        console.log(req)
         Customer.login({
-            email: req.body.userData.email,
-            password: req.body.userData.password
+            email: req.body.email,
+            password: req.body.password
         }, 'Customer', function(err, token) {
             if (err) {
                 // if(err.details && err.code === 'LOGIN_FAILED_EMAIL_NOT_VERIFIED'){
@@ -38,6 +40,7 @@ module.exports = function (app) {
                 //         customerId: err.details.customerId
                 //     });
                 // } else {
+                    console.log(err)
                     res.render('response', {
                         title: 'Login failed. Wrong username or password',
                         content: err,
@@ -47,11 +50,8 @@ module.exports = function (app) {
                 // }
             return;
         }
-        userData = Customer.find({where: {email: req.body.userData.email}})
-        return ( //login user and render 'home' view
+        res.send( //login user and render 'home' view
             { 
-                email: req.body.userData.email,
-                userData: userData,
                 accessToken: token
                 // redirectUrl: '/api/customer/change-password?access_token=' + token.id
             }

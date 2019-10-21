@@ -10,7 +10,7 @@ import axios from 'axios'
 export const getAllBooks = () => dispatch => {
     dispatch(setBookLoading());
     axios
-      .get(`/api/Books/list`)
+      .get(`/Books/list`)
       .then(res =>
         dispatch({
           type: GET_ALL_BOOKS,

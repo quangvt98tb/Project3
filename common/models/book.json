@@ -39,9 +39,7 @@
       "default": "unknow"
     },
     "author": {
-      "type": [
-        "string"
-      ],
+      "type": "string",
       "required": true,
       "default": "unknow"
     },
