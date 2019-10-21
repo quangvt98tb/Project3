@@ -3,7 +3,7 @@ module.exports = function (app) {
     var Book = app.models.Book
 
     router.get('/api/listbook', async function (req, res){
-        listBook = await Book.listBook(req.body.queryData, req.body.page, req.body.pageSize)
+        listBook = await Book.listBook()
         return res.json(listBook)
     })
 

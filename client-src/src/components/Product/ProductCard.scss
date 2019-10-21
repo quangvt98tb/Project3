@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans:100,300,400,600,700|Work+Sans:100,200,300,400,500,600');
+
+:root {
+    --headlinesFont: 'Josefin Sans', sans-serif;
+    --bodyFont: 'Work Sans', sans-serif;
+    --wildWatermelon: #ff4f87;
+    --fuelYellow: #f0a035;
+    --textColor: #323232;
+    --bodyBg: #d6d6d6;
+    --white: #fff;
+    --black: #000;
+}
+
+.card_container {
+    background: white;
+    // width: 90%;
+    width: 80%;
+    // height: 100%;
+}
+
+.title {
+    display: block;
+    margin-top: -3px;
+    font: {
+        family: var(--headlinesFont);
+        size: 1.1em;
+        weight: 500;
+    }
+    text-align: center;
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
+}
+
+.author {
+    display: block;
+    font: {
+        family: var(--headlinesFont);
+        size: 1.1em;
+        weight: 400;
+    }
+    text-align: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.imgCont {
+    margin-top: 30px;
+    text-align: center;
+    display: inline-block;
+}
+
+.imgSect3 {
+    vertical-align: text-bottom;
+    width: 70%;
+    height: 70% !important;
+    object-fit: cover;
+    object-position: 50% 50%;
+    display: inline-flex;
+    margin: auto;
+}
+
+.buyLink {
+    font-family: var(--headlinesFont);
+    display: inline-block;
+    background: var(--wildWatermelon);
+    padding: .45em 1em;
+    width: 80%;
+    text-align: center;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: 500;
+    letter-spacing: .2px;
+    font-size: 15px;
+    transition: transform 250ms ease,
+                box-shadow 250ms ease;
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 34px 0 rgba(255, 79, 135, 0.32);
+    }
+}
+
+.priceTag {
+    text-align: center;
+    color: #ce7852;
+    font-size: 1.3em;
+    margin-right: 15px;
+    font-weight: 700;
+}

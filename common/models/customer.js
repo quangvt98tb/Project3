@@ -35,6 +35,7 @@ module.exports = function(Customer) {
           const [data, total] = await Promise.all([
             Customer.find({
               fields: { 
+                id: true,
                 fullName: true, 
                 email: true,
                 address: true, 

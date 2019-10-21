@@ -7,7 +7,8 @@ module.exports = function(Category) {
     // User
     Category.showCategory = async function(id) {
         try {
-            const data = await Category.findById(id, {fields: {name: true}});
+            const data = await Category.findById(id, {fields: {
+                id: true, name: true}});
             return data
         } catch (err) {
             console.log('show Category', err)
@@ -18,7 +19,8 @@ module.exports = function(Category) {
     Category.listCategory = async function(page, pageSize) {
         try {
             const [data, total] = await Promise.all([
-                Category.find({fields: {name: true}}),
+                Category.find({fields: {
+                    id: true, name: true}}),
                 Category.count()
             ])
             return {

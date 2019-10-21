@@ -11,6 +11,7 @@ module.exports = function(ImportOrder) {
                 ImportOrder.find({
                     where: {supplierId : supplierId}, 
                     fields: {
+                        id: true,
                         supplierId: true,
                         subtotal: true,
                         createdAt: true,
@@ -38,6 +39,7 @@ module.exports = function(ImportOrder) {
                 ImportOrder.find({
                     where: {status : status}, 
                     fields: {
+                        id: true,
                         supplierId: true,
                         subtotal: true, 
                         createdAt: true, 

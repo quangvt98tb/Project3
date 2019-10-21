@@ -8,6 +8,7 @@ module.exports = function(Supplier) {
         try {
             const data = await Supplier.findById(id, {
               fields: {
+                id: true,
                 uid: true,
                 name: true,
                 email: true,
@@ -29,6 +30,7 @@ module.exports = function(Supplier) {
           const [data, total] = await Promise.all([
             Supplier.find({
               fields: {
+                id: true,
                 uid: true,
                 name: true,
                 email: true,

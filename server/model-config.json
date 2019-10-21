@@ -126,11 +126,11 @@
   },
   "RoleMapping": {
     "dataSource": "mydb",
-    "public": true
+    "public": false
   },
   "Role": {
     "dataSource": "mydb",
-    "public": true
+    "public": false
   },
   "Email": {
     "dataSource": "emailDs"

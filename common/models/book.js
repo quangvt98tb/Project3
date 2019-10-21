@@ -7,6 +7,7 @@ module.exports = function(Book) {
         try {
             const data = await Book.findById({id, 
                 fields: {
+                    id: true, 
                     name: true, 
                     categoryId: true, 
                     description: true,
@@ -31,6 +32,7 @@ module.exports = function(Book) {
             const [data, total] = await Promise.all([
                 Book.find({
                     fields: {
+                        _id: true,
                         name: true, 
                         categoryId: true, 
                         description: true,
@@ -57,19 +59,19 @@ module.exports = function(Book) {
 
     Book.remoteMethod(
         'showBook', {
-            http: {path: '/show', verb: 'post'},
+            http: {path: '/show', verb: 'get'},
             accepts: [{arg: 'id', type: 'string', required: true}],
-            returns: {arg: 'data', type: 'object'}
+            returns: {arg: 'data', type: 'object', root:true}
         }
     )
 
     Book.remoteMethod(
         'listBook', {
-            http: {path: '/list', verb: 'post' },
+            http: {path: '/list', verb: 'get' },
             accepts: [
                 {arg: 'queryData', type: 'object'},
-                {arg: 'page', type: 'number', default: '0'},
-                {arg: 'pageSize', type: 'number', default: '10'}],
+                {arg: 'page', type: 'number', default: '4'},
+                {arg: 'pageSize', type: 'number', default: '8'}],
             returns: {arg: 'data', type: 'object'}
       }
     )
