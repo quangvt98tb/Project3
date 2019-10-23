@@ -62,7 +62,6 @@
     }
   },
   "protected" : ["id", "uid", "categoryId", "quantity"],
-  "validations": [],
   "relations": {
     "hasManyComment": {
       "type": "hasMany",

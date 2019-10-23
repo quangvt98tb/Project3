@@ -4,6 +4,7 @@ app = require('../../server/server')
 
 module.exports = function(ExportOrder) {
     const Promise = require('bluebird')
+    ExportOrder.validatesInclusionOf('statua', {in: ["Doi Xac Nhan", "Doi Giao Hang", "Da Huy", "Bi Huy", "Da Hoan Thanh"]})
 
     ExportOrder.UserRead = async function(id) {
         try {
@@ -59,7 +60,7 @@ module.exports = function(ExportOrder) {
             const order = await ExportOrder.findById(id)
             if (order.status == 'Cho xac nhan'){
                 try{
-                    const data = await ExportOrder.upsertWithWhere({id: id}, {status: 'Bi huy boi User'})
+                    const data = await ExportOrder.upsertWithWhere({id: id}, {status: 'Bi Huy'})
                     return data
                 } catch (err) {
                     console.log('update ExportOrderStatus By User', err)
@@ -125,6 +126,36 @@ module.exports = function(ExportOrder) {
             console.log('list ExportOrder By Status', err)
             throw err
         }
+    }
+
+    ExportOrder.AdminUpdateByStatus = async function(reqData){
+        if (reqData.status == "Chap nhan"){
+            let order = await ExportOrder.findById(req.params.id)
+            let i
+            for (i = 0; i < order.bookList.length; i++){
+                let bookId =  order.bookList[i].bookId
+                let quantity = order.bookList[i].quantity
+                let book = await Book.findById(bookId)
+                if (book.quantity < quantity){
+                    ExportOrder.upsertWithWhere(req.params.id, {status: "Huy vi Khong Du Sach"})
+                    return res.status(400).json('Khong Du So Luong Sach Trong Kho')
+                }
+            }
+            for (i = 0; i < order.bookList.length; i++){
+                bookId = order.bookList[i].bookId
+                quantity = order.bookList[i].quantity
+                try{
+                    let book = await Book.findById(bookId)
+                    let newQuantity = book.quantity - orderData.quantity
+                    let bookUpdate = await Book.upsertWithWhere(book.id, {quantity: newQuantity})
+                } catch (error) {
+                    console.log('create Order Detail', error)
+                    return res.status(400).json(error)
+                }
+            }
+        }
+        let exportUpdate = await ExportOrder.upsertWithWhere(req.params.id, {status: reqData.status})
+        return res.json(exportUpdate)
     }
 
     ExportOrder.remoteMethod(

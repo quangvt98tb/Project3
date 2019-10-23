@@ -3,7 +3,6 @@ let to = require('await-to-js').to;
 module.exports = function(Supplier) {
   const Promise = require('bluebird')
 	      
-    //read Supplier
     Supplier.readSupplier = async function(id) {
         try {
             const data = await Supplier.findById(id, {
@@ -24,7 +23,6 @@ module.exports = function(Supplier) {
         }
     }
 
-    // list Suppliers paganation(4)
     Supplier.listSupplier = async function(page, pageSize) {
         try {
           const [data, total] = await Promise.all([

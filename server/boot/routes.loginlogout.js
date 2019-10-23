@@ -22,9 +22,9 @@ module.exports = function (app) {
     // });
 
     //log a customer in
-    router.post('/api/users/login', function(req, res) {
+    router.post('/api/customers/login', function(req, res) {
         console.log(1)
-        console.log(req)
+        console.log(req.body)
         Customer.login({
             email: req.body.email,
             password: req.body.password

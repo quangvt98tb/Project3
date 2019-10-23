@@ -3,15 +3,13 @@ module.exports = function (app) {
     var Customer = app.models.Customer
 
     router.post('/api/customer/create', async function(req, res){
+        console.log(req.body)
         const customerData = {
-            fullName: req.body.fullName,
+            fullName: req.body.fullname,
             email: req.body.email,
             password: req.body.password,
-            address: req.body.address,
-            phone: req.body.phone,
-            dateOfBirth: req.body.dateOfBirth,
-            gender: req.body.gender,
-            receiveDistrict: req.body.receiveDistrict,
+            address: req.body.province,
+            receiveDistrict: req.body.district,
             createdAt: new Date(),
             enable: 1
         }

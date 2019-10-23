@@ -28,7 +28,6 @@
     }
   },
   "protected": ["id"],
-  "validations": [],
   "relations": {
     "belongsToSupplier": {
       "type": "belongsTo",

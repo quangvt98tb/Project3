@@ -4,23 +4,22 @@ app = require('../../server/server')
 
 module.exports = function(Category) {
     const Promise = require('bluebird')
-    // User
+    
+    //General
     Category.showCategory = async function(id) {
         try {
-            const data = await Category.findById(id, {fields: {
-                id: true, name: true}});
+            const data = await Category.findById(id);
             return data
         } catch (err) {
             console.log('show Category', err)
             throw err
         }
     }
-    // User
-    Category.listCategory = async function(page, pageSize) {
+
+    Category.listCategory = async function(nlimit, page, pageSize) {
         try {
             const [data, total] = await Promise.all([
-                Category.find({fields: {
-                    id: true, name: true}}),
+                Category.find({limit: nlimit}),
                 Category.count()
             ])
             return {
@@ -34,14 +33,14 @@ module.exports = function(Category) {
             throw err
         }
     }
-    // User
+
     Category.listBook = async function(id, page, pageSize) {
         try {
             let Book = app.models.Book
             const [data, total] = await Promise.all([
                 Book.find({
                     where: {categoryId : id, enable: 1}, 
-                    fields: {id: true, name: true, imgURL: true, sellPrice: true}
+                    fields: {_id: true, name: true, imgURL: true, sellPrice: true}
                 }),
                 Book.count({categoryId : id, enable: 1})
             ])
@@ -59,7 +58,7 @@ module.exports = function(Category) {
 
     Category.remoteMethod(
         'showCategory', {
-            http: {path: '/show', verb: 'post'},
+            http: {path: '/show', verb: 'get'},
             accepts: [{arg: 'id', type: 'string', required: true}],
             returns: {arg: 'data', type: 'object'}
         }
@@ -67,17 +66,18 @@ module.exports = function(Category) {
 
     Category.remoteMethod(
         'listCategory', {
-            http: {path: '/list', verb: 'post' },
+            http: {path: '/list', verb: 'get' },
             accepts: [
-                {arg: 'page', type: 'number', default: '0'},
-                {arg: 'pageSize', type: 'number', default: '10'}],
+                {arg: 'nlimit', type: 'number', default: 5},
+                {arg: 'page', type: 'number', default: '4'},
+                {arg: 'pageSize', type: 'number', default: '8'}],
             returns: {arg: 'data', type: 'object'}
       }
     )
 
     Category.remoteMethod(
         'listBook', {
-            http: {path: '/listBook', verb: 'post' },
+            http: {path: '/listBook', verb: 'get' },
             accepts: [
                 {arg: 'id', type: 'string', required: true},
                 {arg: 'page', type: 'number', default: '0'},

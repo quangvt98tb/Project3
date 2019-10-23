@@ -24,7 +24,6 @@
       }
     },
     "protected": ["id"],
-    "validations": [],
     "relations": {
       "belongsToBook": {
         "type": "belongsTo",

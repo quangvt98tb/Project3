@@ -18,7 +18,7 @@
       "required": false
     },
     "address": {
-      "type": [ "object" ],
+      "type": "object",
       "required": false
     },
     "phone": {
@@ -34,8 +34,7 @@
       "required": false    
     },
     "receiveDistrict": {
-      "type": "array",
-      "default": []
+      "type": ["string"]
     },
     "createdAt": {
       "type": "date",
@@ -47,7 +46,6 @@
     }
   },
   "protected": ["dateOfBirth", "gender", "createdAt",  "enable"],
-  "validations": [],
   "relations": {
     "hasOneCart": {
       "type": "hasOne",

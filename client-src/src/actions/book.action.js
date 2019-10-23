@@ -26,13 +26,13 @@ export const getAllBooks = () => dispatch => {
   };
 
 export const getByGenres = (genre) => dispatch => {
-  // dispatch(setBookLoading());
+  dispatch(setBookLoading());
   axios
-    .get(`http://localhost:3000/api/books?filter[where][genre][regexp]=\\b${genre}\\b&filter[limit]=32`)
+    .get(`/Categories/listBook`, genre)
     .then(res =>
       dispatch({
         type: GET_BY_GENRES,
-        payload: res.data,
+        payload: res.data.data.rows,
       }),     
     )
     .catch(err =>
@@ -43,15 +43,33 @@ export const getByGenres = (genre) => dispatch => {
     );
 }
 
+export const get5Genres = () => dispatch => {
+  dispatch(setBookLoading());
+  axios
+    .get(`/Categories/list`)
+    .then(res =>
+      dispatch({
+        type: GET_ALL_BOOKS,
+        payload: res.data.data.rows,
+      }),     
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_ALL_BOOKS,
+        payload: {},
+      }),
+    );
+};
+
 export const getBookById = (bookId) => dispatch => {
   dispatch(setBookLoading());
   axios
-    .get(`http://localhost:3000/api/books/${bookId}`)
+    .get(`/Books/showBook`, bookId)
     .then(res => 
       // console.log(res.data))
       dispatch({
         type: GET_BOOK,
-        payload: res.data,
+        payload: res.data.data,
       }))
     .catch(err =>
       dispatch({

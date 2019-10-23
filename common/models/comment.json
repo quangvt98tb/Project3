@@ -28,7 +28,6 @@
     }
   },
   "protected": ["id", "userId", "bookId"],
-  "validations": [],
   "relations": {
     "belongsToUser": {
       "type": "belongsTo",

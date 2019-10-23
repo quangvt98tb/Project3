@@ -25,7 +25,8 @@
     "passport": "^0.4.0",
     "saslprep": "^1.0.3",
     "serve-favicon": "^2.0.1",
-    "strong-error-handler": "^3.3.0"
+    "strong-error-handler": "^3.3.0",
+    "validator": "^11.1.0"
   },
   "devDependencies": {
     "eslint": "^6.1.0",

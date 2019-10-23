@@ -2,13 +2,14 @@ let to = require('await-to-js').to
 var config = require('../../server/config.json')
 var path = require('path')
 var senderAddress = 'ngocanh2162@gmail.com'
+const validateRegisterInput = require('../validation/register');
+const validateLoginInput = require('../validation/login');
 'use_strict';
 
 module.exports = function(Customer) {
     const Promise = require('bluebird')
-
-    //read Customer
-    Customer.readCustomer = async function(id) {
+    //Customer read Profile
+    Customer.readProfile = async function(id) {
         try {
             const data = await Customer.findById(id, {
                 fields: { 
@@ -18,7 +19,6 @@ module.exports = function(Customer) {
                   phone: true,
                   dateOfBirth: true, 
                   gender: true, 
-                  receiveDistrict: true,
                   createdAt: true
                 }
             });
@@ -29,7 +29,30 @@ module.exports = function(Customer) {
         }
     }
 
-    //Admin list Customers paganation
+    // Customer update Profile
+    Customer.updateProfile = async function(reqData){
+        const customerData = {
+            fullName: reqData.fullName,
+            email: reqData.email,
+            address: {
+                province: reqData.province,
+                district: reqData.district
+            },
+            phone: reqData.phone,
+            dateOfBirth: reqData.dateOfBirth,
+            gender: reqData.gender,
+            receiveDistrict: reqData.receiveDistrict,
+        }
+        try {
+            customer = await Customer.findByIdAndUpdate({id: reqData.id}, customerData)
+            return customer
+        } catch (err) {
+            console.log('update Customer', err)
+            throw err
+        }
+    }
+
+    // Admin list Customers 
     Customer.listCustomer = async function(queryData, page, pageSize) {
         try {
           const [data, total] = await Promise.all([
@@ -42,7 +65,6 @@ module.exports = function(Customer) {
                 phone: true,
                 dateOfBirth: true, 
                 gender: true, 
-                receiveDistrict: true,
                 createdAt: true,
                 enable: true
               }
@@ -62,14 +84,99 @@ module.exports = function(Customer) {
         }
     }
 
-    Customer.remoteMethod('readCustomer', 
+    // Admin block User
+    Customer.blockCustomer = async function(reqData){
+        try {
+            customer = await Customer.findByIdAndUpdate({id: reqData.id}, reqData.enable)
+            return customer
+        } catch (err) {
+            console.log('block Customer', err)
+            throw err
+        }
+    }
+
+    // Amdin create Admin
+    Customer.createAdmin = async function(reqData){
+        let RoleMapping = app.models.RoleMapping
+        let Role = app.models.Role
+        let User = app.models.User
+        let adminData = {
+            email: reqData.email,
+            password: reqData.password
+        }
+        try {
+            let [err, roleAdmin] = await to(Role.findOne({where: {name: "admin"}}))
+            admin = await User.create(adminData)
+            const roleData = {
+                principalType: RoleMapping.USER,
+                principalId: admin.id,
+                roleId: roleAdmin.id
+            }
+            try{
+                roleMapping = await to(RoleMapping.create(roleData))
+                return roleData
+            } catch(err){
+                console.log('create Admin roleMapping', err)
+                throw err
+            }
+        } catch (error) {
+            console.log('create Admin', error)
+            throw error
+        }
+    }
+
+
+    // Guest create Customer
+    Customer.createCustomer = async function(reqData){
+        const { errors, isValid } = validateRegisterInput(reqData);
+        if (!isValid) {
+            console.log(errors)
+            return [400, errors];
+        }
+        let customerData = {
+            fullName: reqData.fullname,
+            email: reqData.email,
+            password: reqData.password,
+            address: {
+                province: reqData.province,
+                district: reqData.district
+            },
+            createdAt: new Date(),
+            enable: 1
+        }
+        try {
+            let [err, customer] = await to(Customer.findOne({where: {email: reqData.email}}))
+            if (customer != null) {
+                return [400, 'Da ton tai']
+            }
+            customerData = await Customer.create(customerData)
+            let Cart = app.models.Cart
+            var CartData = {}
+            CartData.userId = customerData.id
+            cart = Cart.create(CartData)
+            return [200, 'Thanh Cong']
+        } catch (error) {
+            console.log('create Customer', error)
+            throw error
+        }
+    }
+
+    //
+    Customer.remoteMethod('readProfile', 
     {
-        http: {path: '/readCustomer', verb: 'get'},
+        http: {path: '/readProfile', verb: 'get'},
         accepts: [
             {arg: 'id', type: 'string', required: true}],
         returns: { arg: 'data', root: true }
     })
     
+    Customer.remoteMethod('updateProfile', 
+    {
+        http: {path: '/updateProfile', verb: 'post'},
+        accepts: {arg: 'reqData', type: 'Object', http: { source: 'body' }},
+        returns: { arg: 'data', root: true }
+    })
+
     Customer.remoteMethod('listCustomer', 
     {
         http: {verb: 'get', path: '/listCustomers' },
@@ -79,6 +186,31 @@ module.exports = function(Customer) {
           { arg: 'pageSize', type: 'number', default: '10'}],
         returns: { arg: 'data', root: true },
     })
+
+    Customer.remoteMethod('blockCustomer', 
+    {
+        http: {path: '/blockCustomer', verb: 'post'},
+        accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
+        returns: { arg: 'data', root: true }
+    })
+
+    Customer.remoteMethod('createAdmin', 
+    {
+        http: {path: '/createAdmin', verb: 'post'},
+        accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
+        returns: { arg: 'data', root: true }
+    })
+
+    Customer.remoteMethod('createCustomer', 
+    {
+        http: {path: '/createCustomer', verb: 'post'},
+        accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
+        returns: [
+            { arg: 'statusCode', root: true },
+            { arg: 'data', root: true }
+        ]   
+    })
+
 
     //send password reset link when requested
     Customer.on('resetPasswordRequest', function(info) {
