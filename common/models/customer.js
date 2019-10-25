@@ -125,13 +125,12 @@ module.exports = function(Customer) {
         }
     }
 
-
     // Guest create Customer
     Customer.createCustomer = async function(reqData){
         const { errors, isValid } = validateRegisterInput(reqData);
         if (!isValid) {
-            console.log(errors)
-            return [400, errors];
+            errors.status = 400
+            return [400, errors]
         }
         let customerData = {
             fullName: reqData.fullname,
@@ -147,7 +146,9 @@ module.exports = function(Customer) {
         try {
             let [err, customer] = await to(Customer.findOne({where: {email: reqData.email}}))
             if (customer != null) {
-                return [400, 'Da ton tai']
+                errors.status = 400
+                errors.email = "Email này đã đăng ký là thành viên"
+                return [400, errors]
             }
             customerData = await Customer.create(customerData)
             let Cart = app.models.Cart
@@ -206,7 +207,7 @@ module.exports = function(Customer) {
         http: {path: '/createCustomer', verb: 'post'},
         accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
         returns: [
-            { arg: 'statusCode', root: true },
+            { arg: 'status', root: true },
             { arg: 'data', root: true }
         ]   
     })

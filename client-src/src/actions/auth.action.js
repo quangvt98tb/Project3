@@ -6,24 +6,27 @@ import { clearCurrentProfile } from './profile.action';
 
 export const registerUser = (userData, history) => dispatch => {
   axios
-    .post(`customer/createCustomer`, userData)
-    console.log(res)
+    .post('customer/createCustomer', userData)
     .then(res => {
-      console.log(res)
-      history.push('/login')
+      if (res.data.status == 400){
+        dispatch({
+          type: GET_ERRORS,
+          payload: res.data,
+        });
+      }
+      else history.push('/login')
     })
-    .catch(err =>
+    .catch(err => {
       dispatch({
         type: GET_ERRORS,
-        payload: err.response.data,
-      }),
-    );
-  history.push('/login');
+        payload: err.data,
+      });
+    });
 };
 
 export const loginUser = userData => dispatch => {
   axios
-    .post('/customer/login', userData)
+    .post('customer/login', userData)
     .then(res => {
       // save to LocalStorageno
       const token = res.data.id;
@@ -37,9 +40,10 @@ export const loginUser = userData => dispatch => {
       dispatch(setCurrentUser(token));
     })
     .catch(err => {
+      console.log(err)
       return dispatch({
         type: GET_ERRORS,
-        payload: err.response.data,
+        payload: err.data,
       });
     });
 };
