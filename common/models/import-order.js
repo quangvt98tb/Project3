@@ -5,11 +5,11 @@ app = require('../../server/server')
 module.exports = function(ImportOrder) {
     const Promise = require('bluebird')
 
-    ImportOrder.ListBySupplier = async function(supplierId, page, pageSize) {
+    ImportOrder.ListBySupplier = async function(reqData) {
         try {
             const [data, total] = await Promise.all([
                 ImportOrder.find({
-                    where: {supplierId : supplierId}, 
+                    where: {supplierId : reqData.supplierId}, 
                     fields: {
                         id: true,
                         supplierId: true,
@@ -19,7 +19,7 @@ module.exports = function(ImportOrder) {
                     },
                     include: ['belongsToSupplier']    
                 }),
-                ImportOrder.count({supplierId : supplierId})
+                ImportOrder.count({supplierId : reqData.supplierId})
             ])
             return {
                 rows: data,
@@ -29,15 +29,15 @@ module.exports = function(ImportOrder) {
             }
         } catch (err) {
             console.log('list ImportOrder of Supplier', err)
-            throw err
+            return [400, err]
         }
     }
 
-    ImportOrder.ListByStatus = async function(status, page, pageSize) {
+    ImportOrder.ListByStatus = async function(reqData) {
         try {
             const [data, total] = await Promise.all([
                 ImportOrder.find({
-                    where: {status : status}, 
+                    where: {status : reqData.status}, 
                     fields: {
                         id: true,
                         supplierId: true,
@@ -45,7 +45,7 @@ module.exports = function(ImportOrder) {
                         createdAt: true, 
                         status: true
                     }}),
-                ImportOrder.count({status : status})
+                ImportOrder.count({status : reqData.status})
             ])
             return {
                 rows: data,
@@ -55,49 +55,94 @@ module.exports = function(ImportOrder) {
             }
         } catch (err) {
             console.log('list ImportOrder By Status', err)
-            throw err
+            return [400, err]
         }
     }
 
-    ImportOrder.UpdateStatus = async function(id, status) {
+    ImportOrder.UpdateStatus = async function(reqData) {
         try {
-            const data = await ImportOrder.upsertWithWhere({id: id}, {status: status})
+            const data = await ImportOrder.upsertWithWhere({id: rreqData.id}, {status: reqData.status})
             return data
         } catch (err) {
             console.log('update ImportOrder Status', err)
-            throw err
+            return [400, err]
+        }
+    }
+
+    ImportOrder.createIO = async function(reqData){
+        let OrderDetail = app.models.OrderDetail
+        let Book = app.models.Book
+        let i
+        let orderDetailList = {}
+        for (i = 0; i < reqData.bookList.length(); i++){
+            let bookData = {
+                bookId: reqData.bookList[i].bookId,
+                quantity: reqData.bookList[i].quantity,
+                price: reqData.bookList[i].price
+            }
+            try {
+                let data1 = await OrderDetail.create(bookData)
+                orderDetailList.push(data1)
+            } catch (err){
+                console.log('add To ImportOrder', err)
+                return [400, err]
+            }
+        }
+        let data = {
+            supplierId: reqData.supplierId,
+            status: reqData.status,
+            subtotal: reqData.subtotal,
+            createdAt: Date()
+        }
+        try{
+            let importOrder = await ImportOrder.create(data)
+            importOrder.bookList.set(orderDetailList)
+            for (i = 0; i < orderDetailList.length; i++){
+                try{
+                    let book = await Book.findById(reqData.bookList[i].bookId)
+                    let newQuantity = book.quantity + reqData.bookList[i].quantity
+                    let bookUpdate = await Book.upsertWithWhere(book.id, {quantity: newQuantity})
+                } catch (error) {
+                    console.log('update Book quantity', error)
+                    return [400, error]
+                }
+            }
+            return importOrder
+        } catch (err){
+            console.log('create ImportOrder', err)
+            return [400, err]
         }
     }
 
     ImportOrder.remoteMethod(
         'ListBySupplier', {
             http: {path: '/listBySupplier', verb: 'post' },
-            accepts: [
-                {arg: 'userId', type: 'string', required: true},
-                {arg: 'page', type: 'number', default: '0'},
-                {arg: 'pageSize', type: 'number', default: '10'}],
-            returns: {arg: 'data', type: 'object'}
+            accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
+            returns: { arg: 'data',type: 'object'}
       }
     )
 
     ImportOrder.remoteMethod(
         'ListByStatus', {
             http: {path: '/listByStatus', verb: 'post' },
-            accepts: [
-                {arg: 'status', type: 'string', required: true},
-                {arg: 'page', type: 'number', default: '0'},
-                {arg: 'pageSize', type: 'number', default: '10'}],
-            returns: {arg: 'data', type: 'object'}
+            accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
+            returns: { arg: 'data',type: 'object'}
       }
     )
 
     ImportOrder.remoteMethod(
         'UpdateStatus', {
             http: {path: '/updateStatus', verb: 'post' },
-            accepts: [
-                {arg: 'id', type: 'string', required: true},
-                {arg: 'status', type: 'string', required: true}],
-            returns: {arg: 'data', type: 'object'}
+            accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
+            returns: { arg: 'data',type: 'object'}
+      }
+    )
+
+    ImportOrder.remoteMethod(
+        'createIO', {
+            http: {path: '/createIO', verb: 'post' },
+            accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
+            returns: { arg: 'data',type: 'object'}
       }
     )
 

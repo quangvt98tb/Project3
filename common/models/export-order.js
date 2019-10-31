@@ -6,9 +6,56 @@ module.exports = function(ExportOrder) {
     const Promise = require('bluebird')
     ExportOrder.validatesInclusionOf('statua', {in: ["Doi Xac Nhan", "Doi Giao Hang", "Da Huy", "Bi Huy", "Da Hoan Thanh"]})
 
-    ExportOrder.UserRead = async function(id) {
+    ExportOrder.createOrder = async function(reqData){
+        let OrderDetail = app.models.OrderDetail
+        let Book = app.models.Book
+        let i
+        let orderDetailList = {}
+        for (i = 0; i < reqData.bookList.length(); i++){
+            let bookData = {
+                bookId: reqData.bookList[i].bookId,
+                quantity: reqData.bookList[i].quantity,
+                price: reqData.bookList[i].price
+            }
+            try {
+                let data1 = await OrderDetail.create(bookData)
+                orderDetailList.push(data1)
+            } catch (err){
+                console.log('add To ExportOrder', err)
+                return [400, err]
+            }
+        }
+        let data = {
+            userId: reqData.userId,
+            status: reqData.status,
+            paymentMethod: reqData.paymentMethod,
+            addressShip: reqData.addressShip,
+            subtotal: reqData.subtotal,
+            createdAt: Date()
+        }
+        try{
+            let exportOrder = await ExportOrder.create(data)
+            exportOrder.bookList.set(orderDetailList)
+            for (i = 0; i < orderDetailList.length; i++){
+                try{
+                    let book = await Book.findById(reqData.bookList[i].bookId)
+                    let newQuantity = book.quantity - reqData.bookList[i].quantity
+                    let bookUpdate = await Book.upsertWithWhere(book.id, {quantity: newQuantity})
+                } catch (error) {
+                    console.log('update Book quantity', error)
+                    return [400, error]
+                }
+            }
+            return exportOrder
+        } catch (err){
+            console.log('create ExportOrder', err)
+            return [400, err]
+        }
+    }
+
+    ExportOrder.UserRead = async function(reqData) {
         try {
-            const data = await ExportOrder.findById(id, 
+            const data = await ExportOrder.findById(reqData.id, 
                 {fields: {
                     userId: true,
                     subtotal: true,
@@ -23,15 +70,15 @@ module.exports = function(ExportOrder) {
             return data
         } catch (err) {
             console.log('show ExportOrder for User', err)
-            throw err
+            return [400, err]
         }
     }
 
-    ExportOrder.UserList = async function(userId, page, pageSize) {
+    ExportOrder.UserList = async function(reqData) {
         try {
             const [data, total] = await Promise.all([
                 ExportOrder.find({
-                    where: {userId : userId}, 
+                    where: {userId : reqData.userId}, 
                     fields: {
                         subtotal: true,
                         paymentMethod: true,
@@ -51,36 +98,36 @@ module.exports = function(ExportOrder) {
             }
         } catch (err) {
             console.log('list ExportOrder For User', err)
-            throw err
+            return [400, err]
         }
     }
 
-    ExportOrder.UserCancelOrder = async function(id) {
+    ExportOrder.UserCancelOrder = async function(reqData) {
         try {
-            const order = await ExportOrder.findById(id)
-            if (order.status == 'Cho xac nhan'){
+            const order = await ExportOrder.findById(reqData.id)
+            if (order.status == 'Doi Xac Nhan'){
                 try{
-                    const data = await ExportOrder.upsertWithWhere({id: id}, {status: 'Bi Huy'})
+                    const data = await ExportOrder.upsertWithWhere({id: reqData.id}, {status: 'Bi Huy'})
                     return data
                 } catch (err) {
                     console.log('update ExportOrderStatus By User', err)
-                    throw err
+                    return [400, err]
                 }
             }
             else {
-                return {status: "Don Hang Da Duoc Tiep Nhan. Khong The Huy Don Hang!"}
+                return [400, "Don Hang Da Duoc Tiep Nhan. Khong The Huy Don Hang!"]
             }
         } catch (err) {
             console.log('find ExportOrderStatus', err)
-            throw err
+            return [400, err]
         }
     }
 
-    ExportOrder.AdminListByUser = async function(userId, page, pageSize) {
+    ExportOrder.AdminListByUser = async function(reqData) {
         try {
             const [data, total] = await Promise.all([
                 ExportOrder.find({
-                    where: {userId : userId}, 
+                    where: {userId : reqData.userId}, 
                     fields: {
                         userId: true,
                         subtotal: true,
@@ -88,7 +135,7 @@ module.exports = function(ExportOrder) {
                         updatedAt: true, 
                         status: true
                     }}),
-                ExportOrder.count({userId : userId})
+                ExportOrder.count({userId : reqData.userId})
             ])
             return {
                 rows: data,
@@ -98,15 +145,15 @@ module.exports = function(ExportOrder) {
             }
         } catch (err) {
             console.log('list ExportOrder of User', err)
-            throw err
+            return [400, err]
         }
     }
 
-    ExportOrder.AdminListByStatus = async function(status, page, pageSize) {
+    ExportOrder.AdminListByStatus = async function(reqData) {
         try {
             const [data, total] = await Promise.all([
                 ExportOrder.find({
-                    where: {status : status}, 
+                    where: {status : reqData.status}, 
                     fields: {
                         userId: true,
                         subtotal: true, 
@@ -114,7 +161,7 @@ module.exports = function(ExportOrder) {
                         updatedAt: true,
                         status: true
                     }}),
-                ExportOrder.count({status : status})
+                ExportOrder.count({status : reqData.status})
             ])
             return {
                 rows: data,
@@ -124,12 +171,12 @@ module.exports = function(ExportOrder) {
             }
         } catch (err) {
             console.log('list ExportOrder By Status', err)
-            throw err
+            return [400, err]
         }
     }
 
     ExportOrder.AdminUpdateByStatus = async function(reqData){
-        if (reqData.status == "Chap nhan"){
+        if (reqData.status == "Doi Giao Hang"){
             let order = await ExportOrder.findById(req.params.id)
             let i
             for (i = 0; i < order.bookList.length; i++){
@@ -137,8 +184,8 @@ module.exports = function(ExportOrder) {
                 let quantity = order.bookList[i].quantity
                 let book = await Book.findById(bookId)
                 if (book.quantity < quantity){
-                    ExportOrder.upsertWithWhere(req.params.id, {status: "Huy vi Khong Du Sach"})
-                    return res.status(400).json('Khong Du So Luong Sach Trong Kho')
+                    ExportOrder.upsertWithWhere(req.params.id, {status: "Da Huy"})
+                    return [400, 'Khong Du So Luong Sach Trong Kho']
                 }
             }
             for (i = 0; i < order.bookList.length; i++){
@@ -150,60 +197,59 @@ module.exports = function(ExportOrder) {
                     let bookUpdate = await Book.upsertWithWhere(book.id, {quantity: newQuantity})
                 } catch (error) {
                     console.log('create Order Detail', error)
-                    return res.status(400).json(error)
+                    return [400, error]
                 }
             }
         }
         let exportUpdate = await ExportOrder.upsertWithWhere(req.params.id, {status: reqData.status})
-        return res.json(exportUpdate)
+        return exportUpdate
     }
+
+    ExportOrder.remoteMethod(
+        'createOrder', {
+            http: {path: '/createOrder', verb: 'post'},
+            accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
+            returns: { arg: 'data',type: 'object'}
+        }
+    )
 
     ExportOrder.remoteMethod(
         'UserRead', {
             http: {path: '/show', verb: 'post'},
-            accepts: [{arg: 'id', type: 'string', required: true}],
-            returns: {arg: 'data', type: 'object'}
+            accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
+            returns: { arg: 'data',type: 'object'}
         }
     )
 
     ExportOrder.remoteMethod(
         'UserList', {
             http: {path: '/listOrdersForUser', verb: 'post' },
-            accepts: [
-                {arg: 'userId', type: 'string', required: true},
-                {arg: 'page', type: 'number', default: '0'},
-                {arg: 'pageSize', type: 'number', default: '10'}],
-            returns: {arg: 'data', type: 'object'}
+            accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
+            returns: { arg: 'data',type: 'object'}
       }
     )
 
     ExportOrder.remoteMethod(
         'UserCancelOrder', {
             http: {path: '/cancelOrder', verb: 'post' },
-            accepts: [{arg: 'id', type: 'string', required: true}],
-            returns: {arg: 'data', type: 'object'}
+            accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
+            returns: { arg: 'data',type: 'object'}
       }
     )
 
     ExportOrder.remoteMethod(
         'AdminListByUser', {
             http: {path: '/listOrdersOfUser', verb: 'post' },
-            accepts: [
-                {arg: 'userId', type: 'string', required: true},
-                {arg: 'page', type: 'number', default: '0'},
-                {arg: 'pageSize', type: 'number', default: '10'}],
-            returns: {arg: 'data', type: 'object'}
+            accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
+            returns: { arg: 'data',type: 'object'}
       }
     )
 
     ExportOrder.remoteMethod(
         'AdminListByStatus', {
             http: {path: '/listOrderByStatus', verb: 'post' },
-            accepts: [
-                {arg: 'status', type: 'string', required: true},
-                {arg: 'page', type: 'number', default: '0'},
-                {arg: 'pageSize', type: 'number', default: '10'}],
-            returns: {arg: 'data', type: 'object'}
+            accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
+            returns: { arg: 'data',type: 'object'}
       }
     )
 }

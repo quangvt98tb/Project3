@@ -97,6 +97,11 @@ module.exports = function(Customer) {
 
     // Amdin create Admin
     Customer.createAdmin = async function(reqData){
+        const { errors, isValid } = validateRegisterInput(reqData);
+        if (!isValid) {
+            errors.status = 400
+            return [400, errors]
+        }
         let RoleMapping = app.models.RoleMapping
         let Role = app.models.Role
         let User = app.models.User
@@ -161,7 +166,7 @@ module.exports = function(Customer) {
             throw error
         }
     }
-
+    
     //
     Customer.remoteMethod('readProfile', 
     {
@@ -248,5 +253,13 @@ module.exports = function(Customer) {
         redirectTo: '/',
         redirectToLinkText: 'Log in'
       })
+    })
+
+    Customer.beforeRemote('login', function(context, Customer, next){
+        const { errors, isValid } = validateRegisterInput(context);
+        if (!isValid) {
+            errors.status = 400
+            return [400, errors]
+        }
     })
 }
