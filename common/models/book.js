@@ -7,7 +7,6 @@ module.exports = function(Book) {
     // Admin
     Book.addBook = async function(reqData){
         const bookData = {
-            uid : reqData.uid,
             name : reqData.name,
             categoryId : reqData.categoryId,
             description : reqData.description,
@@ -19,9 +18,9 @@ module.exports = function(Book) {
             publishedAt : reqData.publishedAt
         }
         try {
-            let [err, book] = await to(Book.findOne({where: {uid: reqData.uid}}))
+            let [err, book] = await to(Book.findOne({where: {name: reqData.name}}))
             if (book != null) {
-                return "Da ton tai ma sach nay"
+                return "Da ton tai cuon sach nay"
             }
             bookCreate = await Book.create(bookData)
             return bookCreate
@@ -33,7 +32,6 @@ module.exports = function(Book) {
 
     Book.updateBook = async function(reqData){
         const bookData = {}
-        bookData.uid = reqData.uid
         bookData.name = reqData.name
         bookData.categoryId = reqData.categoryId
         bookData.description = reqData.description

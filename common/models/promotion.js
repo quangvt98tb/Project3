@@ -4,7 +4,6 @@ let to = require('await-to-js').to;
 module.exports = function(Promotion){
     const Promise = require('bluebird')
     Promotion.createPromotion = async function(
-        uid, 
         name, 
         description, 
         minus,
@@ -13,7 +12,6 @@ module.exports = function(Promotion){
         endAt) {
 
         const PromotionData = {
-            uid: uid,
             name: name,
             description: description,
             minus: minus,

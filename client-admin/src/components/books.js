@@ -1,24 +1,23 @@
 import React from 'react';
-import { List, Datagrid, Edit, Create, SimpleForm, DateField, TextField, EditButton, DisabledInput, TextInput, LongTextInput, DateInput, SelectInput } from 'react-admin';
+import { List, Datagrid, Edit, Create, SimpleForm, DateField, TextField, 
+        EditButton, DisabledInput, TextInput, ReferenceField , ReferenceInput, SingleFieldList,
+        LongTextInput, DateInput, SelectInput, ChipField} from 'react-admin';
 
-const choices = [
-    { _id: 1, category: 'Khoa học' },
-    { _id: 2, category: 'Thiếu nhi' },
-    { _id: 3, category: 'Võ thuật'}
-];
+
 export const BookList = (props) => (
     <List {...props}>
         <Datagrid>
-            <TextField source="uid" />
             <TextField source="name" />
-            <TextField source="categoryId" />
+            <ReferenceField  label="category" reference="Categories" source="categoryId">
+                <TextField source="name" />
+            </ReferenceField>
             <TextField source="description" />
-            <TextField source="imgURL" />
+            <TextField label="Image URL" source="imgURL" />
             <TextField source="publisher" />
             <TextField source="author" />
             <TextField source="quantity" />
-            <TextField source="sellPrice" />
-            <DateField source="publishedAt" />
+            <TextField label="Price" source="sellPrice" />
+            <DateField label="Publish at" source="publishedAt" />
             <EditButton/>
         </Datagrid>
     </List>
@@ -27,32 +26,34 @@ export const BookList = (props) => (
 export const BookEdit = (props) => (
     <Edit {...props}>
         <SimpleForm>
-            <DisabledInput source="uid" />
             <TextInput source="name" />
-            <TextInput source="categoryId" />
-            <TextInput source="description" />
-            <TextInput source="imgURL" />
+            <ReferenceInput   label="Category" reference="Categories" source="categoryId">
+                <SelectInput optionText="name" />
+            </ReferenceInput>
+            <LongTextInput source="description" />
+            <TextInput label="Image URL" source="imgURL" />
             <TextInput source="publisher" />
             <TextInput source="author" />
             <TextInput source="quantity" />
-            <TextInput source="sellPrice" />
-            <TextInput source="publishedAt" />
+            <TextInput label="Price" source="sellPrice" />
+            <DateInput label="Publish at" source="publishedAt" />
         </SimpleForm>
     </Edit>
 );
 export const BookCreate = (props) => (
     <Create {...props}>
         <SimpleForm>
-            <DisabledInput source="uid" />
             <TextInput source="name" />
-            <SelectInput source="categoryId" choices={choices} optionText="category" optionValue="_id"/>
+            <ReferenceInput   label="Category" reference="Categories" source="categoryId">
+                <SelectInput optionText="name" />
+            </ReferenceInput>
             <TextInput source="description" />
-            <TextInput source="imgURL" />
+            <TextInput label="Image URL" source="imgURL" />
             <TextInput source="publisher" />
             <TextInput source="author" />
             <TextInput source="quantity" />
-            <TextInput source="sellPrice" />
-            <TextInput source="publishedAt" />
+            <TextInput label="Price" source="sellPrice" />
+            <DateInput label="Publish at" source="publishedAt" />
         </SimpleForm>
     </Create>
 );

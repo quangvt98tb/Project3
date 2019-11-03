@@ -20,10 +20,10 @@ export const UserList = (props) => (
         <Datagrid>
             <TextField label="Full Name" source="fullName" />
             <TextField label="Address" source="address.province"  />
-            <TextField source="phone" />
-            <DateField source="dateOfBirth" />
-            <TextField source="gender" />
-            <TextField source="email" />
+            <TextField label="Phone" source="phone" />
+            <DateField label="Birthday" source="dateOfBirth" />
+            <TextField label='Gender' source="gender" />
+            <TextField label="Email" source="email" type="email" />
             <EditButton/>
         </Datagrid>
     </List>
@@ -33,15 +33,15 @@ const PostTitle = ({ record }) => {
     return <span>Post {record ? `"${record.title}"` : ''}</span>;
 };
 
-export const UserShow = (props) => (
+export const CustomerEdit = (props) => (
     <Show  title="Xem thông tin tài khoản" {...props}>
         <SimpleShowLayout>
             <TextField  label="Full Name" source="fullName" />
             <TextField  label="Address" source="address.province" />
-            <TextField  source="phone" />
-            <DateField  source="dateOfBirth" />
-            <TextField  source="gender" />
-            <TextField  source="email" />
+            <TextField  label="Phone" source="phone" />
+            <DateField  label="Birthday" source="dateOfBirth" />
+            <TextField  label='Gender' source="gender" />
+            <TextField  label="Email" source="email" type="email" />
         </SimpleShowLayout>
     </Show>
 );

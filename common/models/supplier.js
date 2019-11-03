@@ -8,7 +8,6 @@ module.exports = function(Supplier) {
             const data = await Supplier.findById(id, {
               fields: {
                 id: true,
-                uid: true,
                 name: true,
                 email: true,
                 address: true,

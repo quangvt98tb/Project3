@@ -10,13 +10,6 @@
     }
   },
   "properties": {
-    "uid": {
-      "type": "String",
-      "required": true,
-      "index": {
-        "unique": true
-      }
-    },
     "name": {
       "type": "string",
       "required": true
