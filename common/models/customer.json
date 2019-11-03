@@ -42,7 +42,7 @@
     },
     "enable": {
       "type": "boolean",
-      "default": 1
+      "default": true
     }
   },
   "protected": ["dateOfBirth", "gender", "createdAt",  "enable"],

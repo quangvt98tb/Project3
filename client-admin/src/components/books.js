@@ -18,7 +18,7 @@ export const BookList = (props) => (
             <TextField source="author" />
             <TextField source="quantity" />
             <TextField source="sellPrice" />
-            <TextField source="publishedAt" />
+            <DateField source="publishedAt" />
             <EditButton/>
         </Datagrid>
     </List>

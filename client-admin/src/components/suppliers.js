@@ -4,7 +4,6 @@ import { List, Datagrid, Edit, Create, SimpleForm, DateField, TextField, EditBut
 export const SuppliersList = (props) => (
     <List {...props}>
         <Datagrid>
-            <TextField source="uid" />
             <TextField source="name" />
             <TextField source="email" />
             <TextField source="address" />
@@ -19,7 +18,6 @@ export const SuppliersList = (props) => (
 export const SuppliersEdit = (props) => (
     <Edit {...props}>
         <SimpleForm>
-            <TextField source="uid" />
             <TextField source="name" />
             <TextField source="email" />
             <TextField source="address" />
@@ -32,7 +30,6 @@ export const SuppliersEdit = (props) => (
 export const SuppliersCreate = (props) => (
     <Create {...props}>
         <SimpleForm>
-            <TextInput source="uid" />
             <TextInput source="name" />
             <TextInput source="email" />
             <TextInput source="address" />

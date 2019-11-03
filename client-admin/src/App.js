@@ -4,7 +4,7 @@ import './App.css';
 import {render} from 'react-dom';
 import {Admin, Resource, fetchUtils} from 'react-admin';
 import simpleRestProvider from 'ra-data-simple-rest';
-import { UserList, UserEdit, UserCreate} from './components/users';
+import { UserList, UserShow, UserCreate} from './components/users';
 import { SuppliersList, SuppliersEdit, SuppliersCreate} from './components/suppliers';
 import { BookList, BookEdit, BookCreate} from './components/books';
 import { ImportOrderList, ImportOrderEdit, ImportOderCreate} from './components/importorder';
@@ -26,7 +26,7 @@ const httpClient = (url, options = {}) => {
 const dataProvider = simpleRestProvider('http://localhost:3000/api/', httpClient);
 const App = () => (
     <Admin dataProvider={dataProvider}>
-       <Resource name="customer" list={UserList} edit={UserEdit} create={UserCreate} icon={UserIcon}/>
+       <Resource name="customer" list={UserList} show={UserShow} icon={UserIcon}/>
        <Resource name="Suppliers" list={SuppliersList} edit={SuppliersEdit} create={SuppliersCreate} icon={UserIcon}/>
        <Resource name="Books" list={BookList} edit={BookEdit} create={BookCreate} icon={BookIcon}/>
        <Resource name="ImportOrders" list={ImportOrderList} edit={ImportOrderEdit} create={ImportOderCreate} icon={ImportOrder}/>

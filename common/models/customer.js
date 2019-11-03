@@ -211,7 +211,7 @@ module.exports = function(Customer) {
         accepts: [
           { arg: 'queryData', type: 'string'},
           { arg: 'page', type: 'number', default: '0'},
-          { arg: 'pageSize', type: 'number', default: '10'}],
+          { arg: 'pageSize', type: 'number', default: '20'}],
         returns: { arg: 'data', root: true },
     })
 
