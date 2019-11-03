@@ -25,22 +25,31 @@ export const registerUser = (userData, history) => dispatch => {
 };
 
 export const loginUser = userData => dispatch => {
+  console.log(userData)
   axios
-    .post('customer/login', userData)
+    .post('customer/loginCustomer', userData)
     .then(res => {
-      // save to LocalStorageno
-      const token = res.data.id;
-      //set token to ls
-      localStorage.setItem('jwtToken', token);
-      // set token to Auth header
-      setAuthToken(token);
-      // Decode token to get user data
-      // const decoded = jwt_decode(token);
-      //Set Current user
-      dispatch(setCurrentUser(token));
+      console.log(res.data)
+      if (res.data.status == 400){
+        dispatch({
+          type: GET_ERRORS,
+          payload: res.data,
+        });
+      } else {
+        // save to LocalStorageno
+        const token = res.data.id;
+        //set token to ls
+        localStorage.setItem('jwtToken', token);
+        // set token to Auth header
+        setAuthToken(token);
+        // Decode token to get user data
+        // const decoded = jwt_decode(token);
+        //Set Current user
+        dispatch(setCurrentUser(token)); 
+      }
     })
     .catch(err => {
-      console.log(err)
+      console.log("err",err)
       return dispatch({
         type: GET_ERRORS,
         payload: err.data,

@@ -29,7 +29,7 @@ export const getAllBooks = () => dispatch => {
 export const getByGenres = (genre) => dispatch => {
   dispatch(setBookLoading());
   axios
-    .get(`/Categories/listBook`, genre)
+    .get(`/0/listBook`, genre)
     .then(res =>
       dispatch({
         type: GET_BY_GENRES,

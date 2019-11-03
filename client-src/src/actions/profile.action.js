@@ -69,7 +69,7 @@ export const deleteAccount = () => dispatch => {
 export const getProfiles = () => dispatch => {
   dispatch(setProfileLoading());
   axios
-    .get(`http://localhost:3000/api/profile/all`)
+    .get(``)
     .then(res =>
       dispatch({
         type: GET_PROFILES,

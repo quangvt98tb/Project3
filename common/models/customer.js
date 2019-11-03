@@ -130,7 +130,29 @@ module.exports = function(Customer) {
         }
     }
 
-    // Guest create Customer
+    //Login Customer validateLoginInput
+    Customer.loginCustomer = async function(reqData){
+        const { errors, isValid } = validateLoginInput(reqData);
+        if (!isValid) {
+            errors.status = 400
+            return [400, errors]
+        }
+        try {
+            let [err, customer] = await to(Customer.findOne({where: {email: reqData.email}}))
+            if (customer == null) {
+                errors.status = 400
+                errors.email = "Email này chưa đăng ký là thành viên"
+                return [400, errors]
+            }
+            let data = await Customer.login(reqData)
+            console.log("1", data)
+            return [200, data]
+        } catch (error) {
+            console.log('login Customer', error)
+            throw error
+        }
+    }
+    // Guest create Customer (Register)
     Customer.createCustomer = async function(reqData){
         const { errors, isValid } = validateRegisterInput(reqData);
         if (!isValid) {
@@ -205,6 +227,17 @@ module.exports = function(Customer) {
         http: {path: '/createAdmin', verb: 'post'},
         accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
         returns: { arg: 'data', root: true }
+    })
+
+
+    Customer.remoteMethod('loginCustomer', 
+    {
+        http: {path: '/loginCustomer', verb: 'post'},
+        accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
+        returns: [
+            { arg: 'status', root: true },
+            { arg: 'data', root: true }
+        ]   
     })
 
     Customer.remoteMethod('createCustomer', 
