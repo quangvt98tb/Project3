@@ -10,3 +10,19 @@ export const CategoryList = (props) => (
         </Datagrid>
     </List>
 );
+
+export const CategoryEdit = (props) => (
+    <Edit {...props}>
+        <SimpleForm>
+            <TextInput source="name" />
+        </SimpleForm>
+    </Edit>
+);
+
+export const CategoryCreate = (props) => (
+    <Create {...props}>
+        <SimpleForm>
+            <TextInput source="name" />
+        </SimpleForm>
+    </Create>
+);

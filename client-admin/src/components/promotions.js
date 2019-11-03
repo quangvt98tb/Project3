@@ -4,7 +4,6 @@ import { List, Datagrid, Edit, Create, SimpleForm, DateField, TextField, EditBut
 export const PromotionList = (props) => (
     <List {...props}>
         <Datagrid>
-            <TextField source="uid" />
             <TextField source="name" />
             <TextField source="description" />
             <TextField source="minus" />

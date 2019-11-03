@@ -5,7 +5,7 @@ import {render} from 'react-dom';
 import {Admin, Resource, fetchUtils} from 'react-admin';
 import simpleRestProvider from 'ra-data-simple-rest';
 import { UserList, CustomerEdit} from './components/users';
-import { CategoryList } from './components/category';
+import { CategoryList, CategoryEdit, CategoryCreate } from './components/category';
 import { SuppliersList, SuppliersEdit, SuppliersCreate} from './components/suppliers';
 import { BookList, BookEdit, BookCreate} from './components/books';
 import { ImportOrderList, ImportOrderEdit, ImportOderCreate} from './components/importorder';
@@ -29,11 +29,11 @@ const dataProvider = simpleRestProvider('http://localhost:3000/api/', httpClient
 const App = () => (
     <Admin dataProvider={dataProvider}>
        <Resource name="customer" list={UserList} edit={CustomerEdit} icon={UserIcon}/>
-       <Resource name="Categories" list={CategoryList} />
+       <Resource name="Categories" list={CategoryList} edit={CategoryEdit} create={CategoryCreate} />
        <Resource name="Suppliers" list={SuppliersList} edit={SuppliersEdit} create={SuppliersCreate} icon={SupplierIcon}/>
        <Resource name="Books" list={BookList} edit={BookEdit} create={BookCreate} icon={BookIcon}/>
        <Resource name="ImportOrders" list={ImportOrderList} edit={ImportOrderEdit} create={ImportOderCreate} icon={ImportOrder}/>
-       <Resource name="Orders" list={OrderList} edit={OrderEdit} create={OrderCreate} icon={Order}/>
+       <Resource name="OrderDetails" list={OrderList} edit={OrderEdit} create={OrderCreate} icon={Order}/>
        <Resource name="Promotions" list={PromotionList} edit={PromotionEdit} create={PromotionCreate} icon={Promotion}/>
 
    </Admin>
