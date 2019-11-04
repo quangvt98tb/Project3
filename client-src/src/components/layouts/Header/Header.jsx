@@ -5,8 +5,10 @@ import { logoutUser } from '../../../actions/auth.action';
 
 import classnames from 'classnames';
 import Logo from '../../../image/core-img/bookstore-logo.png';
+// import Logo from '../../../image/core-img/logo.png';
 import Message from '../../../image/core-img/message.png';
 import Placeholder from '../../../image/core-img/placeholder.png';
+//import HeaderIcons from '@/HeaderIcons/HeaderIcons'
 
 class Header extends Component {
   constructor(props) {
@@ -29,7 +31,7 @@ class Header extends Component {
     ) : (
       <>
         <Link to="/profile">TÀI KHOẢN</Link>
-        <Link to="/cart">GIỎ HÀNG</Link>
+        <Link to="/orders">ĐƠN HÀNG</Link>
         <a onClick={e => this.onLogoutClick(e)}>ĐĂNG XUẤT</a>
       </>
     );
@@ -39,18 +41,21 @@ class Header extends Component {
           <li>
             <Link to="/">TRANG CHỦ</Link>
           </li>
-          {/* <li>
-            <Link to="/exchanges">SÀN GIAO DỊCH</Link>
-          </li>
           <li>
-            <Link to="/purchasedhistory">QUẢN LÝ ĐƠN VAY</Link>
+            <Link to="/cart">GIỎ HÀNG</Link>
           </li>
-          <li>
-            <Link to="/loanlookup">TRA CỨU VAY NỢ</Link>
-          </li> */}
           <li>{AuthButton2}</li>
         </ul>
       );
+    const LogoSource = (
+      <div className="logo" style={{ marginTop: "12px" }}>
+        <Link to="/">
+          <a>
+            <img src={Logo} alt="" />
+          </a>
+        </Link>
+      </div>
+    );
     return (
       <header>
         <div className="header-area">
@@ -58,11 +63,7 @@ class Header extends Component {
             <div className="container h-100">
               <div className="row h-100 align-items-center">
                 <div className="col-12 d-flex justify-content-between">
-                  <div className="logo" style={{ marginTop: "12px" }}>
-                    <a href="/">
-                      <img src={Logo} alt="" />
-                    </a>
-                  </div>
+                  {LogoSource}
                   <div className="top-contact-info d-flex align-items-center">
                     <a
                       href="https://www.hust.edu.vn"
@@ -84,9 +85,9 @@ class Header extends Component {
                       <img src={Message} alt="" />
                       <span>www.hust.edu.vn</span>
                     </a>
+                    {/* <HeaderIcons/> */}
                   </div>
                 </div>
-              </div>
             </div>
           </div>
            <div style={{ height: "15px" }} />
@@ -137,6 +138,7 @@ class Header extends Component {
                <div id="omega-overlay" />
              </div>
            </div>
+         </div>
          </div>
        </header>
      );

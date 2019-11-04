@@ -26,12 +26,15 @@ export const registerUser = (userData, history) => dispatch => {
 
 export const loginUser = userData => dispatch => {
   axios
-    .post('customer/login', userData)
+    .post('customer/loginCustomer', userData)
     .then(res => {
       // save to LocalStorageno
+      console.log(res)
       const token = res.data.id;
+      const user_id = res.data.userId;
       //set token to ls
       localStorage.setItem('jwtToken', token);
+      localStorage.setItem('userId', user_id);
       // set token to Auth header
       setAuthToken(token);
       // Decode token to get user data
@@ -57,6 +60,10 @@ export const setCurrentUser = decoded => {
 
 // Log user out
 export const logoutUser = () => dispatch => {
+  axios
+  .post('customer/logout')
+  .then( res => {
+    console.log(res)
   // Remove token from localStorage
   localStorage.removeItem('jwtToken');
   // Remove auth header for future requests
@@ -65,4 +72,5 @@ export const logoutUser = () => dispatch => {
   dispatch(setCurrentUser({}));
   //Remove user profile
   dispatch(clearCurrentProfile());
+  })
 };

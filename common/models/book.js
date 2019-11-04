@@ -50,23 +50,31 @@ module.exports = function(Book) {
     }
 
     // Customer
-    Book.showBook = async function(reqData) {
+    Book.showBook = async function(id) {
         try {
-            const data = await Book.findById({reqData, 
+            const data1 = await Book.findById(id, {
                 fields: {
                     id: true, 
                     name: true, 
-                    categoryId: true, 
-                    description: true,
+                    author:true,
+                    categoryId: true,
+                    description: true, 
                     imgURL: true, 
-                    publisher: true, 
-                    author: true,
-                    sellPrice: true,
-                    publishedAt: true,
-                    enable: true
-                }, 
-                include: ['belongsToCategory']
+                    sellPrice: true
+                }
             });
+            let Category = app.models.Category
+            genre = await Category.findById(data1.categoryId)
+            data1.category = genre.name
+            let data = {  
+                id: data1.id,
+                title: data1.name,
+                imgUrl: data1.imgURL,
+                price: data1.sellPrice,
+                author: data1.author,
+                description: data1.description,
+                genre: data1.category
+            }
             return data
         } catch (err) {
             console.log('show Book', err)
@@ -76,22 +84,31 @@ module.exports = function(Book) {
 
     Book.listBook = async function(page, pageSize) {
         try {
-            const [data, total] = await Promise.all([
+            const [data1, total] = await Promise.all([
                 Book.find({
                     fields: {
-                        _id: true,
+                        id: true,
                         name: true, 
                         categoryId: true, 
-                        description: true,
                         imgURL: true, 
-                        publisher: true, 
                         author: true,
-                        sellPrice: true,
-                        publishedAt: true
-                    }, 
-                    include: ['belongsToCategory']
+                        sellPrice: true
+                    }
                 })
             ])
+            let i
+            let data = []
+            let Category = app.models.Category
+            for (i = 0; i < data1.length; i++){
+                let temp = {}
+                temp.id = data1[i].id
+                temp.title = data1[i].name
+                temp.imgUrl = data1[i].imgURL
+                temp.price = data1[i].sellPrice
+                genre = await Category.findById(data1[i].categoryId)
+                temp.category = genre.name
+                data.push(temp)
+            }
             return {
                 rows: data,
                 page: page,
@@ -102,6 +119,14 @@ module.exports = function(Book) {
             console.log('list Book', err)
             throw err
         }
+    }
+
+    Book.addToCart = async function(bookId, quantity){
+        let book = await Book.findById(bookId)
+        if (book.enable != true || book.quantity == 0 || quantity > book.quantity){
+            return [[]]
+        }
+        else return [book]         
     }
 
     //
@@ -121,8 +146,8 @@ module.exports = function(Book) {
     
     Book.remoteMethod(
         'showBook', {
-            http: {path: '/show', verb: 'get'},
-            accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
+            http: {path: '/show', verb: 'post'},
+            accepts: {arg: 'id', type: 'string'},
             returns: { arg: 'data',type: 'object'}
         }
     )
@@ -136,4 +161,15 @@ module.exports = function(Book) {
             returns: { arg: 'data',type: 'object'}
       }
     )
+
+    Book.remoteMethod('addToCart', 
+    {
+        http: {verb: 'post', path: '/addToCart' },
+        accepts: [
+            {arg: 'bookId', type: 'string'},
+            {arg: 'quantity', type: 'number'}
+        ],
+        returns: { arg: 'data',type: 'object'}
+    })
+
 }

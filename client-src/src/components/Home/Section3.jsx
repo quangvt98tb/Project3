@@ -10,6 +10,11 @@ import { Container, Col } from 'reactstrap';
 import { getAllBooks, getByGenres } from '../../actions/book.action'
 import PropTypes from 'prop-types';
 import SwappingSquaresSpinner from '../common/SwappingSquaresSpinner';
+import {
+  Card, CardText, CardBody,
+  CardTitle, CardSubtitle, CardLink
+} from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 const settings1 = {
   dots: true,
@@ -86,11 +91,16 @@ class Section3 extends Component {
       this.props.getByGenres(genre);
     }
   }
+
+  onClickAll() {
+    return () => {
+      this.props.getAllBooks(32);
+    }
+  }
   
   render(){
     const Genres = ["Horror", "Thriller", "Crime", "Drama"]
     const { books, loading } = this.props.books;
-    console.log(books)
 
     let Content =
       loading || books === null ? (
@@ -104,7 +114,8 @@ class Section3 extends Component {
         )}))
   return (
     <div>
-    <div style={{background: "#f6f6f6"}}>
+    {/* <div style={{background: "#f6f6f6"}}> */}
+    {/* <div style={{background: "https://www.sapo.vn/blog/wp-content/uploads/2017/05/sach-cover.jpg"}}> */}
     {/* <div className="container"> */}
       {/* <div style={{ height: 30 }}></div>
       <h2 className="headline">Best 
@@ -120,7 +131,7 @@ class Section3 extends Component {
         </Slider>
         <div style={{ height: 50 }}></div>
       {/* </div> */}
-    </div>
+    {/* </div> */}
     {/* </div> */}
     <div style={{background: "#f6f6f6"}}>
     <div className="container" >
@@ -133,7 +144,7 @@ class Section3 extends Component {
     <div className="section3">
       <Container>
 				<div class="product__nav nav justify-content-center" role="tablist">
-          <a class="nav-item nav-link active" data-toggle="tab" href="#nav-all" role="tab">ALL</a>
+          <a class="nav-item nav-link active" data-toggle="tab" href="#nav-all" role="tab" onClick={this.onClickAll()}>ALL</a>
           {Genres.map((genre, index) => {
             return(
               <a class="nav-item nav-link" data-toggle="tab" href="#nav-adventure" role="tab" onClick={this.onClick(genre)}>{genre}</a>

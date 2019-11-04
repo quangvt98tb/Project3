@@ -46,15 +46,14 @@
       "required": true
     },
     "publishedAt": {
-      "type": "Date",
+      "type": "date",
       "required": false
     },
     "enable": {
-      "type": "Boolean",
+      "type": "boolean",
       "default": 1
     }
   },
-  "protected" : ["id", "uid", "categoryId", "quantity"],
   "relations": {
     "hasManyComment": {
       "type": "hasMany",

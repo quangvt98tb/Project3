@@ -10,20 +10,26 @@ import {
 
 export const getCurrentProfile = () => dispatch => {
   dispatch(setProfileLoading());
+  const user_Id = localStorage.userId
+  console.log(user_Id)
   axios
-    .get('api/users')
-    .then(res =>
+    .post('customer/readProfile', {
+      id: user_Id
+    })
+    .then(res => {
+      console.log("0",res.data)
       dispatch({
-        type: GET_PROFILE,
+        type: GET_PROFILE, 
         payload: res.data,
-      }),
-    )
-    .catch(err =>
+      })
+    })
+    .catch(err => {
+      console.log(err)
       dispatch({
         type: GET_PROFILE,
         payload: {},
-      }),
-    );
+      })
+    });
 };
 
 // Create Profile

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getCities, getDistricts } from '../../utils/getVNdata';
 import { updateProfile } from '../../actions/profile.action';
+import TextInputAuth from '../../HOC/TextInputAuth';
 // import Notification from '../../HOC/Snackbar';
 import Notifications, { notify } from 'react-notify-toast';
 const Cities = getCities();
@@ -16,19 +17,23 @@ class UpdateInfo extends Component {
 
     this.state = {
       isUpdate: false,
+      email: '',
+      phone: '',
       gender: '',
       province: '',
       district: '',
       ward: '',
-      details: ''
+      details: '',
+      errors: {},
     };
   }
   componentDidMount() {
-    console.log(this.props.profile[0].address[0])
-    const { gender, address } = this.props.profile[0];
-    const { province, district, ward, details } = address[0];
+    const { gender, address, phone, email } = this.props.profile;
+    const { province, district, ward, details } = address;
 
     this.setState({
+      email,
+      phone,
       gender,
       province,
       district,
@@ -48,6 +53,8 @@ class UpdateInfo extends Component {
   onSubmit(e) {
     e.preventDefault();
     const {
+      email,
+      phone,
       gender,
       province,
       district,
@@ -55,6 +62,8 @@ class UpdateInfo extends Component {
       details
     } = this.state;
     const newInfo = {
+      email,
+      phone,
       gender,
       province,
       district,
@@ -71,14 +80,19 @@ class UpdateInfo extends Component {
     this.setState(old => ({ isUpdate: !old.isUpdate }));
   }
   render() {
+    
     const {
-      isUpdate,
+      email,
+      phone,
       gender,
       province,
       district,
       ward,
-      details
+      details,
+      errors,
+      isUpdate,
     } = this.state;
+    console.log(isUpdate);
 
     return (
       <div className="accinfo-2">
@@ -101,7 +115,7 @@ class UpdateInfo extends Component {
                       id="txtFullName"
                       placeholder=""
                       disabled="disabled"
-                      value={this.props.profile[0].fullName}
+                      value={this.props.profile.fullName}
                     />
                   </div>
                 </div>
@@ -115,7 +129,7 @@ class UpdateInfo extends Component {
                   >
                     Điện thoại:
                   </label>
-                  <div className="col-xl-8 col-sm-7">
+                  {/* <div className="col-xl-8 col-sm-7">
                     <input
                       type="tel"
                       className="form-control"
@@ -124,7 +138,21 @@ class UpdateInfo extends Component {
                       disabled="disabled"
                       value={this.props.profile[0].phone}
                     />
-                  </div>
+                  </div> */}
+                  <div className="col-xl-8 col-sm-7">
+                    <TextInputAuth
+                        id="phone"
+                        name="phone"
+                        className="form-control form-control-lg fs-13 px-3 rounded"
+                        placeholder="Số điện thoại"
+                        title="Phone"
+                        type="tel"
+                        onChange={e => this.onChange(e)}
+                        value={phone}
+                        error={errors.phone}
+                        disabled={!isUpdate}
+                      />
+                    </div>
                 </div>
               </div>
             </div>
@@ -224,7 +252,7 @@ class UpdateInfo extends Component {
                   >
                     Phường/ Xã:
                   </label>
-                  <div className="col-xl-8 col-sm-7">
+                  {/* <div className="col-xl-8 col-sm-7">
                     <input
                       type="text"
                       className="form-control"
@@ -233,21 +261,35 @@ class UpdateInfo extends Component {
                       onChange={e => this.onChange(e)}
                       disabled={!isUpdate}
                     />
-                  </div>
+                  </div> */}
+                  <div className="col-xl-8 col-sm-7">
+                    <TextInputAuth
+                        id="ward"
+                        name="ward"
+                        className="form-control form-control-lg fs-13 px-3 rounded"
+                        placeholder="Phường/Xã"
+                        title="Ward"
+                        type="text"
+                        onChange={e => this.onChange(e)}
+                        value={ward}
+                        error={errors.ward}
+                        disabled={!isUpdate}
+                      />
+                    </div>
                 </div>
               </div>
             </div>
 
             <div className="row col-xl-12">
-              <div className="col-xl-12">
+              <div className="col-xl-6">
                 <div className="form-group row">
                   <label
                     htmlFor="txtAddress"
-                    className="col-xl-2 col-sm-4 col-form-label text-sm-right"
+                    className="col-sm-4 col-form-label text-sm-right"
                   >
                     Địa chỉ:
                   </label>
-                  <div className="col-xl-10 col-sm-7">
+                  {/* <div className="col-xl-10 col-sm-7">
                     <input
                       type="text"
                       className="form-control"
@@ -258,6 +300,44 @@ class UpdateInfo extends Component {
                       value={details}
                       onChange={e => this.onChange(e)}
                     />
+                  </div> */}
+                  <div className="col-xl-8 col-sm-7">
+                    <TextInputAuth
+                        id="details"
+                        name="details"
+                        className="form-control form-control-lg fs-13 px-3 rounded"
+                        placeholder="Địa chỉ"
+                        title="Details"
+                        type="text"
+                        onChange={e => this.onChange(e)}
+                        value={details}
+                        error={errors.details}
+                        disabled={!isUpdate}
+                      />
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-6">
+                <div className="form-group row">
+                  <label
+                    htmlFor="txtAddress"
+                    className="col-sm-4 col-form-label text-sm-right"
+                  >
+                    Email:
+                  </label>
+                  <div className="col-xl-8 col-sm-7">
+                    <TextInputAuth
+                        id="email"
+                        name="email"
+                        className="form-control form-control-lg fs-13 px-3 rounded"
+                        placeholder="Địa chỉ"
+                        title="Email"
+                        type="text"
+                        onChange={e => this.onChange(e)}
+                        value={email}
+                        error={errors.email}
+                        disabled={!isUpdate}
+                      />
                   </div>
                 </div>
               </div>
@@ -290,7 +370,7 @@ class UpdateInfo extends Component {
   }
 }
 
-const mapStateToProps = state => ({ user: state.user });
+const mapStateToProps = state => ({ user: state.user, errors: state.errors });
 
 const mapDispatchToProps = { updateProfile };
 

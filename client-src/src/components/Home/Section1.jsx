@@ -7,10 +7,10 @@ import Background4 from '../../image/bg-img/4.jpg';
 export default class Section1 extends Component {
   render() {
     return (
-      <section className="features-area">
+      <section className="features-area" style={{backgroundColor: "white"}}>
         <div className="container">
           <div className="row align-items-end">
-            <div className="col-12 col-sm-6 col-lg-3">
+            <div className="col-sm-12 col-md-6 col-lg-3">
               <div
                 className="single-features-area mb-100 wow fadeInUp"
                 data-wow-delay="100ms"
@@ -29,7 +29,7 @@ export default class Section1 extends Component {
                 </a>
               </div>
             </div>
-            <div className="col-12 col-sm-6 col-lg-3">
+            <div className="col-sm-12 col-md-6 col-lg-3">
               <div
                 className="single-features-area mb-100 wow fadeInUp"
                 data-wow-delay="300ms"
@@ -38,7 +38,7 @@ export default class Section1 extends Component {
                 <h5 style={{ textAlign: 'center' }}>Quan tâm tới bạn</h5>
               </div>
             </div>
-            <div className="col-12 col-sm-6 col-lg-3">
+            <div className="col-sm-12 col-md-6 col-lg-3">
               <div
                 className="single-features-area mb-100 wow fadeInUp"
                 data-wow-delay="500ms"
@@ -47,7 +47,7 @@ export default class Section1 extends Component {
                 <h5 style={{ textAlign: 'center' }}>Giao hàng nhanh</h5>
               </div>
             </div>
-            <div className="col-12 col-sm-6 col-lg-3">
+            <div className="col-sm-12 col-md-6 col-lg-3">
               <div
                 className="single-features-area mb-100 wow fadeInUp"
                 data-wow-delay="700ms"

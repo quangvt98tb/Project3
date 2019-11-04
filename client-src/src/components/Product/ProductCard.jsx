@@ -3,7 +3,7 @@ import {
   Card, CardText, CardBody,
   CardTitle, CardSubtitle, CardLink
 } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
 import './ProductCard.scss';
 
 class Product extends Component {
@@ -22,11 +22,11 @@ class Product extends Component {
           </CardBody>
           <CardText className="priceTag align-self-center">{this.props.item.price}</CardText>
           <div style={{ height: 10 }}></div>
-          <CardLink className="buyLink w-90 align-self-center" href={`/books/${this.props.item.id}`}>
-            <Link to={`/books/${this.props.item.id}`}>
+          <Link to={`/books/${this.props.item.id}`} className="buyLink align-self-center w-90">
+            <h6 className="w-90 align-self-center" href={`/books/${this.props.item.id}`}>
               Buy
-            </Link>
-          </CardLink>
+            </h6>
+          </Link>
           <div style={{ height: 10 }}></div>
         </Card>
     );

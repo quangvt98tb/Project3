@@ -4,8 +4,8 @@ import { List, Datagrid, Edit, Create, SimpleForm,
         TextInput, LongTextInput, DateInput, required, email, number } from 'react-admin';
 
 const validateName = [required()];
-const validateEmail= email();
-const validatePhone = [number('Nhap dung sdt')];
+const validateEmail= email('Nhap dung dang mail');
+const validatePhone = [number()];
 
 export const SuppliersList = (props) => (
     <List {...props}>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios'
+import TextInputAuth from '../../HOC/TextInputAuth'
 import './ProductDetails.scss';
 import { addToCart } from '../../actions/cart.action'
 import { getBookById } from '../../actions/book.action';
@@ -12,20 +12,34 @@ class Product extends Component {
     super(props)
     this.state = {
 			bookId: this.props.match.params.id,
-			quantity: 0,
+			quantity: 1,
     }
 	}
 	
   componentWillMount() {		
 		this.props.getBookById(this.state.bookId);
 	}
+	
+	onSetState(quantity){
+		if (quantity > 0 || quantity === ''){
+			this.setState({
+				...this.state,
+				quantity: quantity,
+			})
+		}
+	}
 
-	handleClick = (id, quantity)=>{
-		this.props.addToCart(id, quantity)
+	handleClick = (productId, quantity)=>{
+		let productData =  {
+			productId: productId,
+			quantity: quantity,
+		};
+		this.props.addToCart(productData);
 	}
 
   render() {
 		const { book, loading } = this.props.books;
+		let error  = this.props.cart.error;
 		let Content =
       loading || book === null ? (
         <SwappingSquaresSpinner />
@@ -36,7 +50,7 @@ class Product extends Component {
 		loading || book === null ? (
 			<SwappingSquaresSpinner/>
 		) : (
-			book.genre.split("|").join(", ")
+			book.genre
 		)
     return (
         <>
@@ -64,13 +78,20 @@ class Product extends Component {
 							<div className="price-box">
 								<span>${Content.price}</span>
 							</div>
-							{/* <div className="product__overview">
-								<p>Ideal for cold-weather training or work outdoors, the Chaz Hoodie promises superior warmth with every wear. Thick material blocks out the wind as ribbed cuffs and bottom band seal in body heat.</p>
-								<p>Ideal for cold-weather training or work outdoors, the Chaz Hoodie promises superior warmth with every wear. </p>
-							</div> */}
 							<div className="box-tocart d-flex">
 								<span>Quantity</span>
-								<input className="input-text" id="qty" value={this.state.quantity} onChange={event => this.setState({quantity: event.target.value.replace(/\D/,'')})}/>
+								{/* <input className="input-text" id="qty" value={this.state.quantity} type="number" max="19" min="1" onChange={event => this.onSetState(event.target.value.replace(/\D/,''))}/> */}
+								<div style={{width: 100}}>
+									<TextInputAuth
+												id="qty"
+												name="quantity"
+												className="form-control form-control-lg rounded"
+												type="number"
+												onChange={event => this.onSetState(event.target.value.replace(/\D/,''))}
+												value={this.state.quantity}
+												error={error}
+											/>
+								</div>
 								<div className="addtocart__actions">
 									<button className="tocart" type="submit" title="Add to Cart" onClick={()=>{this.handleClick(this.state.bookId, this.state.quantity)}}>Add to Cart</button>
 								</div>
@@ -79,6 +100,7 @@ class Product extends Component {
 									<a className="compare" href="#"></a>
 								</div>
 							</div>
+							{/* {error && <div className="invalid-feedback">{error}</div>} */}
 							<div className="product_meta">
 								<p className="posted_in">Genres: {genres}
 								</p>
@@ -120,11 +142,6 @@ class Product extends Component {
 					<div className="pro__tab_label tab-pane fade show active" id="nav-details" role="tabpanel">
 						<div className="description__attribute">
 							<p>Ideal for cold-weather training or work outdoors, the Chaz Hoodie promises superior warmth with every wear. Thick material blocks out the wind as ribbed cuffs and bottom band seal in body heat.Ideal for cold-weather training or work outdoors, the Chaz Hoodie promises superior warmth with every wear. Thick material blocks out the wind as ribbed cuffs and bottom band seal in body heat.Ideal for cold-weather training or work outdoors, the Chaz Hoodie promises superior warmth with every wear. Thick material blocks out the wind as ribbed cuffs and bottom band seal in body heat.Ideal for cold-weather training or work outdoors, the Chaz Hoodie promises superior warmth with every wear. Thick material blocks out the wind as ribbed cuffs and bottom band seal in body heat.</p>
-							{/* <ul>
-								<li>• Two-tone gray heather hoodie.</li>
-								<li>• Drawstring-adjustable hood. </li>
-								<li>• Machine wash/dry.</li>
-							</ul> */}
 						</div>
 					</div>
 				</div>
@@ -140,10 +157,12 @@ Product.propTypes = {
 	books: PropTypes.object.isRequired,
 	getBookById: PropTypes.func.isRequired,
 	addToCart: PropTypes.func.isRequired,
+	cart: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({
 	books: state.books,
+	cart: state.cart
 });
   
 const mapDispatchToProps = {

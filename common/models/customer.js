@@ -18,10 +18,31 @@ module.exports = function(Customer) {
                   address: true, 
                   phone: true,
                   dateOfBirth: true, 
-                  gender: true, 
-                  createdAt: true
+                  gender: true
                 }
             });
+            if (data.phone == null) {
+                data.phone =""
+            }
+            if (data.dateOfBirth == null) {
+                data.dateOfBirth =""
+            }
+            if (data.gender == null) {
+                data.gender =""
+            }
+            
+            if (data.receiveDistrict == null) {
+                data.receiveDistrict =""
+            }
+            if (data.address.district == null) {
+                data.address.district = ""
+            }
+            if (data.address.ward == null) {
+                data.address.ward = ""
+            }
+            if (data.address.details == null) {
+                data.address.details = ""
+            }
             return data;
         } catch (err) {
             console.log('read Customer', err)
@@ -192,7 +213,7 @@ module.exports = function(Customer) {
     //
     Customer.remoteMethod('readProfile', 
     {
-        http: {path: '/readProfile', verb: 'get'},
+        http: {path: '/readProfile', verb: 'post'},
         accepts: [
             {arg: 'id', type: 'string', required: true}],
         returns: { arg: 'data', root: true }

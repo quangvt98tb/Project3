@@ -1,0 +1,297 @@
+.checkout_login,
+.checkout_coupon {
+  display: none; }
+.checkout_info {
+  background-color: #f7f6f7;
+  border-top: 3px solid #e59285;
+  color: #515151;
+  margin: 0 0 2em;
+  padding: 1em 2em 1em 3.5em;
+  position: relative;
+  width: auto;
+  border-top-color: #e59285; }
+  .checkout_info::before {
+    color: #e59285;
+    content: "\f15b";
+    font-family: FontAwesome;
+    font-size: 13px;
+    left: 26px;
+    position: absolute; }
+  .checkout_info span {
+	  font-size: 14px;
+	}
+  .checkout_info a.showlogin, .checkout_info a.showcoupon {
+    color: #e59285;
+    font-size: 12px; }
+.wn__checkout__form {
+  background: #fff none repeat scroll 0 0;
+  border: 1px solid #e1e1e1;
+  border-radius: 0;
+  margin: 0 0 20px;
+  padding: 20px;
+  text-align: left; }
+  .wn__checkout__form p {
+  color: #333;
+  font-size: 14px;
+  margin: 0 0 10px;
+}
+  .wn__checkout__form .input__box label {
+    margin-bottom: 5px;
+    line-height: 2;
+    display: block;
+    color: #333;
+    font-size: 12px; }
+  .wn__checkout__form .input__box input {
+    border: 1px solid #e1e1e1;
+    height: 40px;
+    margin: 0 0 14px;
+    max-width: 100%;
+    padding: 0 0 0 10px;
+    width: 370px; }
+  .wn__checkout__form .form__btn button {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: 2px solid #333;
+    color: #333;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 34px;
+    padding: 2px 20px 0;
+    text-transform: uppercase;
+    transition: all 0.4s ease 0s; }
+    .wn__checkout__form .form__btn button:hover {
+      background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+      border-color: #e59285;
+      color: #e59285; }
+  .wn__checkout__form .form__btn .label-for-checkbox {
+    margin-bottom: 5px; }
+    .wn__checkout__form .form__btn .label-for-checkbox input {
+      margin: 0 3px 0 15px; }
+    .wn__checkout__form .form__btn .label-for-checkbox span {
+      color: #333;
+      font-size: 12px; }
+    .wn__checkout__form .form__btn .label-for-checkbox a {
+      color: #e59285;
+      font-size: 12px; }
+.checkout_coupon {
+  border: 1px solid #d3ced2;
+  border-radius: 5px;
+  margin: 2em 0;
+  padding: 20px;
+  text-align: left; }
+  .checkout_coupon .form__coupon input {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #e1e1e1;
+    border-radius: 0;
+    height: 40px;
+    max-width: 100%;
+    padding: 0 0 0 10px; }
+  .checkout_coupon .form__coupon button {
+    background: #2e2e2e none repeat scroll 0 0;
+    border-radius: 0;
+    color: #fff;
+    margin-left: 6px;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 34px;
+    padding: 2px 20px 0;
+    text-transform: uppercase;
+    transition: all 0.4s ease 0s;
+    border: 0 none; }
+    .checkout_coupon .form__coupon button:hover {
+      color: #e59285; }
+.customer_details h3 {
+  color: #2e2e2e;
+  font-weight: 700;
+  line-height: 1.35;
+  font-size: 20px;
+  margin: 0 0 20px; }
+.customer_details .customar__field .input_box {
+  margin: 0 0 20px;
+}
+  .customer_details .customar__field .input_box.space_between {
+    margin: 0 15px;
+    width: 50%; }
+  .customer_details .customar__field .input_box label {
+    color: #333;
+    line-height: 2;
+    font-size: 14px;
+    display: block; }
+    .customer_details .customar__field .input_box label span {
+      color: red;
+      font-weight: 700; }
+  .customer_details .customar__field .input_box input {
+    height: 40px;
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #e1e1e1;
+    width: 100%;
+    padding: 0 10px; }
+.customer_details .customar__field .margin_between {
+  display: flex;
+  margin-bottom: 20px;
+  margin-left: -15px;
+  margin-right: -15px; }
+.select__option {
+  border: 1px solid #e1e1e1;
+  height: 40px;
+  padding: 0 43px 0 10px;
+  width: 100%; }
+.account__field,
+.differt__form {
+  display: none; }
+.create__account .wn__accountbox span {
+  color: #333;
+  font-size: 14px;
+  font-weight: 700;
+  margin-left: 8px;
+}
+.create__account .account__field label {
+  color: #a00;
+  margin: 0 0 5px;
+  display: block;
+  font-size: 12px; }
+  .create__account .account__field label span {
+    color: red;
+    font-weight: 700; }
+.create__account .account__field input {
+  border: 1px solid #a00;
+  height: 40px;
+  width: 100%;
+  padding: 0 10px; }
+.differt__address span {
+  color: #333;
+  font-size: 14px;
+  font-weight: 700;
+  margin-left: 8px;
+}
+.wn__order__box {
+  background: #f4f4f4 none repeat scroll 0 0; }
+  .wn__order__box h3.onder__title {
+    border-bottom: 1px solid #e1e1e1;
+    font-size: 24px;
+    margin: 0;
+    padding: 15px 0;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%;
+    color: #2e2e2e; }
+.order__total {
+  display: flex;
+  justify-content: space-between;
+  padding: 22px 80px 0; }
+  .order__total li {
+    color: #333444;
+    font-size: 18px;
+    font-weight: 600; }
+.order_product {
+  margin-top: 18px;
+  padding: 0 80px; }
+  .order_product li {
+    color: #333444;
+    font-size: 14px;
+    font-weight: 400;
+    padding: 15px 0; }
+    .order_product li span {
+      float: right; }
+.shipping__method {
+  padding: 15px 80px 25px; }
+.shipping__method > li span {
+  float: right; }
+.shipping__method li {
+  color: #333;
+  display: flex;
+  font-weight: 700;
+  justify-content: space-between; }
+.shipping__method > li + li {
+  margin-top: 20px; }
+.shipping__method li ul li input {
+  margin-right: 5px;
+  margin-top: 6px; }
+.total__amount {
+  border-top: 1px solid #e1e1e1;
+  padding: 0 80px; }
+.total__amount li span {
+  float: right; }
+.total__amount li {
+  color: #333444;
+  font-size: 18px;
+  font-weight: 700;
+  padding-bottom: 15px;
+  padding-top: 15px;
+  text-transform: uppercase; }
+.checkout_accordion .payment {
+  margin: 0 0 15px; }
+.checkout_accordion .payment:last-child {
+  margin-bottom: 0;
+}
+.checkout_accordion .checkout__title input {
+  margin: 0 1em 0 0; }
+.checkout_accordion .checkout__title label {
+  margin: 0 0 5px; }
+.checkout_accordion .payment-body {
+  color: #333;
+  font-size: 12px;
+  padding: 10px 12px; }
+a.checkout__title {
+  background: #f4f4f4 none repeat scroll 0 0;
+  display: block;
+  padding: 10px 15px;
+  font-weight: 600; }
+
+@media only screen and (max-width: 767px) {
+  .order__total {
+    padding: 22px 60px 0; }
+.product__info__main h1 {
+  margin: 30px 0 3px;
+}
+  .order_product {
+    padding: 0 60px; }
+  .shipping__method {
+    padding: 15px 60px 25px; }
+  .total__amount {
+    padding: 0 60px; } }
+@media only screen and (max-width: 575px) {
+  .order__total {
+    padding: 22px 20px 0; }
+  .order_product {
+    padding: 0 20px; }
+  .shipping__method {
+    padding: 15px 20px 25px; }
+  .total__amount {
+    padding: 0 20px; } }
+@media only screen and (max-width: 420px) {
+  .checkout_coupon .form__coupon button {
+    margin-left: 0;
+    margin-top: 20px; }
+.search__active {
+  display: none!important;
+}
+.slider--15 .slide .slider__content p {
+  display:none;
+}
+  .checkout_coupon .form__coupon input {
+    width: 100%; } }
+
+.checkout__btn a{
+  background: #003679 none repeat scroll 0 0;
+  border-radius: 5px;
+  display: block;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  height: 40px;
+  line-height: 40px;
+  padding: 0 26px;
+  text-transform: capitalize;
+  transition: all 0.3s ease 0s;
+  color: #fff !important;
+  margin: auto;
+
+}
+.checkout__btn a:hover {
+  background: #ffbb38 none repeat scroll 0 0;
+  color: #fff !important; }
+
+.checkout {
+}

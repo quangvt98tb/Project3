@@ -15,6 +15,7 @@
     "proxy": "^1.0.1",
     "radium": "^0.26.0",
     "react": "^16.10.2",
+    "react-bootstrap-sweetalert": "^5.1.5",
     "react-card-image-gallery": "^1.0.6",
     "react-coverflow": "^0.2.20",
     "react-dom": "^16.10.2",

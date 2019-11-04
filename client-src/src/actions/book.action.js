@@ -10,7 +10,7 @@ import axios from 'axios'
 export const getAllBooks = () => dispatch => {
     dispatch(setBookLoading());
     axios
-      .get(`Books/list`)
+      .get(`/Books/list`)
       .then(res => {
         console.log(res)
         dispatch({
@@ -65,13 +65,13 @@ export const get5Genres = () => dispatch => {
 export const getBookById = (bookId) => dispatch => {
   dispatch(setBookLoading());
   axios
-    .get(`/Books/showBook`, bookId)
-    .then(res => 
-      // console.log(res.data))
+    .post('/Books/show', {id: bookId})
+    .then(res => { 
       dispatch({
         type: GET_BOOK,
         payload: res.data.data,
-      }))
+      })
+    })
     .catch(err =>
       dispatch({
         type: GET_BOOK,

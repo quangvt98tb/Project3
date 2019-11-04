@@ -4,18 +4,19 @@ app = require('../../server/server')
 
 module.exports = function(ExportOrder) {
     const Promise = require('bluebird')
-    ExportOrder.validatesInclusionOf('statua', {in: ["Doi Xac Nhan", "Doi Giao Hang", "Da Huy", "Bi Huy", "Da Hoan Thanh"]})
-
+    ExportOrder.validatesInclusionOf('status', {in: ["Doi Xac Nhan", "Doi Giao Hang", "Da Huy", "Bi Huy", "Da Hoan Thanh"]})
+    ExportOrder.validatesInclusionOf('paymentMethod', {in: ["Direct Bank Transfer", "Cheque Payment", "Cash on Delivery"]})
+    
     ExportOrder.createOrder = async function(reqData){
         let OrderDetail = app.models.OrderDetail
         let Book = app.models.Book
         let i
         let orderDetailList = {}
-        for (i = 0; i < reqData.bookList.length(); i++){
+        for (i = 0; i < reqData.cart.addedItems.length(); i++){
             let bookData = {
-                bookId: reqData.bookList[i].bookId,
-                quantity: reqData.bookList[i].quantity,
-                price: reqData.bookList[i].price
+                bookId: reqData.cart.addedItems[i].bookId,
+                quantity: reqData.cart.addedItems[i].quantity,
+                price: reqData.cart.addedItems[i].price
             }
             try {
                 let data1 = await OrderDetail.create(bookData)
@@ -26,26 +27,16 @@ module.exports = function(ExportOrder) {
             }
         }
         let data = {
-            userId: reqData.userId,
-            status: reqData.status,
-            paymentMethod: reqData.paymentMethod,
-            addressShip: reqData.addressShip,
-            subtotal: reqData.subtotal,
+            userId: reqData.profileData.userId,
+            status: "Doi Xac Nhan",
+            paymentMethod: reqData.checkOutType,
+            addressShip: reqData.profileData.addressShip,
+            subtotal: reqData.cart.total,
             createdAt: Date()
         }
         try{
             let exportOrder = await ExportOrder.create(data)
             exportOrder.bookList.set(orderDetailList)
-            for (i = 0; i < orderDetailList.length; i++){
-                try{
-                    let book = await Book.findById(reqData.bookList[i].bookId)
-                    let newQuantity = book.quantity - reqData.bookList[i].quantity
-                    let bookUpdate = await Book.upsertWithWhere(book.id, {quantity: newQuantity})
-                } catch (error) {
-                    console.log('update Book quantity', error)
-                    return [400, error]
-                }
-            }
             return exportOrder
         } catch (err){
             console.log('create ExportOrder', err)
@@ -74,22 +65,24 @@ module.exports = function(ExportOrder) {
         }
     }
 
-    ExportOrder.UserList = async function(reqData) {
+    ExportOrder.UserList = async function(userId) {
         try {
             const [data, total] = await Promise.all([
                 ExportOrder.find({
-                    where: {userId : reqData.userId}, 
-                    fields: {
-                        subtotal: true,
-                        paymentMethod: true,
-                        addressShip: true,
-                        createdAt: true,
-                        updatedAt: true, 
-                        status: true
-                    }
+                    where: {userId : userId}
                 }),
                 ExportOrder.count({userId : userId})
             ])
+            let Customer = app.models.Customer
+            customer = Customer.findById(userId)
+            // let data = {
+            //     shipDate: data1.updatedAt,
+            //     orderCode: data1.id,
+            //     orderDate: data1.createdAt,
+            //     status: data1.status,
+            //     books: data1.bookList,
+            //     fullName: customer.fullName
+            // }
             return {
                 rows: data,
                 page: page,
@@ -98,7 +91,7 @@ module.exports = function(ExportOrder) {
             }
         } catch (err) {
             console.log('list ExportOrder For User', err)
-            return [400, err]
+            return err
         }
     }
 
@@ -224,7 +217,7 @@ module.exports = function(ExportOrder) {
     ExportOrder.remoteMethod(
         'UserList', {
             http: {path: '/listOrdersForUser', verb: 'post' },
-            accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
+            accepts: {arg: 'userId', type: 'string'},
             returns: { arg: 'data',type: 'object'}
       }
     )

@@ -16,9 +16,21 @@ export const GET_ALL_BOOKS = 'GET_ALL_BOOKS';
 export const GET_BY_GENRES = 'GET_BY_GENRES';
 
 //CART
-export const ADD_TO_CART = 'ADD_TO_CART'
-export const DELETE_FROM_CART = 'DELETE_FROM_CART'
-export const DELETE_ALL_FROM_CART = 'DELETE_ALL_FROM_CART'
+export const ADD_TO_CART = 'ADD_TO_CART';
+export const DELETE_FROM_CART = 'DELETE_FROM_CART';
+export const DELETE_ALL_FROM_CART = 'DELETE_ALL_FROM_CART';
+export const CHANGE_QUANTITY = 'CHANGE_QUANTITY';
+export const CHECKOUT = 'CHECKOUT';
+
+//CHECKOUT_CONFIRM
+export const CHECKOUT_CONFIRM = 'CHECKOUT_CONFIRM';
+
+//ORDERS
+export const GET_ORDERS = 'GET_ORDERS';
+export const GET_ORDER_DETAILS = 'GET_ORDER_DETAILS';
+export const ORDER_LOADING = 'ORDER_LOADING';
+export const DELETE_ORDER = 'DELETE_ORDER';
+export const CANCEL_ORDER = 'CANCEL_ORDER';
 
 //statistic
 export const COUNT_USER = 'COUNT_USER';

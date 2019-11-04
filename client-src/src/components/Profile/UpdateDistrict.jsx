@@ -18,7 +18,7 @@ class UpdateDistrict extends Component {
     };
   }
   componentDidMount() {
-    const { receiveDistrict } = this.props.profile[0];
+    const { receiveDistrict } = this.props.profile;
     this.setState({ receiveDistrict });
     this.mySet = new Set(receiveDistrict);
   }
@@ -45,7 +45,7 @@ class UpdateDistrict extends Component {
     this.toast(msg, 'warning', 3000);
   }
   render() {
-    console.log(this.props.profile[0].address)
+    console.log(this.props.profile.address)
     const { receiveDistrict } = this.state;
     return (
       <div
@@ -64,7 +64,7 @@ class UpdateDistrict extends Component {
           <hr className="mb-3" />
           <div className="districtDiv form-group row">
             <div className="row">
-              {getDistricts(this.props.profile[0].address[0].province).map(
+              {getDistricts(this.props.profile.address.province).map(
                 (val, key) => {
                   return (
                     <label className="custom-control col-md-5" key={key}>
