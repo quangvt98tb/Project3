@@ -1,9 +1,9 @@
 import React from 'react';
-import { List, Datagrid, Edit, Create, SimpleForm, BooleanInput,
+import { List, Datagrid, Edit, Create, SimpleForm,
         TextField, EditButton, DisabledInput, NumberInput, minValue, number,
         TextInput, ReferenceInput, SelectInput, ReferenceField } from 'react-admin';
 
-const vaildatesSubtotal = [number('Nhap dung la so'),minValue(0)]
+const vaildatesSubtotal = [number('Nhap dung la so'), minValue(0)]
 export const ImportOrderList = (props) => (
     <List {...props}>
         <Datagrid>
