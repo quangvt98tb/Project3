@@ -1,16 +1,20 @@
 import React from 'react';
-import { List, Datagrid, Edit, Create, SimpleForm, DateField, TextField, EditButton, DisabledInput, TextInput, LongTextInput, DateInput } from 'react-admin';
+import { List, Datagrid, Edit, Create, SimpleForm, ReferenceField,ReferenceInput,
+    TextField, EditButton, NumberInput, minValue,SelectInput,
+    TextInput } from 'react-admin';
 
 export const OrderList = (props) => (
     <List {...props}>
         <Datagrid>
-            <TextField source="userId" />
-            <TextField source="bookId" />
+            {/* <ReferenceField  label="User" reference="customer" source="userId">
+                <TextField source="fullName" />
+            </ReferenceField> */}
+            <ReferenceField  label="Book" reference="Books" source="bookId">
+                <TextField source="name" />
+            </ReferenceField>
             <TextField source="quantity" />
             <TextField source="price" />
             <TextField source="total" />
-            <TextField source="promotionId" />
-            <TextField source="createdAt" />
             <TextField source="paymentMethod" />
             <TextField source="addressShip" />
             <TextField source="status" />
@@ -23,13 +27,13 @@ export const OrderList = (props) => (
 export const OrderEdit = (props) => (
     <Edit {...props}>
         <SimpleForm>
-            <DisabledInput source="userId" />
-            <DisabledInput source="bookId" />
-            <TextInput source="quantity" />
-            <TextInput source="price" />
-            <TextInput source="total" />
-            <TextInput source="promotionId" />
-            <TextInput source="createdAt" />
+            <ReferenceField  label="Book" reference="Books" source="bookId">
+                <TextField source="name" />
+            </ReferenceField>
+            <NumberInput source="quantity"  />
+            <NumberInput source="price" />
+            <NumberInput source="total" />
+            {/* <TextInput source="promotionId" /> */}
             <TextInput source="paymentMethod" />
             <TextInput source="addressShip" />
             <TextInput source="status" />
@@ -39,16 +43,15 @@ export const OrderEdit = (props) => (
 export const OrderCreate = (props) => (
     <Create {...props}>
         <SimpleForm>
-        <TextInput source="userId" />
-        <TextInput source="bookId" />
-        <TextInput source="quantity" />
-        <TextInput source="price" />
-        <TextInput source="total" />
-        <TextInput source="promotionId" />
-        <TextInput source="createdAt" />
-        <TextInput source="paymentMethod" />
-        <TextInput source="addressShip" />
-        <TextInput source="status" />
+            <ReferenceInput  label="Book" reference="Books" source="bookId">
+                <SelectInput optionText="name" />
+            </ReferenceInput>   
+            <NumberInput source="quantity" validate={minValue(0)} />
+            <NumberInput source="price" validate={minValue(0)} />
+            <NumberInput source="total" />
+            <TextInput source="paymentMethod" />
+            <TextInput source="addressShip" />
+            <TextInput source="status" />
         </SimpleForm>
     </Create>
 );
