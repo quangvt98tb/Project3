@@ -28,7 +28,7 @@
     },
     "createdAt": {
       "type": "Date",
-      "required": true
+      "required": false
     },
     "enable": {
       "type": "Boolean",

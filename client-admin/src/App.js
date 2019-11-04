@@ -34,7 +34,7 @@ const App = () => (
        <Resource name="Books" list={BookList} edit={BookEdit} create={BookCreate} icon={BookIcon}/>
        <Resource name="ImportOrders" list={ImportOrderList} edit={ImportOrderEdit} create={ImportOderCreate} icon={ImportOrder}/>
        <Resource name="OrderDetails" list={OrderList} edit={OrderEdit} create={OrderCreate} icon={Order}/>
-       <Resource name="Promotions" list={PromotionList} edit={PromotionEdit} create={PromotionCreate} icon={Promotion}/>
+       {/* <Resource name="Promotions" list={PromotionList} edit={PromotionEdit} create={PromotionCreate} icon={Promotion}/> */}
 
    </Admin>
   );

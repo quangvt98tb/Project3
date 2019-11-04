@@ -11,7 +11,7 @@
   "strictObjectIDCoercion": true,
   "properties": {
     "supplierId": {
-      "type": "number",
+      "type": "string",
       "required": true
     },
     "status": {
@@ -24,7 +24,7 @@
     },
     "createdAt": {
       "type": "date",
-      "required": true
+      "required": false
     }
   },
   "protected": ["id"],

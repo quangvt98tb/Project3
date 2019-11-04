@@ -1,8 +1,11 @@
 import React from 'react';
 import { List, Datagrid, Edit, Create, SimpleForm, DateField, TextField, 
-        EditButton, DisabledInput, TextInput, ReferenceField , ReferenceInput, SingleFieldList,
-        LongTextInput, DateInput, SelectInput, ChipField} from 'react-admin';
+        EditButton, TextInput, ReferenceField , ReferenceInput, minValue,
+        LongTextInput, DateInput, SelectInput, NumberInput ,
+        required, number} from 'react-admin';
 
+const validateName = [required('not Empty!')];
+const validateQuantity = [ number('Nhap dung so'),minValue(0)];
 
 export const BookList = (props) => (
     <List {...props}>
@@ -26,7 +29,7 @@ export const BookList = (props) => (
 export const BookEdit = (props) => (
     <Edit {...props}>
         <SimpleForm>
-            <TextInput source="name" />
+            <TextInput source="name" validate={validateName} />
             <ReferenceInput   label="Category" reference="Categories" source="categoryId">
                 <SelectInput optionText="name" />
             </ReferenceInput>
@@ -34,8 +37,8 @@ export const BookEdit = (props) => (
             <TextInput label="Image URL" source="imgURL" />
             <TextInput source="publisher" />
             <TextInput source="author" />
-            <TextInput source="quantity" />
-            <TextInput label="Price" source="sellPrice" />
+            <NumberInput  source="quantity" validate={validateQuantity} />
+            <NumberInput  label="Price" source="sellPrice"  validate={validateQuantity} />
             <DateInput label="Publish at" source="publishedAt" />
         </SimpleForm>
     </Edit>
@@ -43,7 +46,7 @@ export const BookEdit = (props) => (
 export const BookCreate = (props) => (
     <Create {...props}>
         <SimpleForm>
-            <TextInput source="name" />
+            <TextInput source="name" validate={validateName} />
             <ReferenceInput   label="Category" reference="Categories" source="categoryId">
                 <SelectInput optionText="name" />
             </ReferenceInput>
@@ -51,8 +54,8 @@ export const BookCreate = (props) => (
             <TextInput label="Image URL" source="imgURL" />
             <TextInput source="publisher" />
             <TextInput source="author" />
-            <TextInput source="quantity" />
-            <TextInput label="Price" source="sellPrice" />
+            <NumberInput  source="quantity" validate={validateQuantity} />
+            <NumberInput  label="Price" source="sellPrice" validate={validateQuantity} />
             <DateInput label="Publish at" source="publishedAt" />
         </SimpleForm>
     </Create>

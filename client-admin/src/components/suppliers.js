@@ -1,5 +1,11 @@
 import React from 'react';
-import { List, Datagrid, Edit, Create, SimpleForm, DateField, TextField, EditButton, DisabledInput, TextInput, LongTextInput, DateInput } from 'react-admin';
+import { List, Datagrid, Edit, Create, SimpleForm, 
+        DateField, TextField, EditButton, DisabledInput, 
+        TextInput, LongTextInput, DateInput, required, email, number } from 'react-admin';
+
+const validateName = [required()];
+const validateEmail= email();
+const validatePhone = [number('Nhap dung sdt')];
 
 export const SuppliersList = (props) => (
     <List {...props}>
@@ -16,10 +22,10 @@ export const SuppliersList = (props) => (
 export const SuppliersEdit = (props) => (
     <Edit {...props}>
         <SimpleForm>
-            <TextField source="name" />
-            <TextField source="email" type="email" />
-            <TextField source="address" />
-            <TextField source="phone" />
+            <TextInput source="name" validate={validateName} />
+            <TextInput source="email" validate={validateEmail} />
+            <TextInput source="address" />
+            <TextInput source="phone" validate={validatePhone} />
             <DisabledInput source="id" />
         </SimpleForm>
     </Edit>
@@ -27,10 +33,10 @@ export const SuppliersEdit = (props) => (
 export const SuppliersCreate = (props) => (
     <Create {...props}>
         <SimpleForm>
-            <TextInput source="name" />
-            <TextInput source="email" type="email" />
+            <TextInput source="name" validate={validateName} />
+            <TextInput source="email" type="email" validate={validateEmail} />
             <TextInput source="address" />
-            <TextInput source="phone" />
+            <TextInput source="phone" validate={validatePhone} />
         </SimpleForm>
     </Create>
 );

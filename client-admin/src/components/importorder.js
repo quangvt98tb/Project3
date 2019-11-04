@@ -1,13 +1,17 @@
 import React from 'react';
-import { List, Datagrid, Edit, Create, SimpleForm, DateField, TextField, EditButton, DisabledInput, TextInput, LongTextInput, DateInput } from 'react-admin';
+import { List, Datagrid, Edit, Create, SimpleForm, BooleanInput,
+        TextField, EditButton, DisabledInput, NumberInput, minValue, number,
+        TextInput, ReferenceInput, SelectInput, ReferenceField } from 'react-admin';
 
+const vaildatesSubtotal = [number('Nhap dung la so'),minValue(0)]
 export const ImportOrderList = (props) => (
     <List {...props}>
         <Datagrid>
-            <TextField source="supplierId" />
+            <ReferenceField  label="Supplier" reference="Suppliers" source="supplierId">
+                <TextField source="name" />
+            </ReferenceField>
             <TextField source="status" />
             <TextField source="subtotal" />
-            <TextField source="createdAt" />
             <EditButton/>
         </Datagrid>
     </List>
@@ -16,19 +20,22 @@ export const ImportOrderList = (props) => (
 export const ImportOrderEdit = (props) => (
     <Edit {...props}>
         <SimpleForm>
-            <DisabledInput source="supplierId" />
+            <ReferenceField  label="Supplier" reference="Suppliers" source="supplierId">
+                <TextField source="name" />
+            </ReferenceField>
             <TextInput source="status" />
-            <TextInput source="subtotal" />
-            <TextInput source="createdAt" />
+            <NumberInput source="subtotal" validate={vaildatesSubtotal} />
         </SimpleForm>
     </Edit>
 );
 export const ImportOderCreate = (props) => (
     <Create {...props}>
         <SimpleForm>
+        <ReferenceInput  label="Supplier" reference="Suppliers" source="supplierId">
+            <SelectInput optionText="name" />
+        </ReferenceInput>
         <TextInput source="status" />
-        <TextInput source="subtotal" />
-        <TextInput source="createdAt" />
+        <NumberInput source="subtotal" validate={vaildatesSubtotal} />
         </SimpleForm>
     </Create>
 );

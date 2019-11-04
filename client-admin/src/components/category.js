@@ -1,5 +1,9 @@
 import React from 'react';
-import { List, Datagrid, Edit, Create, SimpleForm, DateField, TextField, EditButton, DisabledInput, TextInput, LongTextInput, DateInput } from 'react-admin';
+import { List, Datagrid, Edit, Create, SimpleForm, 
+    TextField, EditButton, DisabledInput, 
+    TextInput, required } from 'react-admin';
+
+const validateName = [required('Not Empty')]
 
 export const CategoryList = (props) => (
     <List {...props}>
@@ -14,7 +18,8 @@ export const CategoryList = (props) => (
 export const CategoryEdit = (props) => (
     <Edit {...props}>
         <SimpleForm>
-            <TextInput source="name" />
+            <TextInput source="name" validate={validateName} />
+            <DisabledInput source="id" />
         </SimpleForm>
     </Edit>
 );
@@ -22,7 +27,7 @@ export const CategoryEdit = (props) => (
 export const CategoryCreate = (props) => (
     <Create {...props}>
         <SimpleForm>
-            <TextInput source="name" />
+            <TextInput source="name" validate={validateName} />
         </SimpleForm>
     </Create>
 );
