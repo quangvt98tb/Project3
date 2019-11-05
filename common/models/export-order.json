@@ -39,7 +39,6 @@
       "required": false
     }
   },
-  "protected": ["id"],
   "relations": {
     "belongsToUser": {
       "type": "belongsTo",

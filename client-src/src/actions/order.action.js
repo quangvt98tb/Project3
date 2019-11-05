@@ -9,12 +9,12 @@ import {
 
 export const getOrders = () => dispatch => {
     axios
-      //console.log(localStorage.userId) ??? 
+      // console.log(localStorage.userId) 
       .post(`/ExportOrders/listOrdersForUser`, {userId: localStorage.userId})
       .then(res =>
           dispatch({
               type: GET_ORDERS,
-              payload: res.data.data.rows,
+              payload: res.data.data,
           }),     
       )
       .catch(error =>
