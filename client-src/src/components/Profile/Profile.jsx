@@ -9,8 +9,9 @@ import UpdateDistrict from './UpdateDistrict';
 import SwappingSquaresSpinner from '../common/SwappingSquaresSpinner';
 export class Profile extends Component {
 
-  componentDidMount() {
-    this.props.getCurrentProfile();
+  async componentDidMount() {
+    await this.props.getCurrentProfile();
+    // console.log("profile", this.props.profile);
   }
   render() {
     const { profile, loading } = this.props.profile;

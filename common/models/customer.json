@@ -31,7 +31,8 @@
     },
     "gender": {
       "type": "string",
-      "required": false    
+      "required": false,  
+      "default": "Male"  
     },
     "receiveDistrict": {
       "type": ["string"]

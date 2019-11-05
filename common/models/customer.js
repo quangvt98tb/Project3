@@ -4,6 +4,7 @@ var path = require('path')
 var senderAddress = 'ngocanh2162@gmail.com'
 const validateRegisterInput = require('../validation/register');
 const validateLoginInput = require('../validation/login');
+const validateUpdateCustomer = require('../validation/updateCustomer');
 'use_strict';
 
 module.exports = function(Customer) {
@@ -18,30 +19,21 @@ module.exports = function(Customer) {
                   address: true, 
                   phone: true,
                   dateOfBirth: true, 
-                  gender: true
+                  gender: true,
+                  receiveDistrict: true
                 }
             });
             if (data.phone == null) {
-                data.phone =""
+                data.phone = ""
+            }
+            if (data.receiveDistrict == null) {
+                data.receiveDistrict = []
             }
             if (data.dateOfBirth == null) {
                 data.dateOfBirth =""
             }
             if (data.gender == null) {
-                data.gender =""
-            }
-            
-            if (data.receiveDistrict == null) {
-                data.receiveDistrict =""
-            }
-            if (data.address.district == null) {
-                data.address.district = ""
-            }
-            if (data.address.ward == null) {
-                data.address.ward = ""
-            }
-            if (data.address.details == null) {
-                data.address.details = ""
+                data.gender = ""
             }
             return data;
         } catch (err) {
@@ -52,20 +44,33 @@ module.exports = function(Customer) {
 
     // Customer update Profile
     Customer.updateProfile = async function(reqData){
+        console.log("1", reqData);
+        const { errors, isValid } = validateUpdateCustomer(reqData);
+        console.log("err1", errors, "phone", reqData.phone)
+        if (!isValid) {
+            errors.status = 400
+            console.log("err1", errors)
+            return errors
+        }
+
         const customerData = {
-            fullName: reqData.fullName,
             email: reqData.email,
             address: {
                 province: reqData.province,
-                district: reqData.district
+                district: reqData.district,
+                ward: reqData.ward,
+                details: reqData.details    
             },
             phone: reqData.phone,
-            dateOfBirth: reqData.dateOfBirth,
+            //dateOfBirth: reqData.dateOfBirth,
             gender: reqData.gender,
             receiveDistrict: reqData.receiveDistrict,
+            id: reqData.id
         }
+        console.log("2", customerData)
         try {
-            customer = await Customer.findByIdAndUpdate({id: reqData.id}, customerData)
+            customer = await Customer.upsert(customerData)
+            console.log("3", customer)
             return customer
         } catch (err) {
             console.log('update Customer', err)
@@ -166,7 +171,7 @@ module.exports = function(Customer) {
                 return [400, errors]
             }
             let data = await Customer.login(reqData)
-            console.log("1", data)
+            //console.log("1", data)
             return [200, data]
         } catch (error) {
             console.log('login Customer', error)
@@ -233,7 +238,9 @@ module.exports = function(Customer) {
           { arg: 'queryData', type: 'string'},
           { arg: 'page', type: 'number', default: '0'},
           { arg: 'pageSize', type: 'number', default: '20'}],
-        returns: { arg: 'data', root: true },
+        returns: [
+            { arg: 'status', root: true },
+            { arg: 'data', root: true }  ]
     })
 
     Customer.remoteMethod('blockCustomer', 
