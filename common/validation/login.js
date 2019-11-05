@@ -1,3 +1,4 @@
+
 /* eslint-disable no-param-reassign */
 const Validator = require('validator');
 const isEmpty = require('./is-empty');
@@ -12,7 +13,7 @@ module.exports = data => {
   };
 
   if (Validator.isEmpty(data.password)) {
-    errors.password = 'Vui lòng nhập mật khẩu';
+    errors.login = 'Vui lòng nhập mật khẩu';
   };
   return {
     errors,

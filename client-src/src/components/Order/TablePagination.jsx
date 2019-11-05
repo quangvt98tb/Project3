@@ -50,7 +50,6 @@ class TableP extends Component {
   }
 
   render() {
-    console.log()
     const {allOrders, currentOrder, currentPage, totalPages } = this.state;
     const totalOrders = (allOrders === null) ? (
       0
@@ -58,23 +57,23 @@ class TableP extends Component {
       allOrders.length
     );
 
-    // let paginationComp = (allOrders === null) ? (
+    // let pagination = (allOrders === null) ? (
     //   <></>
     // ) : (
     //   <PaginationDeck totalRecords={totalOrders} pageLimit={5} pageNeighbours={1} onPageChanged={this.onPageChanged} />
     // );
 
-    let paginationComp = (this.props.orders.orders === null) ? (
-        <></>
-      ) : (
-        // <PaginationDeck totalRecords={totalOrders} pageLimit={5} pageNeighbours={1} onPageChanged={this.onPageChanged} />
-        this.setState({
-          ...this.state,
-          allOrders: this.props.orders.orders;
-        })
-      );
+    // let paginationComp = (this.props.orders.orders === null) ? (
+    //     <></>
+    //   ) : (
+    //     // <PaginationDeck totalRecords={totalOrders} pageLimit={5} pageNeighbours={1} onPageChanged={this.onPageChanged} />
+    //     this.setState({
+    //       ...this.state,
+    //       allOrders: this.props.orders.orders
+    //     })
+    //   );
     
-      console.log(paginationComp)
+    //   console.log(paginationComp)
 
     let Content =  (allOrders === null) || (allOrders[0] === "empty") ? (
         <h6>Đơn hàng trống</h6>
@@ -125,8 +124,9 @@ class TableP extends Component {
                 </div> 
             </div>
          <div style={{ height: 30 }}></div>
-          {/* <PaginationDeck totalRecords={totalOrders} pageLimit={5} pageNeighbours={1} onPageChanged={this.onPageChanged} /> */}
-          {/* {paginationComp} */}
+          <PaginationDeck totalRecords={totalOrders} pageLimit={5} pageNeighbours={1} onPageChanged={this.onPageChanged} />
+          {/* {paginationComp}
+          {pagination} */}
           <div style={{ height: 50 }}></div>
           </div>
     );

@@ -115,9 +115,12 @@ module.exports = function(Book) {
         let quan = quantity + currentQuantity
         let book = await Book.findById(bookId)
         if (book.enable != true || book.quantity == 0 || quan > book.quantity){
-            return [[]]
+            return [400, []]
         }
-        else return [book]         
+        if (quantity == 0){
+            return [200, book]
+        }
+        else return [200, book]         
     }
 
     //

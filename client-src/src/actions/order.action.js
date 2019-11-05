@@ -7,22 +7,21 @@ import {
   CANCEL_ORDER,
 } from './actionTypes';
 
-export const getOrders = () => dispatch => {
-    axios
-      .post(`/ExportOrders/listOrdersForUser`, {userId: localStorage.userId})
-      .then(res => {
-        // console.log(res.data.data)
-          dispatch({
-              type: GET_ORDERS,
-              payload: res.data.data,
-          })
+export const getOrders = () => async dispatch => {
+    const res = await axios.post(`/ExportOrders/listOrdersForUser`, {userId: localStorage.userId});
+      // .then(res => {
+      //   // console.log(res.data.data)
+      dispatch({
+          type: GET_ORDERS,
+          payload: res.data.data,
       })
-      .catch(error =>
-          dispatch({
-              type: GET_ORDERS,
-              payload: ["empty"],
-          }),
-      );
+      // })
+      // .catch(error =>
+      //     dispatch({
+      //         type: GET_ORDERS,
+      //         payload: ["empty"],
+      //     }),
+      // );
     // dispatch({
     //   type: GET_ORDERS,
     //   payload: [{
