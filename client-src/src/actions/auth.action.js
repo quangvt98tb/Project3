@@ -29,18 +29,24 @@ export const loginUser = userData => dispatch => {
     .post('customer/loginCustomer', userData)
     .then(res => {
       // save to LocalStorageno
-      console.log(res)
-      const token = res.data.id;
-      const user_id = res.data.userId;
-      //set token to ls
-      localStorage.setItem('jwtToken', token);
-      localStorage.setItem('userId', user_id);
-      // set token to Auth header
-      setAuthToken(token);
-      // Decode token to get user data
-      // const decoded = jwt_decode(token);
-      //Set Current user
-      dispatch(setCurrentUser(token));
+      if (res.data.status != 400) {
+        const token = res.data.id;
+        const user_id = res.data.userId;
+        //set token to ls
+        localStorage.setItem('jwtToken', token);
+        localStorage.setItem('userId', user_id);
+        // set token to Auth header
+        setAuthToken(token);
+        // Decode token to get user data
+        // const decoded = jwt_decode(token);
+        //Set Current user
+        dispatch(setCurrentUser(token));
+      } else {
+        return dispatch({
+          type: GET_ERRORS,
+          payload: res.data,
+        });
+      }
     })
     .catch(err => {
       console.log(err)

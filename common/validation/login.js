@@ -8,15 +8,12 @@ module.exports = data => {
   data.password = !isEmpty(data.password) ? data.password : '';
 
   if (Validator.isEmpty(data.email)) {
-    errors.login = 'Vui lòng nhập số điện thoại';
-  }
-  else if (!Validator.isEmail(data.email)) {
-    errors.email = 'Email is invalid';
-  }
+    errors.email = 'Vui lòng nhập email';
+  };
 
   if (Validator.isEmpty(data.password)) {
-    errors.login = 'Vui lòng nhập mật khẩu';
-  }
+    errors.password = 'Vui lòng nhập mật khẩu';
+  };
   return {
     errors,
     isValid: isEmpty(errors)

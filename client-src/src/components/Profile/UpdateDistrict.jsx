@@ -40,7 +40,7 @@ class UpdateDistrict extends Component {
     e.preventDefault();
     const { receiveDistrict } = this.state;
 
-    this.props.updateProfile('loan/update/receiveDistrict', { receiveDistrict });
+    this.props.updateProfile({ receiveDistrict });
     const msg = 'Cập nhật quận huyện nhận đơn thành công.';
     this.toast(msg, 'warning', 3000);
   }

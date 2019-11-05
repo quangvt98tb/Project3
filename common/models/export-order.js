@@ -1,10 +1,10 @@
 let to = require('await-to-js').to;
 app = require('../../server/server')
-'use_strict';
+'use_strict'; 
 
 module.exports = function(ExportOrder) {
     const Promise = require('bluebird')
-    ExportOrder.validatesInclusionOf('status', {in: ["Doi Xac Nhan", "Doi Giao Hang", "Da Huy", "Bi Huy", "Da Hoan Thanh"]})
+    ExportOrder.validatesInclusionOf('status', {in: ["Waiting", "Confirmed", "Canceled", "Shipping", "Delivered"]})
     ExportOrder.validatesInclusionOf('paymentMethod', {in: ["Direct Bank Transfer", "Cheque Payment", "Cash on Delivery"]})
     
     ExportOrder.createOrder = async function(reqData){
@@ -28,7 +28,7 @@ module.exports = function(ExportOrder) {
         }
         let data = {
             userId: reqData.profileData.userId,
-            status: "Doi Xac Nhan",
+            status: "Waiting",
             paymentMethod: reqData.checkOutType,
             addressShip: reqData.profileData.addressShip,
             subtotal: reqData.cart.total,
@@ -45,19 +45,46 @@ module.exports = function(ExportOrder) {
     }
 
     ExportOrder.UserRead = async function(orderId) {
+        let Book = app.models.Book
+        let Customer = app.models.Customer
         try {
-            const data = await ExportOrder.findById(orderId, 
-                {fields: {
-                    userId: true,
-                    subtotal: true,
-                    paymentMethod: true,
-                    addressShip: true,
-                    createdAt: true,
-                    updatedAt: true, 
-                    status: true
+            const data1 = await ExportOrder.findById(orderId);
+            let customer = await Customer.findById(data1.userId)
+            let items = []
+            let i
+            for (i = 0; i < data1.bookList.length; i++){
+                let book = await Book.findById(data1.bookList[i].bookId)
+                let temp = {
+                    id: book.id,
+                    author: book.author,
+                    title: book.name,
+                    imgUrl: book.imgURL,
+                    price: book.sellPrice,
+                    quantity: data1.bookList[i].quantity
+                }
+                items.push(temp)
+            }
+            let data = {
+                profileData: {
+                    email: customer.email,
+                    fullName: customer.fullName,
+                    phone: customer.phone,
+                    province: customer.address.province,
+                    district: customer.address.district,
+                    ward: customer.address.ward,
+                    details: customer.address.details
                 },
-                include: ['belongsToUser']
-            });
+                cart: {
+                    addedItems: items,
+                    total: data1.subtotal,
+                    shipping: data1.shipping,
+                    grandTotal: data1.grandTotal,
+                },
+                checkOutType: data1.paymentMethod,
+                orderDate: data1.createdAt,
+                shipDate: data1.updatedAt,
+                status: data1.status
+            }
             return data
         } catch (err) {
             console.log('show ExportOrder for User', err)
@@ -68,33 +95,37 @@ module.exports = function(ExportOrder) {
     ExportOrder.UserList = async function(userId) {
         try {
             const data1 = await Promise.all([
-                ExportOrder.find({
-                    where: {userId : userId}
-                })
+                ExportOrder.find({ where: {userId : userId}})
             ])
             let Customer = app.models.Customer
-            customer = Customer.findById(userId)
-            let data = {
-                shipDate: data1.updatedAt,
-                orderCode: data1.id,
-                orderDate: data1.createdAt,
-                status: data1.status,
-                books: data1.bookList,
-                fullName: customer.fullName
+            customer = await Customer.findById(userId)
+            let orderList = []
+            let i
+            let data2 = data1[0]
+            for (i=0; i< data2.length; i++){
+                let data = {
+                    shipDate: data2[i].updatedAt,
+                    orderCode: data2[i].id,
+                    orderDate: data2[i].createdAt,
+                    status: data2[i].status,
+                    books: data2[i]._bookList,
+                    fullName: customer.fullName
+                }
+                orderList.push(data)
             }
-            return data
+            return orderList
         } catch (err) {
             console.log('list ExportOrder For User', err)
-            return [userId, err]
+            return []
         }
     }
 
     ExportOrder.UserCancelOrder = async function(orderId) {
         try {
             const order = await ExportOrder.findById(orderId)
-            if (order.status == 'Doi Xac Nhan'){
+            if (order.status == 'Waiting'){
                 try{
-                    const data = await ExportOrder.upsertWithWhere({id: orderId}, {status: 'Bi Huy'})
+                    const data = await ExportOrder.upsertWithWhere({id: orderId}, {status: 'Canceled'})
                     return data
                 } catch (err) {
                     console.log('update ExportOrderStatus By User', err)
@@ -166,7 +197,7 @@ module.exports = function(ExportOrder) {
             for (i = 0; i < order.bookList.length; i++){s
                 let book = await Book.findById(order.bookList[i].bookId)
                 if (book.quantity < order.bookList[i].quantity){
-                    ExportOrder.upsertWithWhere(req.params.id, {status: "Da Huy"})
+                    ExportOrder.upsertWithWhere(req.params.id, {status: "Canceled"})
                     return [400, 'Khong Du So Luong Sach Trong Kho']
                 }
             }
@@ -205,7 +236,7 @@ module.exports = function(ExportOrder) {
         'UserList', {
             http: {path: '/listOrdersForUser', verb: 'post' },
             accepts: {arg: 'userId', type: 'string'},
-            returns: { arg: 'data',type: 'object'}
+            returns: { arg: 'data',type: 'array'}
       }
     )
 

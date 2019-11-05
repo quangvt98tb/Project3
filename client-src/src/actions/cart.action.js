@@ -10,21 +10,33 @@ import {
 
 export const addToCart = (productData) => dispatch =>{
   axios
-    .post(`/Books/addToCart`, {bookId: productData.productId, quantity:productData.quantity})
-    .then(res =>
-      dispatch({
-        type: ADD_TO_CART,
-        payload: res.data.data,
-        productData
-      }),     
+    .post('/Books/addToCart', {bookId: productData.productId, quantity: productData.quantity, currentQuantity: productData.currentQuantity})
+    .then(res => 
+      // console.log(res.data.data)
+        dispatch({
+          type: ADD_TO_CART,
+          payload: res.data.data,
+          productData
+        })
     )
-    .catch(error =>
+    // )
+    .catch(err =>
       dispatch({
         type: ADD_TO_CART,
-        payload: error,
-        productData 
-      }),
-    );
+        payload: {},
+        productData
+      }))
+  // dispatch({
+  //   type: ADD_TO_CART,
+  //   payload: {
+  //     category: "Tiểu thuyết",
+  //     id: "5db301a366c1b16c3143e45d",
+  //     imgUrl: "string",
+  //     price: 2,
+  //     title: "tieu thuyet 1"
+  //   },
+  //   productData,
+  // })
 };
 
 export const deleteAll = () => dispatch =>{

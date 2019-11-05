@@ -11,13 +11,11 @@ import {
 export const getCurrentProfile = () => dispatch => {
   dispatch(setProfileLoading());
   const user_Id = localStorage.userId
-  console.log("1", user_Id)
   axios
     .post('/customer/readProfile', {
       id: user_Id
     })
     .then(res => {
-      //console.log("read Profile", res.data)
       dispatch({
         type: GET_PROFILE, 
         payload: res.data,
@@ -34,15 +32,13 @@ export const getCurrentProfile = () => dispatch => {
 
 // update Profile
 export const updateProfile = ( profileData) => dispatch => {
-  console.log("profile 1", profileData)
   profileData.id = localStorage.userId;
   if (profileData.receiveDistrict == null){
-    profileData.receiveDistrict= [""]
+    profileData.receiveDistrict= []
   }
-  console.log("profile 2", profileData)
   axios
     .post('/customer/updateProfile', profileData)
-    .then(res =>{
+    .then(res => {
       console.log(res.data)
       if (res.data.status == 400) {
         dispatch({ 
@@ -68,9 +64,10 @@ export const clearCurrentProfile = () => {
   };
 };
 export const deleteAccount = () => dispatch => {
+  const id = localStorage.userId
   if (window.confirm('Are you sure?')) {
     axios
-      .delete('api/users')
+      .delete('/customer', id)
       .then(res =>
         dispatch({
           type: SET_CURRENT_USER,

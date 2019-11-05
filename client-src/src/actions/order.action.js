@@ -9,14 +9,14 @@ import {
 
 export const getOrders = () => dispatch => {
     axios
-      // console.log(localStorage.userId) 
       .post(`/ExportOrders/listOrdersForUser`, {userId: localStorage.userId})
-      .then(res =>
+      .then(res => {
+        // console.log(res.data.data)
           dispatch({
               type: GET_ORDERS,
               payload: res.data.data,
-          }),     
-      )
+          })
+      })
       .catch(error =>
           dispatch({
               type: GET_ORDERS,
@@ -101,64 +101,64 @@ export const getOrders = () => dispatch => {
 };
 
 export const getOrderDetails = (orderCode) => dispatch => {
-    // dispatch(setOrderLoading());
-    // axios
-    //   .get(`api/here`)
-    //   .then(res => 
-    //     dispatch({
-    //       type: GET_ORDER_DETAILS,
-    //       payload: res.data,
-    //       orderCode,
-    //     }))
-    //   .catch(err =>
-    //     dispatch({
-    //       type: GET_ORDER_DETAILS,
-    //       payload: {},
-    //     }))
-    dispatch({
-      type: GET_ORDER_DETAILS,
-      payload: {
-        profileData: {
-          details: "32B ngõ 296/86",
-          district: "Quận Ba Đình",
-          email: "vudat1710@gmail.com",
-          errors: {},
-          fullName: "Vu Tien Dat",
-          phone: "0123456789",
-          province: "HANOI",
-          ward: "Minh Khai"
-        },
-        cart: {
-          addedItems: [
-            {
-              author: "Johny Apedaile",
-              genre: "Drama",
-              id: "5d8980766f920a2016f5af50",
-              imgUrl: "https://sueddie.files.wordpress.com/2015/12/blackass_igoni-barrett.jpg",
-              price: 7,
-              quantity: 4,
-              title: "Different from the Others"
-            },
-            {
-              author: "Vladimir Lewry",
-              genre: "Comedy|Crime|Drama",
-              id: "5d8980766f920a2016f5af52",
-              imgUrl: "https://sueddie.files.wordpress.com/2015/12/blackass_igoni-barrett.jpg",
-              price: 9,
-              quantity: 4,
-              title: "Eulogy"
-            }
-          ], 
-          total: 64, 
-          shipping: 10, 
-          grandTotal: 74
-        },
-        checkOutType: 1,
-        orderDate: "22/02/2019",
-        shipDate: "23/11/2019",
-        status: "Confirmed",
-      },
-    })
+    dispatch(setOrderLoading());
+    axios
+      .get(`/ExportOrders/show`, {orderId: orderCode})
+      .then(res => 
+        dispatch({
+          type: GET_ORDER_DETAILS,
+          payload: res.data.data,
+          orderCode,
+        }))
+      .catch(err =>
+        dispatch({
+          type: GET_ORDER_DETAILS,
+          payload: {},
+        }))
+    // dispatch({
+    //   type: GET_ORDER_DETAILS,
+    //   payload: {
+    //     profileData: {
+    //       details: "32B ngõ 296/86",
+    //       district: "Quận Ba Đình",
+    //       email: "vudat1710@gmail.com",
+    //       errors: {},
+    //       fullName: "Vu Tien Dat",
+    //       phone: "0123456789",
+    //       province: "HANOI",
+    //       ward: "Minh Khai"
+    //     },
+    //     cart: {
+    //       addedItems: [
+    //         {
+    //           author: "Johny Apedaile",
+    //           genre: "Drama",
+    //           id: "5d8980766f920a2016f5af50",
+    //           imgUrl: "https://sueddie.files.wordpress.com/2015/12/blackass_igoni-barrett.jpg",
+    //           price: 7,
+    //           quantity: 4,
+    //           title: "Different from the Others"
+    //         },
+    //         {
+    //           author: "Vladimir Lewry",
+    //           genre: "Comedy|Crime|Drama",
+    //           id: "5d8980766f920a2016f5af52",
+    //           imgUrl: "https://sueddie.files.wordpress.com/2015/12/blackass_igoni-barrett.jpg",
+    //           price: 9,
+    //           quantity: 4,
+    //           title: "Eulogy"
+    //         }
+    //       ], 
+    //       total: 64, 
+    //       shipping: 10, 
+    //       grandTotal: 74
+    //     },
+    //     checkOutType: 1,
+    //     orderDate: "22/02/2019",
+    //     shipDate: "23/11/2019",
+    //     status: "Confirmed",
+    //   },
+    // })
   }
 
 export const setOrderLoading = () => {

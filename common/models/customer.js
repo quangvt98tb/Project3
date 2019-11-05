@@ -171,7 +171,6 @@ module.exports = function(Customer) {
                 return [400, errors]
             }
             let data = await Customer.login(reqData)
-            //console.log("1", data)
             return [200, data]
         } catch (error) {
             console.log('login Customer', error)
@@ -194,7 +193,7 @@ module.exports = function(Customer) {
                 district: reqData.district
             },
             createdAt: new Date(),
-            enable: 1
+            enable: true
         }
         try {
             let [err, customer] = await to(Customer.findOne({where: {email: reqData.email}}))

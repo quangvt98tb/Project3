@@ -101,6 +101,7 @@ class Login extends Component {
                       type="input"
                       onChange={e => this.onChange(e)}
                       value={email}
+                      error={errors.email}
                     />
                     <TextInputAuth
                       id="password"

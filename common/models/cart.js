@@ -7,11 +7,14 @@ module.exports = function(Cart) {
 
     Cart.updateCart = async function(reqData) {
         const Book = app.models.Book
-        let book = await Book.findById(bookId)
-        if (book.enable != 1 || book.quantity < reqData.quantity){
-            return [400, []]
+        let i
+        for (i =0; i < reqData.addedItems.length; i++){
+            let book = await Book.findById(reqData.addedItems[i].bookId)
+            if (book.enable != 1 || book.quantity < reqData.addedItems[i].quantity){
+                return [400, []]
+            }
         }
-        else return 200
+        return 200
 
     }
 

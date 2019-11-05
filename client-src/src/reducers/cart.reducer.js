@@ -8,13 +8,15 @@ const initialState = {
     error: "",
 }
 
-export default (state = initialState, { type, payload, productData, dataList, shipping }) => {
+export default (state = initialState, { type, payload, productData, dataList, shipping}) => {
     let extra = 10;
     if (shipping === "standard") {
         extra = 3;
     } else{
         extra = 10;
     }
+    // console.log(payload)
+    // console.log(productData)
     switch (type) {
         case ADD_TO_CART:
             let quant = parseInt(productData.quantity);
@@ -22,12 +24,12 @@ export default (state = initialState, { type, payload, productData, dataList, sh
             if  (addedItem){
                 let added = state.addedItems;
                 let existedItem = added.find(item=> productData.productId === item[0].id);
-                if (Number.isNaN(quant)){
+                if (quant === 0){
                     return {
                         ...state,
                         error: "Điền vào số sách cần mua"
                     }
-                } else if (quant<20) {
+                } else if (0<quant<20) {
                     if (existedItem){
                         let temp = existedItem[0].quantity + quant;
                         if (temp >= 20){

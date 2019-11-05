@@ -14,6 +14,7 @@ const initialState = {
 };
 
 export default (state = initialState, { type, payload, status }) => {
+    console.log(payload)
     switch (type) {
         case ORDER_LOADING:
             return {

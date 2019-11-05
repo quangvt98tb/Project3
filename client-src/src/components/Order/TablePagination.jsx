@@ -50,10 +50,33 @@ class TableP extends Component {
   }
 
   render() {
+    console.log()
     const {allOrders, currentOrder, currentPage, totalPages } = this.state;
-    const totalOrders = allOrders.length;
+    const totalOrders = (allOrders === null) ? (
+      0
+    ) : (
+      allOrders.length
+    );
 
-    let Content =  (allOrders[0] === "empty") ? (
+    // let paginationComp = (allOrders === null) ? (
+    //   <></>
+    // ) : (
+    //   <PaginationDeck totalRecords={totalOrders} pageLimit={5} pageNeighbours={1} onPageChanged={this.onPageChanged} />
+    // );
+
+    let paginationComp = (this.props.orders.orders === null) ? (
+        <></>
+      ) : (
+        // <PaginationDeck totalRecords={totalOrders} pageLimit={5} pageNeighbours={1} onPageChanged={this.onPageChanged} />
+        this.setState({
+          ...this.state,
+          allOrders: this.props.orders.orders;
+        })
+      );
+    
+      console.log(paginationComp)
+
+    let Content =  (allOrders === null) || (allOrders[0] === "empty") ? (
         <h6>Đơn hàng trống</h6>
     ) : (currentOrder.map((order, index) => {
           return (
@@ -102,7 +125,8 @@ class TableP extends Component {
                 </div> 
             </div>
          <div style={{ height: 30 }}></div>
-          <PaginationDeck totalRecords={totalOrders} pageLimit={5} pageNeighbours={1} onPageChanged={this.onPageChanged} />
+          {/* <PaginationDeck totalRecords={totalOrders} pageLimit={5} pageNeighbours={1} onPageChanged={this.onPageChanged} /> */}
+          {/* {paginationComp} */}
           <div style={{ height: 50 }}></div>
           </div>
     );

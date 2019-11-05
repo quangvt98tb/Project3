@@ -9,6 +9,9 @@ const initialState = {
 }
 
 export default (state = initialState, { type, payload, productData, dataList, shipping }) => {
+    console.log(payload)
+    console.log(productData)
+    console.log(type)
     let extra = 10;
     if (shipping === "standard") {
         extra = 3;

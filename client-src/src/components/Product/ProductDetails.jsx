@@ -29,10 +29,15 @@ class Product extends Component {
 		}
 	}
 
-	handleClick = (productId, quantity)=>{
+	handleClick = (productId, quantity, currentQuantity)=>{
+		if (quantity === ""){
+			quantity = 0;
+		}
 		let productData =  {
 			productId: productId,
-			quantity: quantity,
+			quantity: parseInt(quantity),
+			currentQuantity: currentQuantity,
+			// cartQuantity: this.props.cart.
 		};
 		this.props.addToCart(productData);
 	}
@@ -52,6 +57,14 @@ class Product extends Component {
 		) : (
 			book.genre
 		)
+		const added = this.props.cart.addedItems;
+		let existedItem = added.find(item=> this.state.bookId === item[0].id);
+		let currentQuantity;
+		if (existedItem !== undefined) {
+			currentQuantity = existedItem[0].quantity
+		} else {
+			currentQuantity = 0
+		}
     return (
         <>
         <div style={{ height: 50 }}></div>
@@ -93,7 +106,7 @@ class Product extends Component {
 											/>
 								</div>
 								<div className="addtocart__actions">
-									<button className="tocart" type="submit" title="Add to Cart" onClick={()=>{this.handleClick(this.state.bookId, this.state.quantity)}}>Add to Cart</button>
+									<button className="tocart" type="submit" title="Add to Cart" onClick={()=>{this.handleClick(this.state.bookId, this.state.quantity, currentQuantity)}}>Add to Cart</button>
 								</div>
 								<div className="product-addto-links clearfix">
 									<a className="wishlist" href="#"></a>

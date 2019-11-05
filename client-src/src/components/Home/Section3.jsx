@@ -106,7 +106,7 @@ class Section3 extends Component {
       loading || books === null ? (
         <SwappingSquaresSpinner />
       ) : (
-        books.map((productDetails, index) => {
+        books.map((productDetails,  ) => {
         return (
           <Col className="mb-3">
             <Product key={productDetails.id} item={productDetails}/>

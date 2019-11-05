@@ -52,17 +52,7 @@ module.exports = function(Book) {
     // Customer
     Book.showBook = async function(id) {
         try {
-            const data1 = await Book.findById(id, {
-                fields: {
-                    id: true, 
-                    name: true, 
-                    author:true,
-                    categoryId: true,
-                    description: true, 
-                    imgURL: true, 
-                    sellPrice: true
-                }
-            });
+            const data1 = await Book.findById(id);
             let Category = app.models.Category
             genre = await Category.findById(data1.categoryId)
             data1.category = genre.name
@@ -121,9 +111,10 @@ module.exports = function(Book) {
         }
     }
 
-    Book.addToCart = async function(bookId, quantity){
+    Book.addToCart = async function(bookId, quantity, currentQuantity){
+        let quan = quantity + currentQuantity
         let book = await Book.findById(bookId)
-        if (book.enable != true || book.quantity == 0 || quantity > book.quantity){
+        if (book.enable != true || book.quantity == 0 || quan > book.quantity){
             return [[]]
         }
         else return [book]         
@@ -167,7 +158,8 @@ module.exports = function(Book) {
         http: {verb: 'post', path: '/addToCart' },
         accepts: [
             {arg: 'bookId', type: 'string'},
-            {arg: 'quantity', type: 'number'}
+            {arg: 'quantity', type: 'number'},
+            {arg: 'currentQuantity', type: 'number'}
         ],
         returns: { arg: 'data',type: 'object'}
     })
