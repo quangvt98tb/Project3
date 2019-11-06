@@ -1,6 +1,6 @@
 import React from 'react';
 import { List, Datagrid, Edit, Create, SimpleForm, ReferenceField,ReferenceInput,
-    TextField, EditButton, NumberInput, minValue,SelectInput,
+    TextField, EditButton, NumberInput, minValue, SelectInput,
     TextInput } from 'react-admin';
 
 export const OrderList = (props) => (
@@ -33,7 +33,6 @@ export const OrderEdit = (props) => (
             <NumberInput source="quantity"  />
             <NumberInput source="price" />
             <NumberInput source="total" />
-            {/* <TextInput source="promotionId" /> */}
             <TextInput source="paymentMethod" />
             <TextInput source="addressShip" />
             <TextInput source="status" />

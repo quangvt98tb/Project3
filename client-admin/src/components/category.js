@@ -3,13 +3,20 @@ import { List, Datagrid, Edit, Create, SimpleForm,
     TextField, EditButton, DisabledInput, 
     TextInput, required } from 'react-admin';
 
-const validateName = [required('Not Empty')]
+const nameValidation = (value, allValues) => {
+
+    if (!value) {
+        return 'required';
+    }
+    return [];
+}
+
+const validateName = [required('Not Empty'), nameValidation];
 
 export const CategoryList = (props) => (
     <List {...props}>
         <Datagrid>
             <TextField source="name" />
-            <TextField source="id" />
             <EditButton/>
         </Datagrid>
     </List>

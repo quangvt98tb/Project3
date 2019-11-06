@@ -61,7 +61,7 @@ module.exports = function(ImportOrder) {
 
     ImportOrder.UpdateStatus = async function(reqData) {
         try {
-            const data = await ImportOrder.upsertWithWhere({id: rreqData.id}, {status: reqData.status})
+            const data = await ImportOrder.upsertWithWhere({id: reqData.id}, {status: reqData.status})
             return data
         } catch (err) {
             console.log('update ImportOrder Status', err)
@@ -70,7 +70,6 @@ module.exports = function(ImportOrder) {
     }
 
     ImportOrder.createIO = async function(reqData){
-        let OrderDetail = app.models.OrderDetail
         let Book = app.models.Book
         let i
         let orderDetailList = {}
@@ -80,23 +79,17 @@ module.exports = function(ImportOrder) {
                 quantity: reqData.bookList[i].quantity,
                 price: reqData.bookList[i].price
             }
-            try {
-                let data1 = await OrderDetail.create(bookData)
-                orderDetailList.push(data1)
-            } catch (err){
-                console.log('add To ImportOrder', err)
-                return [400, err]
-            }
+            orderDetailList.push(bookData)
         }
         let data = {
             supplierId: reqData.supplierId,
             status: reqData.status,
             subtotal: reqData.subtotal,
+            bookList: orderDetailList,
             createdAt: Date()
         }
         try{
             let importOrder = await ImportOrder.create(data)
-            importOrder.bookList.set(orderDetailList)
             for (i = 0; i < orderDetailList.length; i++){
                 try{
                     let book = await Book.findById(reqData.bookList[i].bookId)
@@ -107,10 +100,10 @@ module.exports = function(ImportOrder) {
                     return [400, error]
                 }
             }
-            return importOrder
+            return "success"
         } catch (err){
             console.log('create ImportOrder', err)
-            return [400, err]
+            return []
         }
     }
 

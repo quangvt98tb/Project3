@@ -51,6 +51,7 @@ class Checkout extends Component {
             cart: cart_,
             checkOutType: checkOutType
         }
+        console.log(checkOutData)
         this.props.checkOutConfirm(checkOutData);
         this.setState({
             ...this.state,

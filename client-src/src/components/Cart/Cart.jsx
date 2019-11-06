@@ -27,7 +27,7 @@ class Cart extends Component {
 
     onChangeQuantity(quantity, productId){
         if (quantity > 0 || quantity === ''){
-            this.state.dataList[productId] = quantity;
+            this.state.dataList[productId] = parseInt(quantity);
             let added = this.state.addedItems;
             let book = added.find(item => item.id === productId);
             book.quantity = quantity;
@@ -119,6 +119,14 @@ class Cart extends Component {
                         </tr>
                     )
             }));
+        
+        let a = (addedItems === undefined) || (addedItems.length === 0) ? (
+            <></>
+        ) : (
+            addedItems
+        );
+
+        console.log(a);
         
         let alertSucc= (!this.state.deleteAllSuccess) ? (
             <></>

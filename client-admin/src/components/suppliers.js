@@ -1,11 +1,11 @@
 import React from 'react';
 import { List, Datagrid, Edit, Create, SimpleForm, 
-        DateField, TextField, EditButton, DisabledInput, 
+        DateField, TextField, EditButton, DisabledInput, NumberInput,
         TextInput, LongTextInput, DateInput, required, email, number } from 'react-admin';
 
-const validateName = [required()];
-const validateEmail= email('Nhap dung dang mail');
-const validatePhone = [number()];
+const validateName = [required('Không thể bỏ trống!')];
+const validateEmail= [email('Nhập đúng dạng email'), required('Không thể bỏ trống!')];
+const validatePhone = [number("Nhap dung so dien thoai")];
 
 export const SuppliersList = (props) => (
     <List {...props}>
@@ -25,7 +25,7 @@ export const SuppliersEdit = (props) => (
             <TextInput source="name" validate={validateName} />
             <TextInput source="email" validate={validateEmail} />
             <TextInput source="address" />
-            <TextInput source="phone" validate={validatePhone} />
+            <NumberInput source="phone" validate={validatePhone} />
             <DisabledInput source="id" />
         </SimpleForm>
     </Edit>

@@ -25,8 +25,9 @@ class Details extends Component {
     }
 
     componentDidMount() {
-        const { address, fullName, phone, email } = this.props.profile[0];
-        const { province, district, ward, details } = address[0];
+        // console.log(this.props.profile)
+        const { address, fullName, phone, email } = this.props.profile;
+        const { province, district, ward, details } = address;
 
         this.setState({
             fullName,

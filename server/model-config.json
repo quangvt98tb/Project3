@@ -24,17 +24,6 @@
       }
     }
   },
-  "Cart": {
-    "dataSource": "mydb",
-    "public": true,
-    "options": {
-      "remoting": {
-        "sharedMethods": {
-          "*": true
-        }
-      }
-    }
-  },
   "Category": {
     "dataSource": "mydb",
     "public": true,
@@ -80,17 +69,6 @@
     }
   },
   "ImportOrder": {
-    "dataSource": "mydb",
-    "public": true,
-    "options": {
-      "remoting": {
-        "sharedMethods": {
-          "*": true
-        }
-      }
-    }
-  },
-  "OrderDetail": {
     "dataSource": "mydb",
     "public": true,
     "options": {

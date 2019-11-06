@@ -4,6 +4,7 @@ import { getOrderDetails, cancelOrder } from '../../actions/order.action'
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import SweetAlert from 'react-bootstrap-sweetalert';
+import SwappingSquaresSpinner from '../common/SwappingSquaresSpinner.jsx'
 
 class OrderDetails extends Component {
     constructor(props) {
@@ -17,8 +18,8 @@ class OrderDetails extends Component {
         }
 	}
     
-    componentDidMount(){
-        this.props.getOrderDetails(this.state.orderCode)
+    async componentDidMount(){
+        await this.props.getOrderDetails(this.state.orderCode);
     }
 
     onTrigger(){
@@ -44,12 +45,12 @@ class OrderDetails extends Component {
 
     async onCancelOrder(orderCode, status){
         await this.props.cancelOrder(orderCode, status);
-        let error = this.props.orders.error;
-        if (error !== "error"){
+        if (status === "Confirmed"){
+            this.props.orders.order.status = "Canceled";
             this.setState({
                 ...this.state,
                 cancelTriggered: false,
-                isSucc: true,
+                isSucc: true, 
             })
         } else {
             this.setState({
@@ -63,10 +64,23 @@ class OrderDetails extends Component {
     render() {
         const { order, loading } = this.props.orders;
         let orderData = (loading) || (order === null) ? (
-            null
+            <SwappingSquaresSpinner/>
         ) : (
             order
         );
+
+        let profileData = (loading) || (order === null) ? (
+            <SwappingSquaresSpinner/>
+        ) : (
+            order.profileData
+        );
+
+        let cart = (loading) || (order === null) ? (
+            <SwappingSquaresSpinner/>
+        ) : (
+            order.cart
+        );
+
         let payment = null;
         switch (orderData.checkOutType){
             case 1:
@@ -77,38 +91,46 @@ class OrderDetails extends Component {
                 payment = "Cash on Delivery";
         }
 
-        let address = String(orderData.profileData.details + ', ' + orderData.profileData.ward + ', ' + orderData.profileData.district + ', ' +orderData.profileData.province)
+        let address = (loading) || (order === null) ? (
+            <SwappingSquaresSpinner/>
+        ) : (
+            String(orderData.profileData.details + ', ' + orderData.profileData.ward + ', ' + orderData.profileData.district + ', ' +orderData.profileData.province)
+        );
 
-        let CartData = orderData.cart.addedItems.map((item, index) => {
-            return (
-                <tr>
-                    <td className="text-center">
-                        <div className="avatar">
-                            <img className="img-avatar" src={item.imgUrl}/>
-                        </div>
-                    </td>
-                    <td>
-                        <div>{item.title}</div>
-                    </td>
-                    <td className="text-center">
-                        <div>{item.genre}</div>
-                    </td>
-                    <td className="text-center">
-                        <div className="clearfix">
-                            <div className="text-center">
-                                <strong>{item.quantity}</strong>
+        let CartData = (loading) || (order === null) ? (
+            <SwappingSquaresSpinner/>
+        ) : (
+            orderData.cart.addedItems.map((item, index) => {
+                return (
+                    <tr>
+                        <td className="text-center">
+                            <div className="avatar">
+                                <img className="img-avatar" src={item.imgUrl}/>
                             </div>
-                        </div>
-                    </td>
-                    <td className="text-center">
-                        <div>{item.price}</div>
-                    </td>
-                    <td className="text-center">
-                        <strong>{item.price * item.quantity}</strong>
-                    </td>
-                </tr>
-            );
-        })
+                        </td>
+                        <td>
+                            <div>{item.title}</div>
+                        </td>
+                        <td className="text-center">
+                            <div>{item.genre}</div>
+                        </td>
+                        <td className="text-center">
+                            <div className="clearfix">
+                                <div className="text-center">
+                                    <strong>{item.quantity}</strong>
+                                </div>
+                            </div>
+                        </td>
+                        <td className="text-center">
+                            <div>{item.price}</div>
+                        </td>
+                        <td className="text-center">
+                            <strong>{item.price * item.quantity}</strong>
+                        </td>
+                    </tr>
+                );
+            })
+        )
 
         let alertSucc= (!this.state.isSucc) ? (
             <></>
@@ -176,7 +198,7 @@ class OrderDetails extends Component {
                                         </div>
                                         <div className="col-sm-6">
                                             <div className="">
-                                                <h4 className="orderDetails">{orderData.profileData.fullName}</h4>
+                                                <h4 className="orderDetails">{profileData.fullName}</h4>
                                             </div>
                                         </div>
                                     </div>
@@ -192,7 +214,7 @@ class OrderDetails extends Component {
                                         </div>
                                         <div className="col-sm-6">
                                             <div className="">
-                                                <h4 className="orderDetails">{orderData.profileData.email}</h4>
+                                                <h4 className="orderDetails">{profileData.email}</h4>
                                             </div>
                                         </div>
                                     </div>
@@ -208,7 +230,7 @@ class OrderDetails extends Component {
                                         </div>
                                         <div className="col-sm-6">
                                             <div className="">
-                                                <h4 className="orderDetails">{orderData.profileData.phone}</h4>
+                                                <h4 className="orderDetails">{profileData.phone}</h4>
                                             </div>
                                         </div>
                                     </div>
@@ -318,7 +340,7 @@ class OrderDetails extends Component {
                                         <div>Tổng phụ</div>
                                     </td>
                                     <td className="text-center">
-                                        <strong>{orderData.cart.total}</strong>
+                                        <strong>{cart.total}</strong>
                                     </td>
                                 </tr>
                                 <tr>
@@ -330,7 +352,7 @@ class OrderDetails extends Component {
                                         <div>Phí ship</div>
                                     </td>
                                     <td className="text-center">
-                                        <strong>{orderData.cart.shipping}</strong>
+                                        <strong>{cart.shipping}</strong>
                                     </td>
                                 </tr>
                                 <tr>
@@ -342,7 +364,7 @@ class OrderDetails extends Component {
                                         <h3>Tổng</h3>
                                     </td>
                                     <td className="text-center">
-                                        <h3>{orderData.cart.grandTotal}</h3>
+                                        <h3>{cart.grandTotal}</h3>
                                     </td>
                                 </tr>
                              </tbody>

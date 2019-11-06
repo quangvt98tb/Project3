@@ -17,8 +17,21 @@ export const checkOutConfirm = (checkOutData) => dispatch => {
     //       payload: error.response.data, 
     //     })
     //   }
-    dispatch({
-      type: CHECKOUT_CONFIRM,
-      payload: "success",
-    })
+    axios
+    .post('/ExportOrders/createOrder', {checkOutData: checkOutData, userId: localStorage.userId})
+    .then(res => 
+        dispatch({
+          type: CHECKOUT_CONFIRM,
+          payload: res.data.data,   // return "success"
+        })
+    )
+    .catch(error =>   // giong dang ki dang nhap validate input
+      dispatch({
+        type: GET_ERRORS,
+        payload: error.response.data, 
+      }))
+    // dispatch({
+    //   type: CHECKOUT_CONFIRM,
+    //   payload: "success",
+    // })
 };

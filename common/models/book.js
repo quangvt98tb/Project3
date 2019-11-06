@@ -115,12 +115,31 @@ module.exports = function(Book) {
         let quan = quantity + currentQuantity
         let book = await Book.findById(bookId)
         if (book.enable != true || book.quantity == 0 || quan > book.quantity){
-            return [400, []]
+            return []
+        }
+        let data ={
+            id: book.id,
+            title: book.name,
+            imgUrl: book.imgURL,
+            price:book.sellPrice,
         }
         if (quantity == 0){
-            return [200, book]
+            return [data]
         }
-        else return [200, book]         
+        else return [data]         
+    }
+
+    Book.updateCart = async function(dataList) {
+        let i;
+        let productIdList = Object.keys(dataList);
+        for (i =0; i < productIdList.length; i++){
+            let book = await Book.findById(productIdList[i])
+            if (book.enable != 1 || book.quantity < dataList[productIdList[i]]){
+                return []
+            }
+        }
+        return "success"
+
     }
 
     //
@@ -167,4 +186,10 @@ module.exports = function(Book) {
         returns: { arg: 'data',type: 'object'}
     })
 
+    Book.remoteMethod('updateCart', 
+    {
+        http: {verb: 'post', path: '/updateCart' },
+        accepts: {arg: 'dataList', type: 'object'},
+        returns: { arg: 'data', type: 'object'}
+    })
 }

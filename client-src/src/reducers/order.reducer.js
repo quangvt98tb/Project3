@@ -15,6 +15,7 @@ const initialState = {
 
 export default (state = initialState, { type, payload, status }) => {
     switch (type) {
+        
         case ORDER_LOADING:
             return {
                 ...state,
@@ -33,6 +34,7 @@ export default (state = initialState, { type, payload, status }) => {
                 loading: false
             };
         case CANCEL_ORDER:
+            console.log(status)
             if (status === "Confirmed"){
                 state.order.status = "Canceled";  
                 return{

@@ -48,11 +48,6 @@
   },
   "protected": ["dateOfBirth", "gender", "createdAt",  "enable"],
   "relations": {
-    "hasOneCart": {
-      "type": "hasOne",
-      "model": "Cart",
-      "foreignKey": "userId"
-    },
      "hasManyOrder": {
       "type": "hasMany",
       "model": "ExportOrder",

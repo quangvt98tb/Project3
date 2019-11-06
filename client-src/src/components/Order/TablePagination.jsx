@@ -43,9 +43,9 @@ class TableP extends Component {
 
   formatBookTitles(books) {
     if (books.length === 1){
-      return books[0];
+      return books[0].title;
     } else {
-      return (String(books[0]) + " và " + (books.length -1)  + " cuốn sách khác");
+      return (String(books[0].title) + " và " + (books.length -1)  + " cuốn sách khác");
     }
   }
 

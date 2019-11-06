@@ -15,7 +15,7 @@ export default (state = initialState, { type, payload, productData, dataList, sh
     } else{
         extra = 10;
     }
-    // console.log(payload)
+    
     // console.log(productData)
     switch (type) {
         case ADD_TO_CART:
@@ -76,7 +76,6 @@ export default (state = initialState, { type, payload, productData, dataList, sh
             else{
                 if (payload === "success"){
                     const vals = Object.values(dataList)
-                    console.log(vals)
                     if (!vals.every(e=>e<20)){
                         return {
                             ...state,

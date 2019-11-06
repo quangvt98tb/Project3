@@ -15,11 +15,11 @@
       "required": true
     },
     "subtotal": {
-      "type": "number",
+      "type": "object",
       "required": false
     },
     "paymentMethod": {
-      "type": "string",
+      "type": "number",
       "required": true
     },
     "addressShip": {
@@ -37,6 +37,10 @@
     "updatedAt": {
       "type": "date",
       "required": false
+    },
+    "bookList": {
+      "type": "array",
+      "required": false
     }
   },
   "relations": {
@@ -44,15 +48,6 @@
       "type": "belongsTo",
       "model": "Customer",
       "foreignKey": "userId"
-    },
-    "bookList": {
-      "type": "embedsMany",
-      "model": "OrderDetail",
-      "property": "bookList",
-      "options": {
-        "validate": true,
-        "forceId": false
-      }
     }
   },
   "acls": [],

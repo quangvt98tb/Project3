@@ -1,15 +1,11 @@
 import React from 'react';
 import {Filter, ReferenceInput, SelectInput, List, Datagrid,
         SimpleShowLayout, Show, Create, SimpleForm, DateField, 
-        TextField, EditButton, DisabledInput, 
+        TextField, EditButton, DisabledInput, BooleanInput,
         TextInput, DateInput } from 'react-admin';
 // export PostIcon from '@material-ui/core/svg-icons/action/book';
 // import {DateInput} from 'react-admin-date-inputs';
-const choices = [
-    { _id: 1, gender: 'Nam' },
-    { _id: 2, gender: 'Nữ' },
-    { _id: 3, gender: 'Giới tính thứ 3'}
-];
+
 const PostFilter = (props) => (
     <Filter {...props}>
         <TextInput label="Search" source="fullName" alwaysOn />
@@ -38,14 +34,15 @@ const PostTitle = ({ record }) => {
 
 export const CustomerEdit = (props) => (
     <Show  title="Xem thông tin tài khoản" {...props}>
-        <SimpleShowLayout>
-            <TextField  label="Full Name" source="fullName" />
-            <TextField  label="Address" source="address.province" />
-            <TextField  label="Phone" source="phone" />
-            <DateField  label="Birthday" source="dateOfBirth" />
-            <TextField  label='Gender' source="gender" />
-            <TextField  label="Email" source="email" type="email" />
-        </SimpleShowLayout>
+        <SimpleForm>
+            <DisabledInput  label="Full Name" source="fullName" />
+            <DisabledInput  label="Address" source="address.province" />
+            <DisabledInput  label="Phone" source="phone" />
+            <DisabledInput  label="Birthday" source="dateOfBirth" />
+            <DisabledInput  label='Gender' source="gender" />
+            <DisabledInput  label="Email" source="email" />
+            <BooleanInput label="Block-Activity" source="enable" />
+        </SimpleForm>
     </Show>
 );
 

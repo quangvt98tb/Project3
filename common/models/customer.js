@@ -203,10 +203,10 @@ module.exports = function(Customer) {
                 return [400, errors]
             }
             customerData = await Customer.create(customerData)
-            let Cart = app.models.Cart
-            var CartData = {}
-            CartData.userId = customerData.id
-            cart = Cart.create(CartData)
+            // let Cart = app.models.Cart
+            // var CartData = {}
+            // CartData.userId = customerData.id
+            // cart = Cart.create(CartData)
             return [200, 'Thanh Cong']
         } catch (error) {
             console.log('create Customer', error)

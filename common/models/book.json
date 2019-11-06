@@ -64,11 +64,6 @@
       "type": "belongsTo",
       "model": "Category",
       "foreignKey": "categoryId"
-    }, 
-    "hasManyOrderDetail": {
-      "type": "hasMany",
-      "model": "Comment",
-      "foreignKey": "bookId"
     }
   },
   "foreignKeys": {

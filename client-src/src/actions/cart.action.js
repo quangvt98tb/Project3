@@ -12,7 +12,7 @@ export const addToCart = (productData) => dispatch =>{
   axios
     .post('/Books/addToCart', {bookId: productData.productId, quantity: productData.quantity, currentQuantity: productData.currentQuantity})
     .then(res => 
-      // console.log(res.data.data)
+      // console.log(res.data)
         dispatch({
           type: ADD_TO_CART,
           payload: res.data.data,
@@ -53,30 +53,37 @@ export const deleteFromCart = (productData) => dispatch =>{
 };
 
 export const changeQuantity = (dataList, shipping) => dispatch =>{
-//  try {
-//     dispatch({
-//       type: CHANGE_QUANTITY,
-//       payload: "success",
-//       dataList, shipping
-//     })
-// const productData = {
-//     dataList: dataList,
-//     shipping: shipping,
-// };
-//  const response = await axios.post(`api/here`, productData);
-//   } catch (error) {
-//     dispatch({
-//       type: CHANGE_QUANTITY,
-//       payload: error, 
-//       dataList, shipping
-//     })
-//   }
-  dispatch({
-      type: CHANGE_QUANTITY,
-      payload: "success",
-      // payload: [],
-      dataList, shipping
-  })
+  // try {
+  //     dispatch({
+  //       type: CHANGE_QUANTITY,
+  //       payload: "success",
+  //       dataList, shipping
+  //     })
+  // const response = await axios.post(`api/here`, dataList);
+  //   } catch (error) {
+  //     dispatch({
+  //       type: CHANGE_QUANTITY,
+  //       payload: error, 
+  //       dataList, shipping
+  //     })
+  //   }
+  console.log(dataList)
+  axios
+    .post('/Books/updateCart', {dataList: dataList})
+    .then(res => 
+        dispatch({
+          type: CHANGE_QUANTITY,
+          payload: res.data.data, // neu thanh cong return "success", neu that bai return []
+          dataList, shipping
+        })
+    )
+    // )
+  // dispatch({
+  //     type: CHANGE_QUANTITY,
+  //     payload: "success",
+  //     // payload: [],
+  //     dataList, shipping
+  // })
 };
 
 export const checkOut = () => dispatch =>{

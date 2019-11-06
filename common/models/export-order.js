@@ -4,43 +4,46 @@ app = require('../../server/server')
 
 module.exports = function(ExportOrder) {
     const Promise = require('bluebird')
-    ExportOrder.validatesInclusionOf('status', {in: ["Waiting", "Confirmed", "Canceled", "Shipping", "Delivered"]})
-    ExportOrder.validatesInclusionOf('paymentMethod', {in: ["Direct Bank Transfer", "Cheque Payment", "Cash on Delivery"]})
+    // ExportOrder.validatesInclusionOf('status', {in: ["Confirmed", "Canceled", "Shipping", "Delivered"]})
+    // ExportOrder.validatesInclusionOf('paymentMethod', {in: ["Direct Bank Transfer", "Cheque Payment", "Cash on Delivery"]})
     
-    ExportOrder.createOrder = async function(reqData){
-        let OrderDetail = app.models.OrderDetail
-        let Book = app.models.Book
+    ExportOrder.createOrder = async function(checkOutData, userId){
         let i
-        let orderDetailList = {}
-        for (i = 0; i < reqData.cart.addedItems.length(); i++){
+        let orderDetailList = []
+        for (i = 0; i < checkOutData.cart.addedItems.length ; i++){
             let bookData = {
-                bookId: reqData.cart.addedItems[i].bookId,
-                quantity: reqData.cart.addedItems[i].quantity,
-                price: reqData.cart.addedItems[i].price
+                bookId: checkOutData.cart.addedItems[i].id,
+                title: checkOutData.cart.addedItems[i].title,
+                quantity: checkOutData.cart.addedItems[i].quantity,
+                price: checkOutData.cart.addedItems[i].price
             }
-            try {
-                let data1 = await OrderDetail.create(bookData)
-                orderDetailList.push(data1)
-            } catch (err){
-                console.log('add To ExportOrder', err)
-                return [400, err]
-            }
+            orderDetailList.push(bookData)
         }
         let data = {
-            userId: reqData.profileData.userId,
-            status: "Waiting",
-            paymentMethod: reqData.checkOutType,
-            addressShip: reqData.profileData.addressShip,
-            subtotal: reqData.cart.total,
-            createdAt: Date()
+            userId: userId,
+            status: "Confirmed",
+            paymentMethod: checkOutData.checkOutType,
+            addressShip: {
+                province: checkOutData.profileData.province,
+                district: checkOutData.profileData.district,
+                ward: checkOutData.profileData.ward,
+                details: checkOutData.profileData.details
+            },
+            subtotal: {
+                total: checkOutData.cart.total,
+                shipping: checkOutData.cart.shipping,
+                grandTotal: checkOutData.cart.grandTotal
+            },
+            bookList: orderDetailList,
+            createdAt: Date(),
+            updatedAt: Date()
         }
         try{
             let exportOrder = await ExportOrder.create(data)
-            exportOrder.bookList.set(orderDetailList)
-            return exportOrder
+            return "success"
         } catch (err){
             console.log('create ExportOrder', err)
-            return [400, err]
+            return []
         }
     }
 
@@ -76,9 +79,9 @@ module.exports = function(ExportOrder) {
                 },
                 cart: {
                     addedItems: items,
-                    total: data1.subtotal,
-                    shipping: data1.shipping,
-                    grandTotal: data1.grandTotal,
+                    total: data1.subtotal.total,
+                    shipping: data1.subtotal.shipping,
+                    grandTotal: data1.subtotal.grandTotal,
                 },
                 checkOutType: data1.paymentMethod,
                 orderDate: data1.createdAt,
@@ -108,7 +111,7 @@ module.exports = function(ExportOrder) {
                     orderCode: data2[i].id,
                     orderDate: data2[i].createdAt,
                     status: data2[i].status,
-                    books: data2[i]._bookList,
+                    books: data2[i].bookList,
                     fullName: customer.fullName
                 }
                 orderList.push(data)
@@ -121,23 +124,18 @@ module.exports = function(ExportOrder) {
     }
 
     ExportOrder.UserCancelOrder = async function(orderId) {
-        try {
-            const order = await ExportOrder.findById(orderId)
-            if (order.status == 'Waiting'){
-                try{
-                    const data = await ExportOrder.upsertWithWhere({id: orderId}, {status: 'Canceled'})
-                    return data
-                } catch (err) {
-                    console.log('update ExportOrderStatus By User', err)
-                    return err
-                }
+        const order = await ExportOrder.findById(orderId)
+        if (order.status == 'Confirmed'){
+            try{
+                const data = await ExportOrder.upsertWithWhere({id: orderId}, {status: 'Canceled', updatedAt: Date()})
+                return "success"
+            } catch (err) {
+                console.log('update ExportOrderStatus By User', err)
+                return []
             }
-            else {
-                return [400, "Don Hang Da Duoc Tiep Nhan. Khong The Huy Don Hang!"]
-            }
-        } catch (error) {
-            console.log('find ExportOrderStatus', error)
-            return error
+        }
+        else {
+            return []
         }
     }
 
@@ -191,7 +189,7 @@ module.exports = function(ExportOrder) {
     }
 
     ExportOrder.AdminUpdateByStatus = async function(reqData){
-        if (reqData.status == "Doi Giao Hang"){
+        if (reqData.status == "Confirmed"){
             let order = await ExportOrder.findById(req.params.id)
             let i
             for (i = 0; i < order.bookList.length; i++){s
@@ -219,7 +217,9 @@ module.exports = function(ExportOrder) {
     ExportOrder.remoteMethod(
         'createOrder', {
             http: {path: '/createOrder', verb: 'post'},
-            accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
+            accepts: [
+                {arg: 'checkOutData', type: 'Object'},
+                {arg: 'userId', type: 'string'}],
             returns: { arg: 'data',type: 'object'}
         }
     )

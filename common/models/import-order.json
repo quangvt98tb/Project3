@@ -25,6 +25,10 @@
     "createdAt": {
       "type": "date",
       "required": false
+    },
+    "bookList": {
+      "type": "array",
+      "required": false
     }
   },
   "protected": ["id"],
@@ -33,15 +37,6 @@
       "type": "belongsTo",
       "model": "Supplier",
       "foreignKey": "supplierId"
-    },
-    "bookList": {
-      "type": "embedsMany",
-      "model": "OrderDetail",
-      "property": "bookList",
-      "options": {
-        "validate": true,
-        "forceId": false
-      }
     }
   },
   "acls": [
