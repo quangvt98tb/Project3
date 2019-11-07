@@ -7,7 +7,20 @@ module.exports = function(ExportOrder) {
     const Promise = require('bluebird')
     // ExportOrder.validatesInclusionOf('status', {in: ["Confirmed", "Canceled", "Shipping", "Delivered"]})
     // ExportOrder.validatesInclusionOf('paymentMethod', {in: ["Direct Bank Transfer", "Cheque Payment", "Cash on Delivery"]})
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
     
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+    
+        return [year, month, day].join('-');
+    }
+
     ExportOrder.createOrder = async function(checkOutData, userId){
         const { errors, isValid } = validateCheckOut(checkOutData)
         if (!isValid) {
@@ -42,8 +55,8 @@ module.exports = function(ExportOrder) {
                 grandTotal: checkOutData.cart.grandTotal
             },
             bookList: orderDetailList,
-            createdAt: Date(),
-            updatedAt: Date()
+            createdAt: formatDate(Date()),
+            updatedAt: formatDate(Date())
         }
         try{
             let exportOrder = await ExportOrder.create(data)
@@ -91,8 +104,8 @@ module.exports = function(ExportOrder) {
                     grandTotal: data1.subtotal.grandTotal,
                 },
                 checkOutType: data1.paymentMethod,
-                orderDate: data1.createdAt,
-                shipDate: data1.updatedAt,
+                orderDate: formatDate(data1.createdAt),
+                shipDate: formatDate(data1.updatedAt),
                 status: data1.status
             }
             return data
@@ -114,9 +127,9 @@ module.exports = function(ExportOrder) {
             let data2 = data1[0]
             for (i=0; i< data2.length; i++){
                 let data = {
-                    shipDate: data2[i].updatedAt,
+                    shipDate: formatDate(data2[i].updatedAt),
                     orderCode: data2[i].id,
-                    orderDate: data2[i].createdAt,
+                    orderDate: formatDate(data2[i].createdAt),
                     status: data2[i].status,
                     books: data2[i].bookList,
                     fullName: customer.fullName
