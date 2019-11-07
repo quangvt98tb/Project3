@@ -12,31 +12,18 @@ export const addToCart = (productData) => dispatch =>{
   axios
     .post('/Books/addToCart', {bookId: productData.productId, quantity: productData.quantity, currentQuantity: productData.currentQuantity})
     .then(res => 
-      // console.log(res.data)
         dispatch({
           type: ADD_TO_CART,
           payload: res.data.data,
           productData
         })
     )
-    // )
     .catch(err =>
       dispatch({
         type: ADD_TO_CART,
         payload: {},
         productData
       }))
-  // dispatch({
-  //   type: ADD_TO_CART,
-  //   payload: {
-  //     category: "Tiểu thuyết",
-  //     id: "5db301a366c1b16c3143e45d",
-  //     imgUrl: "string",
-  //     price: 2,
-  //     title: "tieu thuyet 1"
-  //   },
-  //   productData,
-  // })
 };
 
 export const deleteAll = () => dispatch =>{
@@ -53,21 +40,6 @@ export const deleteFromCart = (productData) => dispatch =>{
 };
 
 export const changeQuantity = (dataList, shipping) => dispatch =>{
-  // try {
-  //     dispatch({
-  //       type: CHANGE_QUANTITY,
-  //       payload: "success",
-  //       dataList, shipping
-  //     })
-  // const response = await axios.post(`api/here`, dataList);
-  //   } catch (error) {
-  //     dispatch({
-  //       type: CHANGE_QUANTITY,
-  //       payload: error, 
-  //       dataList, shipping
-  //     })
-  //   }
-  console.log(dataList)
   axios
     .post('/Books/updateCart', {dataList: dataList})
     .then(res => 
@@ -77,13 +49,6 @@ export const changeQuantity = (dataList, shipping) => dispatch =>{
           dataList, shipping
         })
     )
-    // )
-  // dispatch({
-  //     type: CHANGE_QUANTITY,
-  //     payload: "success",
-  //     // payload: [],
-  //     dataList, shipping
-  // })
 };
 
 export const checkOut = () => dispatch =>{

@@ -1,5 +1,6 @@
 let to = require('await-to-js').to;
 app = require('../../server/server')
+const validateCheckOut = require('../validation/checkOut');
 'use_strict'; 
 
 module.exports = function(ExportOrder) {
@@ -8,6 +9,10 @@ module.exports = function(ExportOrder) {
     // ExportOrder.validatesInclusionOf('paymentMethod', {in: ["Direct Bank Transfer", "Cheque Payment", "Cash on Delivery"]})
     
     ExportOrder.createOrder = async function(checkOutData, userId){
+        const { errors, isValid } = validateCheckOut(checkOutData)
+        if (!isValid) {
+            return errors
+        }
         let i
         let orderDetailList = []
         for (i = 0; i < checkOutData.cart.addedItems.length ; i++){
@@ -21,6 +26,8 @@ module.exports = function(ExportOrder) {
         }
         let data = {
             userId: userId,
+            fullName: checkOutData.profileData.fullName,
+            phone: checkOutData.profileData.phone,
             status: "Confirmed",
             paymentMethod: checkOutData.checkOutType,
             addressShip: {
@@ -70,12 +77,12 @@ module.exports = function(ExportOrder) {
             let data = {
                 profileData: {
                     email: customer.email,
-                    fullName: customer.fullName,
-                    phone: customer.phone,
-                    province: customer.address.province,
-                    district: customer.address.district,
-                    ward: customer.address.ward,
-                    details: customer.address.details
+                    fullName: data1.fullName,
+                    phone: data1.phone,
+                    province: data1.addressShip.province,
+                    district: data1.addressShip.district,
+                    ward: data1.addressShip.ward,
+                    details: data1.addressShip.details
                 },
                 cart: {
                     addedItems: items,
