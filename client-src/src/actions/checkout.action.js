@@ -4,25 +4,22 @@ import {
   CHECKOUT_CONFIRM,
 } from './actionTypes';
 
-export const checkOutConfirm = (checkOutData) => dispatch => {
-    axios
-    .post('/ExportOrders/createOrder', {checkOutData: checkOutData, userId: localStorage.userId})
-    .then(res => {
-        if (res.data.data == "success" || res.data.data == []) {
+export const checkOutConfirm = (checkOutData) => async dispatch => {
+  const res = await axios.post('/ExportOrders/createOrder', {checkOutData: checkOutData, userId: localStorage.userId})
+    // axios
+    // .post('/ExportOrders/createOrder', {checkOutData: checkOutData, userId: localStorage.userId})
+    // .then(res => {
+    //     console.log(res.data.data)
+        if (res.data.data === "success" || res.data.data === []) {
           dispatch({
             type: CHECKOUT_CONFIRM,
             payload: res.data.data,   
           })
         } else {
-          return dispatch({
+          dispatch({
             type: GET_ERRORS,
             payload: res.data.data,
           });
         }
-    })
-    .catch(error =>   
-      dispatch({
-        type: GET_ERRORS,
-        payload: error.response.data, 
-      }))
+    // })
 };

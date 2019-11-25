@@ -18,17 +18,7 @@
       }
     }
   },
-  "protected": ["id"],
-  "relations": {
-    "hasManyBook": {
-      "type": "hasMany",
-      "model": "Book",
-      "foreignKey": "categoryId", 
-      "options": {
-        "nestRemoting": true
-      }
-    }
-  },
+  "relations": {},
   "acls": [],
   "methods": {}
 }

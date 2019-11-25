@@ -27,7 +27,7 @@ export default class Footer extends Component {
                       type="email"
                       name="nl-email"
                       id="nlemail"
-                      placeholder="Your e-mail"
+                      placeholder="Email của bạn"
                     />
                     <button type="submit">Đăng kí</button>
                   </form>
@@ -43,7 +43,7 @@ export default class Footer extends Component {
         <footer className="footer-area ">
           <div className="container">
             <div className="row">
-              <div className="col-12 col-sm-6 col-lg-3">
+              <div className="col-sm-12 col-md-6 col-lg-3">
                 <div className="single-footer-widget mb-100">
                   <h5 className="widget-title" style={{ marginTop: '40px' }}>
                     Về chúng tôi
@@ -70,7 +70,7 @@ export default class Footer extends Component {
                 </div>
               </div>
 
-              <div className="col-12 col-sm-6 col-lg-3">
+              <div className="col-sm-12 col-md-6 col-lg-3">
                 <div className="single-footer-widget mb-100">
                   <h5 className="widget-title" style={{ marginTop: '40px' }}>
                     Đối tác
@@ -94,7 +94,7 @@ export default class Footer extends Component {
                 </div>
               </div>
 
-              <div className="col-12 col-sm-6 col-lg-3">
+              <div className="col-sm-12 col-md-6 col-lg-3">
                 <div className="single-footer-widget mb-100">
                   <h5 className="widget-title" style={{ marginTop: '40px' }}>
                     Thể loại
@@ -112,7 +112,7 @@ export default class Footer extends Component {
                 </div>
               </div>
 
-              <div className="col-12 col-sm-6 col-lg-3">
+              <div className="col-sm-12 col-md-6 col-lg-3">
                 <div className="single-footer-widget mb-100">
                   <h5 className="widget-title" style={{ marginTop: '40px' }}>
                     Tin mới nhất

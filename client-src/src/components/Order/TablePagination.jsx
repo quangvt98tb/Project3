@@ -57,24 +57,6 @@ class TableP extends Component {
       allOrders.length
     );
 
-    // let pagination = (allOrders === null) ? (
-    //   <></>
-    // ) : (
-    //   <PaginationDeck totalRecords={totalOrders} pageLimit={5} pageNeighbours={1} onPageChanged={this.onPageChanged} />
-    // );
-
-    // let paginationComp = (this.props.orders.orders === null) ? (
-    //     <></>
-    //   ) : (
-    //     // <PaginationDeck totalRecords={totalOrders} pageLimit={5} pageNeighbours={1} onPageChanged={this.onPageChanged} />
-    //     this.setState({
-    //       ...this.state,
-    //       allOrders: this.props.orders.orders
-    //     })
-    //   );
-    
-    //   console.log(paginationComp)
-
     let Content =  (allOrders === null) || (allOrders[0] === "empty") ? (
         <h6>Đơn hàng trống</h6>
     ) : (currentOrder.map((order, index) => {
@@ -103,14 +85,14 @@ class TableP extends Component {
                                     <table>
                                         <thead>
                                             <tr className="title-top">
-                                                <th className="product-thumbnail">Order Code</th>
-                                                <th className="product-name">Books</th>
-                                                <th className="product-price">Order Date</th>
-                                                <th className="product-ship">Ship Date</th>
-                                                <th className="product-quantity">Full Name</th>
-                                                <th className="product-subtotal">Status</th>
-                                                <th className="product-remove">Remove</th>
-                                                <th className="product-details">Details</th>
+                                                <th className="product-thumbnail">Mã đơn hàng</th>
+                                                <th className="product-name">Các sách đã mua</th>
+                                                <th className="product-price">Ngày đặt hàng</th>
+                                                <th className="product-ship">Ngày vận chuyển</th>
+                                                <th className="product-quantity">Tên</th>
+                                                <th className="product-subtotal">Trạng thái</th>
+                                                <th className="product-remove">Xóa</th>
+                                                <th className="product-details">Chi tiết</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -125,8 +107,6 @@ class TableP extends Component {
             </div>
          <div style={{ height: 30 }}></div>
           <PaginationDeck totalRecords={totalOrders} pageLimit={5} pageNeighbours={1} onPageChanged={this.onPageChanged} />
-          {/* {paginationComp}
-          {pagination} */}
           <div style={{ height: 50 }}></div>
           </div>
     );

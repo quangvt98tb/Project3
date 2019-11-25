@@ -16,7 +16,6 @@ class UpdateInfo extends Component {
     super(props);
 
     this.state = {
-      isUpdate: false,
       email: '',
       phone: '',
       gender: '',
@@ -71,13 +70,6 @@ class UpdateInfo extends Component {
       details
     };
     this.props.updateProfile(newInfo);
-    this.setState(old => ({ isUpdate: !old.isUpdate }));
-
-    const msg = 'Cập nhật thông tin cá nhân thành công.';
-    this.toast(msg, 'warning', 3000);
-  }
-  onUpdate() {
-    this.setState(old => ({ isUpdate: !old.isUpdate }));
   }
   render() {
     
@@ -90,9 +82,7 @@ class UpdateInfo extends Component {
       ward,
       details,
       errors,
-      isUpdate,
     } = this.state;
-    console.log(isUpdate);
 
     return (
       <div className="accinfo-2">
@@ -129,16 +119,6 @@ class UpdateInfo extends Component {
                   >
                     Điện thoại:
                   </label>
-                  {/* <div className="col-xl-8 col-sm-7">
-                    <input
-                      type="tel"
-                      className="form-control"
-                      id="txtPhone"
-                      placeholder=""
-                      disabled="disabled"
-                      value={this.props.profile[0].phone}
-                    />
-                  </div> */}
                   <div className="col-xl-8 col-sm-7">
                     <TextInputAuth
                         id="phone"
@@ -150,7 +130,7 @@ class UpdateInfo extends Component {
                         onChange={e => this.onChange(e)}
                         value={phone}
                         error={errors.phone}
-                        disabled={!isUpdate}
+                        
                       />
                     </div>
                 </div>
@@ -170,7 +150,7 @@ class UpdateInfo extends Component {
                     <select
                       className="form-control"
                       id="slGender"
-                      disabled={!isUpdate}
+                      
                       value={gender}
                       name="gender"
                       onChange={e => this.onChange(e)}
@@ -195,7 +175,7 @@ class UpdateInfo extends Component {
                     <select
                       className="form-control"
                       id="cbCity"
-                      disabled={!isUpdate}
+                      
                       name="province"
                       value={province}
                       onChange={e => this.onChange(e)}
@@ -226,7 +206,7 @@ class UpdateInfo extends Component {
                     <select
                       className="form-control"
                       id="cbDistrict"
-                      disabled={!isUpdate}
+                      
                       name="district"
                       value={district}
                       onChange={e => this.onChange(e)}
@@ -252,16 +232,6 @@ class UpdateInfo extends Component {
                   >
                     Phường/ Xã:
                   </label>
-                  {/* <div className="col-xl-8 col-sm-7">
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={ward}
-                      name="ward"
-                      onChange={e => this.onChange(e)}
-                      disabled={!isUpdate}
-                    />
-                  </div> */}
                   <div className="col-xl-8 col-sm-7">
                     <TextInputAuth
                         id="ward"
@@ -273,7 +243,7 @@ class UpdateInfo extends Component {
                         onChange={e => this.onChange(e)}
                         value={ward}
                         error={errors.ward}
-                        disabled={!isUpdate}
+                        
                       />
                     </div>
                 </div>
@@ -289,18 +259,6 @@ class UpdateInfo extends Component {
                   >
                     Địa chỉ:
                   </label>
-                  {/* <div className="col-xl-10 col-sm-7">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="txtAddress"
-                      placeholder=""
-                      disabled={!isUpdate}
-                      name="details"
-                      value={details}
-                      onChange={e => this.onChange(e)}
-                    />
-                  </div> */}
                   <div className="col-xl-8 col-sm-7">
                     <TextInputAuth
                         id="details"
@@ -312,7 +270,7 @@ class UpdateInfo extends Component {
                         onChange={e => this.onChange(e)}
                         value={details}
                         error={errors.details}
-                        disabled={!isUpdate}
+                        
                       />
                   </div>
                 </div>
@@ -336,14 +294,13 @@ class UpdateInfo extends Component {
                         onChange={e => this.onChange(e)}
                         value={email}
                         error={errors.email}
-                        disabled={!isUpdate}
+                        disabled="disabled"
                       />
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          {isUpdate && (
             <div className="text-center">
               <input
                 type="submit"
@@ -351,20 +308,7 @@ class UpdateInfo extends Component {
                 value="CẬP NHẬT"
               />
             </div>
-          )}
         </form>
-
-        {!isUpdate && (
-          <div className="text-center">
-            <input
-              type="button"
-              id="btnUpdateInfoLender"
-              className="btn btn-warning mx-auto text-uppercase"
-              value="Thay đổi thông tin"
-              onClick={() => this.onUpdate()}
-            />
-          </div>
-        )}
       </div>
     );
   }

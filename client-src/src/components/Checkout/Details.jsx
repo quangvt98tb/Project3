@@ -24,6 +24,12 @@ class Details extends Component {
         this.props.getChildState(this.state);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.errors) {
+          this.setState({ errors: nextProps.errors });
+        }
+      }
+
     componentDidMount() {
         // console.log(this.props.profile)
         const { address, fullName, phone, email } = this.props.profile;
@@ -72,10 +78,10 @@ class Details extends Component {
           } = this.state;
         return (      
             <div class="customer_details">
-                <h3>Billing details</h3>
+                <h3>Chi tiết đơn thanh toán</h3>
                 <div class="customar__field">
                     <div class="input_box">
-                        <label>Name <span>*</span></label>
+                        <label>Tên <span>*</span></label>
                         <TextInputAuth
                             id="fullName"
                             name="fullName"
@@ -91,7 +97,7 @@ class Details extends Component {
                     </div>
                 
                     <div className="input_box">
-                        <label>City<span>*</span></label>
+                        <label>Thành phố<span>*</span></label>
                         <div>
                             <select
                             className="form-control"
@@ -111,7 +117,7 @@ class Details extends Component {
                         </div>
                     </div>
                     <div className="input_box">
-                        <label>District <span>*</span></label>
+                        <label>Quận <span>*</span></label>
                         <div>
                             <select
                             className="form-control"
@@ -149,7 +155,7 @@ class Details extends Component {
                         </div>
                     </div>
                     <div className="input_box">
-                        <label>Address <span>*</span></label>
+                        <label>Địa chỉ chi tiết <span>*</span></label>
                         <div>
                         <TextInputAuth
                             id="details"
@@ -166,7 +172,7 @@ class Details extends Component {
                         </div>
                         </div>
                     <div class="input_box">
-                        <label>Phone <span>*</span></label>
+                        <label>Số điện thoại <span>*</span></label>
                         <TextInputAuth
                             id="phone"
                             name="phone"
@@ -182,7 +188,7 @@ class Details extends Component {
                     </div>
 
                     <div class="input_box">
-                        <label>Email address <span>*</span></label>
+                        <label>Email <span>*</span></label>
                         <TextInputAuth
                             id="email"
                             name="email"

@@ -1,7 +1,7 @@
 import React from 'react';
 import { List, Datagrid, Edit, Create, SimpleForm, 
     TextField, EditButton, DisabledInput, 
-    TextInput, required } from 'react-admin';
+    TextInput, required, Filter } from 'react-admin';
 
 const nameValidation = (value, allValues) => {
 
@@ -11,30 +11,36 @@ const nameValidation = (value, allValues) => {
     return [];
 }
 
-const validateName = [required('Not Empty'), nameValidation];
+const validateName = [required('Không được bỏ trống'), nameValidation];
+
+const CategoryFilter = (props) => (
+    <Filter {...props}>
+        <TextInput label="Tìm kiếm" source="name" alwaysOn />
+    </Filter>
+);
 
 export const CategoryList = (props) => (
-    <List {...props}>
+    <List title="Quản lý thể loại" {...props} filters={<CategoryFilter/>} >
         <Datagrid>
-            <TextField source="name" />
+            <TextField label="Thể loại" source="name" />
             <EditButton/>
         </Datagrid>
     </List>
 );
 
 export const CategoryEdit = (props) => (
-    <Edit {...props}>
+    <Edit title="Chỉnh sửa chi tiết" {...props}>
         <SimpleForm>
-            <TextInput source="name" validate={validateName} />
-            <DisabledInput source="id" />
+            <TextInput label="Thể loại" source="name" />
+            {/* <DisabledInput source="id" /> */}
         </SimpleForm>
     </Edit>
 );
 
 export const CategoryCreate = (props) => (
-    <Create {...props}>
+    <Create title="Thêm thể loại mới" {...props}>
         <SimpleForm>
-            <TextInput source="name" validate={validateName} />
+            <TextInput label="Thể loại" source="name" />
         </SimpleForm>
     </Create>
 );

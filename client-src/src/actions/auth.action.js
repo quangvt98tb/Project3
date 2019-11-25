@@ -1,6 +1,6 @@
 import axios from 'axios';
 import setAuthToken from '../utils/setAuthToken';
-import jwt_decode from 'jwt-decode';
+// import jwt_decode from 'jwt-decode';
 import { GET_ERRORS, SET_CURRENT_USER } from './actionTypes';
 import { clearCurrentProfile } from './profile.action';
 
@@ -8,7 +8,7 @@ export const registerUser = (userData, history) => dispatch => {
   axios
     .post('customer/createCustomer', userData)
     .then(res => {
-      if (res.data.status == 400){
+      if (res.data.status === 400){
         dispatch({
           type: GET_ERRORS,
           payload: res.data,
@@ -29,16 +29,23 @@ export const loginUser = userData => dispatch => {
     .post('customer/loginCustomer', userData)
     .then(res => {
       // save to LocalStorageno
-      if (res.data.status != 400) {
+      if (res.data.status !== 400) {
+        console.log(res.data)
         const token = res.data.id;
         const user_id = res.data.userId;
+        const cart = {
+          addedItems: [],
+          total: 0,
+          shipping: 10,
+          error: "",
+        }
         //set token to ls
         localStorage.setItem('jwtToken', token);
         localStorage.setItem('userId', user_id);
+        localStorage.setItem('ttl', res.data.ttl);
+        localStorage.setItem('cart', JSON.stringify(cart))
         // set token to Auth header
         setAuthToken(token);
-        // Decode token to get user data
-        // const decoded = jwt_decode(token);
         //Set Current user
         dispatch(setCurrentUser(token));
       } else {
@@ -57,10 +64,10 @@ export const loginUser = userData => dispatch => {
     });
 };
 
-export const setCurrentUser = decoded => {
+export const setCurrentUser = token => {
   return {
     type: SET_CURRENT_USER,
-    payload: decoded,
+    payload: token,
   };
 };
 
@@ -73,6 +80,8 @@ export const logoutUser = () => dispatch => {
   // Remove token from localStorage
   localStorage.removeItem('jwtToken');
   localStorage.removeItem('userId')
+  localStorage.removeItem('ttl')
+  localStorage.removeItem('cart')
   // Remove auth header for future requests
   setAuthToken(false);
   // Set current user to {} which will set isAuthenticated to false

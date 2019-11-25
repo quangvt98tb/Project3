@@ -1,0 +1,36 @@
+{
+    "name": "Publisher",
+    "base": "PersistedModel",
+    "idInjection": true,
+    "options": {
+      "validateUpsert": true,
+      "strictObjectIDCoercion": true,
+      "mydb": {
+        "table": "publisher"
+      }
+    },
+    "properties": {
+      "name": {
+        "type": "string",
+        "required": true,
+        "index": {
+          "unique": true
+        }
+      },
+      "descreption": {
+        "type": "string"
+      }
+    },
+    "relations": {
+      "hasManyBook": {
+        "type": "hasMany",
+        "model": "Book",
+        "foreignKey": "publisherId", 
+        "options": {
+          "nestRemoting": true
+        }
+      }
+    },
+    "acls": [],
+    "methods": {}
+  }

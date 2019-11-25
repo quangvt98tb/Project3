@@ -5,48 +5,43 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Product from '../Product/ProductCard'
-import ProductData from '../../data/products.json'
+// import ProductData from '../../data/products.json'
 import { Container, Col } from 'reactstrap';
 import { getAllBooks, getByGenres } from '../../actions/book.action'
 import PropTypes from 'prop-types';
 import SwappingSquaresSpinner from '../common/SwappingSquaresSpinner';
-import {
-  Card, CardText, CardBody,
-  CardTitle, CardSubtitle, CardLink
-} from 'reactstrap';
-import { Link } from 'react-router-dom';
 
-const settings1 = {
-  dots: true,
-  infinite: true,
-  centerPadding: "50px",
-  speed: 500,
-  focusOnSelect: true,
-  slidesToShow: 8,
-  slidesToScroll: 1,
-  autoplay: true,
-  swipeToSlide: true,
-  draggable: true,
-  centerMode: true,
-  responsive: [
-    {
-    breakpoint: 1000,
-    settings: {
-    arrows: false,
-    centerMode: true,
-    centerPadding: '50px',
-    slidesToShow: 3
-    }
-    },
-    {
-    breakpoint: 600,
-    settings: {
-    arrows: false,
-    centerMode: true,
-    centerPadding: '50px',
-    slidesToShow: 1
-    }} ]
-};
+// const settings1 = {
+//   dots: true,
+//   infinite: true,
+//   centerPadding: "50px",
+//   speed: 500,
+//   focusOnSelect: true,
+//   slidesToShow: 8,
+//   slidesToScroll: 1,
+//   autoplay: true,
+//   swipeToSlide: true,
+//   draggable: true,
+//   centerMode: true,
+//   responsive: [
+//     {
+//     breakpoint: 1000,
+//     settings: {
+//     arrows: false,
+//     centerMode: true,
+//     centerPadding: '50px',
+//     slidesToShow: 3
+//     }
+//     },
+//     {
+//     breakpoint: 600,
+//     settings: {
+//     arrows: false,
+//     centerMode: true,
+//     centerPadding: '50px',
+//     slidesToShow: 1
+//     }} ]
+// };
 const settings2 = {
   dots: true,
   infinite: false,
@@ -79,17 +74,12 @@ const settings2 = {
 };
 
 class Section3 extends Component {
-  constructor(props) {
-    super(props);
-  }
   componentDidMount() {
     this.props.getAllBooks(32);
   }
 
   onClick(genre) {
-    return () =>{
-      this.props.getByGenres(genre);
-    }
+    return () => {this.props.getByGenres(genre)};
   }
 
   onClickAll() {
@@ -99,7 +89,7 @@ class Section3 extends Component {
   }
   
   render(){
-    const Genres = ["Horror", "Thriller", "Crime", "Drama"]
+    const Genres = ["Tiểu thuyết", "Khoa học", "Kinh doanh", "Lãng mạn"]
     const { books, loading } = this.props.books;
 
     let Content =
@@ -144,7 +134,7 @@ class Section3 extends Component {
     <div className="section3">
       <Container>
 				<div class="product__nav nav justify-content-center" role="tablist">
-          <a class="nav-item nav-link active" data-toggle="tab" href="#nav-all" role="tab" onClick={this.onClickAll()}>ALL</a>
+          <a class="nav-item nav-link active" data-toggle="tab" href="#nav-all" role="tab" onClick={this.onClickAll()}>TẤT CẢ</a>
           {Genres.map((genre, index) => {
             return(
               <a class="nav-item nav-link" data-toggle="tab" href="#nav-adventure" role="tab" onClick={this.onClick(genre)}>{genre}</a>

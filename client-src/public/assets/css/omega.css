@@ -67,7 +67,7 @@
   margin-bottom: 4px;
 }
 #omega-sidebar-body nav ul li:first-child:before {
-  content: '\f015';
+  content: "\f015";
   font-family: 'Font Awesome 5 Free';
   font-weight: 900;
 }

@@ -27,7 +27,13 @@ class Cart extends Component {
 
     onChangeQuantity(quantity, productId){
         if (quantity > 0 || quantity === ''){
-            this.state.dataList[productId] = parseInt(quantity);
+            let tempDataList = this.state.dataList;
+            tempDataList[productId] = parseInt(quantity);
+            this.setState({
+                ...this.state,
+                dataList: tempDataList
+            })
+            // this.state.dataList[productId] = parseInt(quantity);
             let added = this.state.addedItems;
             let book = added.find(item => item.id === productId);
             book.quantity = quantity;
@@ -74,7 +80,6 @@ class Cart extends Component {
 
     onTrigger(){
         let trig = this.state.deleteAllTrigger;
-        console.log(trig)
         this.setState({
             deleteAllTrigger: !trig,
         })
@@ -95,6 +100,7 @@ class Cart extends Component {
             <h6>Giỏ hàng trống</h6>
         ) : (
             addedItems.map((product, index) => {
+                    
                     return (
                         <tr>
                             <td className="product-thumbnail"><a href="#"><img src={product.imgUrl} alt="product img"/></a></td>
@@ -109,7 +115,7 @@ class Cart extends Component {
                                         type="input-text"
                                         onChange={event => this.onChangeQuantity(event.target.value.replace(/\D/,''), product.id)}
                                         value={product.quantity}
-                                        error={error}
+                                        error={error[product.id]}
                                     />
 								</div>
                             </td>
@@ -119,14 +125,7 @@ class Cart extends Component {
                         </tr>
                     )
             }));
-        
-        let a = (addedItems === undefined) || (addedItems.length === 0) ? (
-            <></>
-        ) : (
-            addedItems
-        );
 
-        console.log(a);
         
         let alertSucc= (!this.state.deleteAllSuccess) ? (
             <></>
@@ -141,14 +140,13 @@ class Cart extends Component {
             <SweetAlert
                 warning
                 showCancel
-                confirmBtnText="Yes, delete it!"
+                confirmBtnText="Có, xóa tất cả!"
                 confirmBtnBsStyle="danger"
                 cancelBtnBsStyle="default"
-                title="Are you sure?"
+                title="Bạn chắc chắn không?"
                 onConfirm={()=>{this.onDeleteAllClick()}}
                 onCancel={()=>{this.onTrigger()}}
                 >
-                You will not be able to recover this imaginary file!
             </SweetAlert>
         );
         
@@ -156,7 +154,7 @@ class Cart extends Component {
             <div className="cartbox__btn text-center">
                 <div className="d-inline-block">
                     <p style={{fontSize: 20, fontWeight: 300, color: "black"}}>
-                        Click{' '}
+                        Ấn{' '}
                         <Link className="text-primary" to="/">
                             <ins style={{ color: '#ffc107', fontSize: '20px' }}>
                             vào đây
@@ -169,10 +167,10 @@ class Cart extends Component {
             ) : (
             <div className="cartbox__btn">
                 <ul className="cart__btn__list d-flex flex-wrap flex-md-nowrap flex-lg-nowrap justify-content-between"> 
-                    <li><a href="#" onClick={()=>{this.onTrigger()}}>Remove All</a></li>
-                    <li><a href="#">Apply Code</a></li>
-                    <li><a href="#" onClick={()=>{this.onUpdateClick(this.state.dataList, this.state.shipping)}}>Update Cart</a></li>
-                    <li><Link to="/checkout"><a href="#" onClick={()=>{this.onCheckOutClick()}}>Check Out</a></Link></li>
+                    <li><a href="#" onClick={()=>{this.onTrigger()}}>Xóa tất cả</a></li>
+                    <li><a href="#">Dùng mã Code</a></li>
+                    <li><a href="#" onClick={()=>{this.onUpdateClick(this.state.dataList, this.state.shipping)}}>Cập nhật</a></li>
+                    <li><Link to="/checkout"><a href="#" onClick={()=>{this.onCheckOutClick()}}>Thanh toán</a></Link></li>
                 </ul>
             </div>
             );
@@ -189,14 +187,14 @@ class Cart extends Component {
                                     <div className="col-12">
                                         <div className="custom-control custom-checkbox">
                                             <input type="checkbox" className="custom-control-input" id="cb1" name="shipping" value="fast" checked={shipType === 'fast'} onChange={e => this.onChangeShipping(e)}/>
-                                            <label className="custom-control-label" for="cb1">Fast Shipping with $10</label>
+                                            <label className="custom-control-label" for="cb1">Giao hàng nhanh với $10</label>
                                         </div>
                                     </div>
                                     <div style={{height:35}}/>
                                     <div className="col-12">
                                         <div className="custom-control custom-checkbox">
                                             <input type="checkbox" className="custom-control-input" id="cb2" name="shipping" value="standard" checked={shipType === 'standard'} onChange={e => this.onChangeShipping(e)}/>
-                                            <label className="custom-control-label" for="cb2">Standard Shipping with $3</label>
+                                            <label className="custom-control-label" for="cb2">Giao hàng tiêu chuẩn với $3</label>
                                         </div>
                                     </div>
                                     <div style={{height:20}}/>
@@ -208,7 +206,7 @@ class Cart extends Component {
                         <div className="cartbox__total__area">
                             <div className="cartbox-total d-flex justify-content-between">
                                 <ul className="cart__total__list">
-                                    <li>Cart total</li>
+                                    <li>Tổng sản phẩm</li>
                                 </ul>
                                 <ul className="cart__total__tk">
                                     <li>{total}</li>
@@ -216,14 +214,14 @@ class Cart extends Component {
                             </div>
                             <div className="cartbox-total d-flex justify-content-between">
                                 <ul className="cart__total__list">
-                                    <li>Shipping</li>
+                                    <li>Giao hàng</li>
                                 </ul>
                                 <ul className="cart__total__tk">
                                     <li>{shipping}</li>
                                 </ul>
                             </div>
                             <div className="cart__total__amount">
-                                <span>Grand Total</span>
+                                <span>Tổng thanh toán</span>
                                 <span>{total + shipping}</span>
                             </div>
                         </div>
@@ -240,12 +238,12 @@ class Cart extends Component {
                                     <table>
                                         <thead>
                                             <tr className="title-top">
-                                                <th className="product-thumbnail">Image</th>
-                                                <th className="product-name">Product</th>
-                                                <th className="product-price">Price</th>
-                                                <th className="product-quantity">Quantity</th>
-                                                <th className="product-subtotal">Total</th>
-                                                <th className="product-remove">Remove</th>
+                                                <th className="product-thumbnail">Ảnh</th>
+                                                <th className="product-name">Tên sản phẩm</th>
+                                                <th className="product-price">Giá</th>
+                                                <th className="product-quantity">Số lượng</th>
+                                                <th className="product-subtotal">Tổng tiền</th>
+                                                <th className="product-remove">Xóa</th>
                                             </tr>
                                         </thead>
                                         <tbody>

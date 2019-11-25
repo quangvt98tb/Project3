@@ -5,10 +5,9 @@ import {
   DELETE_ALL_FROM_CART,
   CHANGE_QUANTITY,
   CHECKOUT,
-  GET_ERRORS,
 } from './actionTypes';
 
-export const addToCart = (productData) => dispatch =>{
+export const addToCart = (productData) => async dispatch =>{
   axios
     .post('/Books/addToCart', {bookId: productData.productId, quantity: productData.quantity, currentQuantity: productData.currentQuantity})
     .then(res => 

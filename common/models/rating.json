@@ -1,0 +1,65 @@
+{
+  "name": "Rating",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true,
+    "strictObjectIDCoercion": true,
+    "mydb": {
+      "table": "rating"
+    }
+  },
+  "properties": {
+    "userId": {
+      "type": "string",
+      "required": true
+    },
+    "bookId": {
+      "type": "string",
+      "required": true
+    },
+    "rate": {
+      "type": "number",
+      "default": 5 
+    },
+    "createdAt": {
+      "type": "Date",
+      "required": false
+    }
+  },
+  "relations": {
+    "belongsToUser": {
+      "type": "belongsTo",
+      "model": "User",
+      "foreignKey": "userId"
+    },
+    "belongsToBook": {
+      "type": "belongsTo",
+      "model": "Book",
+      "foreignKey": "bookId"
+    }
+  },
+  "foreignKeys": {
+    "userId": {
+      "name": "comment_user",
+      "foreignKey": "userId",
+      "entityKey": "id",
+      "entity": "User"
+    },
+    "bookId": {
+      "name": "comment_book",
+      "foreignKey": "bookId",
+      "entityKey": "id",
+      "entity": "Book"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": {}
+}

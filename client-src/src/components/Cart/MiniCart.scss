@@ -1,0 +1,98 @@
+@media only screen and (max-width: 330px) {
+    .list-group-abcd{
+        left: 10%;
+        position: fixed;
+        top: 65px;
+        z-index: 200;
+    }
+}
+
+@media only screen and (min-width: 330px) and (max-width: 380px) {
+    .list-group-abcd{
+        left: 10%;
+        position: fixed;
+        top: 65px;
+        z-index: 300;
+    }
+}
+
+@media only screen and (min-width: 380px) and (max-width: 420px) {
+    .list-group-abcd{
+        left: 10%;
+        position: fixed;
+        top: 65px;
+        z-index: 300;
+    }
+}
+
+@media only screen and (min-width: 420px) and (max-width: 760px) {
+    .list-group-abcd{
+        left: 40%;
+        position: fixed;
+        top: 45px;
+        z-index: 200;
+    }
+}
+
+@media only screen and (min-width: 760px) and (max-width: 1200px) {
+    .list-group-abcd{
+        left: 55%;
+        position: fixed;
+        top: 45px;
+        z-index: 200;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .list-group-abcd{
+        left: 60%;
+        position: fixed;
+        top: 45px;
+        z-index: 200;
+    }
+}
+
+.item01 .content .product_prize .qun {
+    font-size: 12px;
+    font-weight: 400; }
+.item01 .content .product_prize ul li i {
+    color: #303030;
+    font-size: 19px;
+    transition: 0.3s; }
+.item01 .content .product_prize ul li i:hover {
+    color: #e59285; }
+.item01 .content .product_prize ul li + li {
+    margin-left: 20px; }
+.item01 .content .product_prize ul li i:hover {
+    color: #ce7852; }
+.item01 .thumb {
+    flex-basis: 23%; }
+.item01 .thumb a {
+    border: 1px solid #ebebeb;
+    border-radius: 5px;
+    padding: 3px;
+    display: block; }
+.item01 .content {
+    padding-left: 16px;
+    text-align: left;
+    flex-basis: 77%; }
+.item01 .content h6 a {
+    color: #2e2e2e;
+    text-transform: capitalize;
+    font-weight: 400;
+    margin: 0 0 10px;
+    display: block; }
+.item01 .content .prize {
+    color: #343940;
+    font-size: 1rem;
+    font-weight: 700; }
+.item01 .content .product_prize .qun {
+    font-size: 12px;
+    font-weight: 400; }
+.item01 .content h6 a {
+    font-size: 13px;
+    margin: 0 0 1px; }
+.item01 .content {
+    flex-basis: 77%;
+    padding-left: 10px; } 
+    

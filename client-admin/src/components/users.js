@@ -8,21 +8,19 @@ import {Filter, ReferenceInput, SelectInput, List, Datagrid,
 
 const PostFilter = (props) => (
     <Filter {...props}>
-        <TextInput label="Search" source="fullName" alwaysOn />
-        <TextInput label="Họ và tên" source="fullName" allowEmpty>
-            <SelectInput optionText="fullName" />
-        </TextInput>
+        <TextInput label="Tìm kiếm" source="fullName" alwaysOn />
     </Filter>
 );
 export const UserList = (props) => (
-    <List filters={<PostFilter />} {...props}>
+    <List title="Quản lý người dùng" filters={<PostFilter />} {...props}>
         <Datagrid>
-            <TextField label="Full Name" source="fullName" />
-            <TextField label="Address" source="address.province"  />
-            <TextField label="Phone" source="phone" />
-            <DateField label="Birthday" source="dateOfBirth" />
-            <TextField label='Gender' source="gender" />
+            <TextField label="Họ và tên" source="fullName" />
+            <TextField label="Địa chỉ" source="address.province"  />
+            <TextField label="Số điện thoại" source="phone" />
+            {/* <DateField label="Ngày sinh" source="dateOfBirth" /> */}
+            <TextField label='Giới tính' source="gender" />
             <TextField label="Email" source="email" type="email" />
+            <TextField label="Đang hoạt động" source="enable" />
             <EditButton/>
         </Datagrid>
     </List>
@@ -35,13 +33,13 @@ const PostTitle = ({ record }) => {
 export const CustomerEdit = (props) => (
     <Show  title="Xem thông tin tài khoản" {...props}>
         <SimpleForm>
-            <DisabledInput  label="Full Name" source="fullName" />
-            <DisabledInput  label="Address" source="address.province" />
-            <DisabledInput  label="Phone" source="phone" />
-            <DisabledInput  label="Birthday" source="dateOfBirth" />
-            <DisabledInput  label='Gender' source="gender" />
+            <DisabledInput  label="Họ và tên" source="fullName" />
+            <DisabledInput  label="Địa chỉ" source="address.province" />
+            <DisabledInput  label="Số điện thoại" source="phone" />
+            <DisabledInput  label="Ngày sinh" source="dateOfBirth" />
+            <DisabledInput  label='Giới tính' source="gender" />
             <DisabledInput  label="Email" source="email" />
-            <BooleanInput label="Block-Activity" source="enable" />
+            <BooleanInput label="Đang hoạt động" source="enable" />
         </SimpleForm>
     </Show>
 );

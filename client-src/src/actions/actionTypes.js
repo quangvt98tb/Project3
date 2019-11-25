@@ -14,6 +14,8 @@ export const BOOK_LOADING = 'BOOK_LOADING';
 export const GET_BOOK = 'GET_BOOK';
 export const GET_ALL_BOOKS = 'GET_ALL_BOOKS';
 export const GET_BY_GENRES = 'GET_BY_GENRES';
+export const GET_AUTOCOMPLETE = 'GET_AUTOCOMPLETE';
+export const SEARCH_BOOKS = 'SEARCH_BOOKS';
 
 //CART
 export const ADD_TO_CART = 'ADD_TO_CART';

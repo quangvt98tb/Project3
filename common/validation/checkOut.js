@@ -27,7 +27,7 @@ module.exports = data => {
     errors.phone = 'Số điện thoại không được bỏ trống';
   }
   if (Validator.isEmpty(data.profileData.fullName)) {
-    errors.phone = 'Tên không được bỏ trống';
+    errors.fullName = 'Tên không được bỏ trống';
   }
 
   return {

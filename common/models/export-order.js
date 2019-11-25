@@ -1,3 +1,4 @@
+let FD = require('../formatDate')
 let to = require('await-to-js').to;
 app = require('../../server/server')
 const validateCheckOut = require('../validation/checkOut');
@@ -7,20 +8,7 @@ module.exports = function(ExportOrder) {
     const Promise = require('bluebird')
     // ExportOrder.validatesInclusionOf('status', {in: ["Confirmed", "Canceled", "Shipping", "Delivered"]})
     // ExportOrder.validatesInclusionOf('paymentMethod', {in: ["Direct Bank Transfer", "Cheque Payment", "Cash on Delivery"]})
-    function formatDate(date) {
-        var d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
     
-        if (month.length < 2) 
-            month = '0' + month;
-        if (day.length < 2) 
-            day = '0' + day;
-    
-        return [year, month, day].join('-');
-    }
-
     ExportOrder.createOrder = async function(checkOutData, userId){
         const { errors, isValid } = validateCheckOut(checkOutData)
         if (!isValid) {
@@ -55,8 +43,8 @@ module.exports = function(ExportOrder) {
                 grandTotal: checkOutData.cart.grandTotal
             },
             bookList: orderDetailList,
-            createdAt: formatDate(Date()),
-            updatedAt: formatDate(Date())
+            createdAt: Date(),
+            updatedAt: Date()
         }
         try{
             let exportOrder = await ExportOrder.create(data)
@@ -70,6 +58,7 @@ module.exports = function(ExportOrder) {
     ExportOrder.UserRead = async function(orderId) {
         let Book = app.models.Book
         let Customer = app.models.Customer
+        let Author = app.models.Author
         try {
             const data1 = await ExportOrder.findById(orderId);
             let customer = await Customer.findById(data1.userId)
@@ -77,9 +66,10 @@ module.exports = function(ExportOrder) {
             let i
             for (i = 0; i < data1.bookList.length; i++){
                 let book = await Book.findById(data1.bookList[i].bookId)
+                let author = await Author.findById(book.authorId)
                 let temp = {
                     id: book.id,
-                    author: book.author,
+                    author: author.name,
                     title: book.name,
                     imgUrl: book.imgURL,
                     price: book.sellPrice,
@@ -104,8 +94,8 @@ module.exports = function(ExportOrder) {
                     grandTotal: data1.subtotal.grandTotal,
                 },
                 checkOutType: data1.paymentMethod,
-                orderDate: formatDate(data1.createdAt),
-                shipDate: formatDate(data1.updatedAt),
+                orderDate: FD.formatDate(data1.createdAt),
+                shipDate: FD.formatDate(data1.updatedAt),
                 status: data1.status
             }
             return data
@@ -127,9 +117,9 @@ module.exports = function(ExportOrder) {
             let data2 = data1[0]
             for (i=0; i< data2.length; i++){
                 let data = {
-                    shipDate: formatDate(data2[i].updatedAt),
+                    shipDate: FD.formatDate(data2[i].updatedAt),
                     orderCode: data2[i].id,
-                    orderDate: formatDate(data2[i].createdAt),
+                    orderDate: FD.formatDate(data2[i].createdAt),
                     status: data2[i].status,
                     books: data2[i].bookList,
                     fullName: customer.fullName

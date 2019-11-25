@@ -6,6 +6,7 @@ import { getBookById } from '../../actions/book.action';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import SwappingSquaresSpinner from '../common/SwappingSquaresSpinner';
+import Button from '../common/Button';
 
 class Product extends Component {
   constructor(props) {
@@ -13,7 +14,9 @@ class Product extends Component {
     this.state = {
 			bookId: this.props.match.params.id,
 			quantity: 1,
-    }
+			isLoading: false,
+		}
+		// const isLoading = React.useState(false);
 	}
 	
   componentWillMount() {		
@@ -40,6 +43,7 @@ class Product extends Component {
 			// cartQuantity: this.props.cart.
 		};
 		this.props.addToCart(productData);
+		
 	}
 
   render() {
@@ -50,7 +54,8 @@ class Product extends Component {
         <SwappingSquaresSpinner />
       ) : (
 			book
-			)
+		)
+		console.log(Content)
 	let genres = 
 		loading || book === null ? (
 			<SwappingSquaresSpinner/>
@@ -66,8 +71,8 @@ class Product extends Component {
 			currentQuantity = 0
 		}
     return (
-        <>
-        <div style={{ height: 50 }}></div>
+      <>
+			<div style={{ height: 50 }}></div>
         <div className="container">
         	<div className="wn__single__product">
         		<div className="row">
@@ -92,7 +97,7 @@ class Product extends Component {
 								<span>${Content.price}</span>
 							</div>
 							<div className="box-tocart d-flex">
-								<span>Quantity</span>
+								<span>Số lượng</span>
 								{/* <input className="input-text" id="qty" value={this.state.quantity} type="number" max="19" min="1" onChange={event => this.onSetState(event.target.value.replace(/\D/,''))}/> */}
 								<div style={{width: 100}}>
 									<TextInputAuth
@@ -106,7 +111,24 @@ class Product extends Component {
 											/>
 								</div>
 								<div className="addtocart__actions">
-									<button className="tocart" type="submit" title="Add to Cart" onClick={()=>{this.handleClick(this.state.bookId, this.state.quantity, currentQuantity)}}>Add to Cart</button>
+									{/* <button className="tocart" type="submit" title="Add to Cart" onClick={()=>{ */}
+									<Button className="tocart" type="submit" title="Add to Cart" onClick={()=> {
+										this.setState({
+											...this.state,
+											isLoading: true
+										});
+										setTimeout(() => {
+											this.setState({
+												...this.state,
+												isLoading: false
+											});
+										}, 600);
+										this.handleClick(this.state.bookId, this.state.quantity, currentQuantity)}}
+										isLoading = {this.state.isLoading}
+									>
+											Thêm vào giỏ
+									{/* </button> */}
+									</Button>
 								</div>
 								<div className="product-addto-links clearfix">
 									<a className="wishlist" href="#"></a>
@@ -115,12 +137,12 @@ class Product extends Component {
 							</div>
 							{/* {error && <div className="invalid-feedback">{error}</div>} */}
 							<div className="product_meta">
-								<p className="posted_in">Genres: {genres}
+								<p className="posted_in">Thể loại: {genres}
 								</p>
 							</div>
 							<div className="product-share">
 								<ul>
-									<li className="categories-title">Share :</li>
+									<li className="categories-title">Chia sẻ :</li>
 									<li>
 										<a href="#">
 											<i className="icon-social-twitter icons"></i>
@@ -149,7 +171,7 @@ class Product extends Component {
 			</div>
 			<div className="product__info__detailed">
 				<div className="pro_details_nav nav justify-content-start" role="tablist">
-					<a className="nav-item nav-link active" data-toggle="tab" href="#nav-details" role="tab">Details</a>
+					<a className="nav-item nav-link active" data-toggle="tab" href="#nav-details" role="tab">Chi tiết</a>
 				</div>
 				<div className="tab__container">
 					<div className="pro__tab_label tab-pane fade show active" id="nav-details" role="tabpanel">
@@ -161,6 +183,7 @@ class Product extends Component {
 				<div style={{ height: 50 }}></div>
 			</div>
 			</div>
+				}
 			</>
     )};
 }
@@ -187,4 +210,3 @@ export default connect(
 	mapStateToProps,
 	mapDispatchToProps,
   )(Product);
-// export default Product;

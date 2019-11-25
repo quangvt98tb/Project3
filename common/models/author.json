@@ -1,0 +1,33 @@
+{
+    "name": "Author",
+    "base": "PersistedModel",
+    "idInjection": true,
+    "options": {
+      "validateUpsert": true,
+      "strictObjectIDCoercion": true,
+      "mydb": {
+        "table": "author"
+      }
+    },
+    "properties": {
+      "name": {
+        "type": "string",
+        "required": true
+      },
+      "descreption": {
+        "type": "string"
+      }
+    },
+    "relations": {
+      "hasManyBook": {
+        "type": "hasMany",
+        "model": "Book",
+        "foreignKey": "authorId", 
+        "options": {
+          "nestRemoting": true
+        }
+      }
+    },
+    "acls": [],
+    "methods": {}
+  }

@@ -1,62 +1,82 @@
 import React from 'react';
 import { List, Datagrid, Edit, Create, SimpleForm, DateField, TextField, 
         EditButton, TextInput, ReferenceField , ReferenceInput, minValue,
-        LongTextInput, DateInput, SelectInput, NumberInput ,
-        required, number} from 'react-admin';
+        LongTextInput, DateInput, SelectInput, NumberInput , ArrayField,
+        required, number, BooleanInput, Filter} from 'react-admin';
 
-const validateName = [required('not Empty!')];
-const validateQuantity = [ number('Nhap dung so'),minValue(0)];
+const validateName = [required('Không được bỏ trống!')];
+const validateQuantity = [ number(),minValue(0)];
+
+const BookFilter = (props) => (
+    <Filter {...props}>
+        <TextInput label="Tên sách" source="name" alwaysOn />
+        <ReferenceInput label="Thể loại" source="categoryId" reference="Categories" alwaysOn>
+            <SelectInput optionText="name" />
+        </ReferenceInput>
+        <TextInput label="Tác giả" source="author" alwaysOn />
+    </Filter>
+);
 
 export const BookList = (props) => (
-    <List {...props}>
+    <List title="Quản lý sách" {...props} filters={<BookFilter />} >
         <Datagrid>
-            <TextField source="name" />
-            <ReferenceField  label="category" reference="Categories" source="categoryId">
+            <TextField label="UID sách" source="uid" />
+            <TextField label="Tên sách" source="name" />
+            <ReferenceField  label="Tác giả" reference="Authors" source="authorId">
                 <TextField source="name" />
             </ReferenceField>
-            <TextField source="description" />
-            <TextField label="Image URL" source="imgURL" />
-            <TextField source="publisher" />
-            <TextField source="author" />
-            <TextField source="quantity" />
-            <TextField label="Price" source="sellPrice" />
-            <DateField label="Publish at" source="publishedAt" />
+            <TextField label="Ảnh" source="imgURL" />
+            <TextField label="Số lượng" source="quantity" />
+            <TextField label="Giá" source="sellPrice" />
+            <TextField label="Đang kinh doanh" source="enable" />
             <EditButton/>
         </Datagrid>
     </List>
 );
 
 export const BookEdit = (props) => (
-    <Edit {...props}>
+    <Edit title="Thông tin chi tiết" {...props}>
         <SimpleForm>
-            <TextInput source="name" validate={validateName} />
-            <ReferenceInput   label="Category" reference="Categories" source="categoryId">
+            <TextInput label="UID sách" source="uid"  />
+            <TextInput label="Tên sách" source="name" validate={validateName} />
+            {/* <ReferenceInput   label="Thể loại" reference="Categories" source="categoryId">
+                <SelectInput optionText="name" />
+            </ReferenceInput> */}
+            <LongTextInput label="Giới thiệt" source="description" />
+            <TextInput label="Ảnh" source="imgURL" />
+            {/* <ReferenceInput   label="Nhà xuất bản" reference="Publishers" source="publisherId">
+                <SelectInput optionText="name" />
+            </ReferenceInput> */}
+             <ReferenceInput   label="Tác giả" reference="Authors" source="authorId">
                 <SelectInput optionText="name" />
             </ReferenceInput>
-            <LongTextInput source="description" />
-            <TextInput label="Image URL" source="imgURL" />
-            <TextInput source="publisher" />
-            <TextInput source="author" />
-            <NumberInput  source="quantity" validate={validateQuantity} />
-            <NumberInput  label="Price" source="sellPrice"  validate={validateQuantity} />
-            <DateInput label="Publish at" source="publishedAt" />
+            <NumberInput label="Số lượng"  source="quantity" validate={validateQuantity} />
+            <NumberInput  label="Giá" source="sellPrice"  validate={validateQuantity} />
+            <DateInput label="Ngày xuất bản" source="publishedAt" />
+            <BooleanInput label="Đang kinh doanh" source="enable" />
         </SimpleForm>
     </Edit>
 );
 export const BookCreate = (props) => (
-    <Create {...props}>
+    <Create title="Thêm sách mới" {...props}>
         <SimpleForm>
-            <TextInput source="name" validate={validateName} />
-            <ReferenceInput   label="Category" reference="Categories" source="categoryId">
+            <TextInput label="UID sách" source="uid"  />
+            <TextInput label="Tên sách" source="name" validate={validateName} />
+            {/* <ReferenceInput   label="Thể loại" reference="Categories" source="categoryId">
+                <SelectInput optionText="name" />
+            </ReferenceInput> */}
+            <TextInput label="Miêu tả" source="description" />
+            <TextInput label="Ảnh" source="imgURL" />
+            {/* <ReferenceInput   label="Nhà xuất bản" reference="Publishers" source="publisherId">
+                <SelectInput optionText="name" />
+            </ReferenceInput> */}
+             <ReferenceInput   label="Tác giả" reference="Authors" source="authorId">
                 <SelectInput optionText="name" />
             </ReferenceInput>
-            <TextInput source="description" />
-            <TextInput label="Image URL" source="imgURL" />
-            <TextInput source="publisher" />
-            <TextInput source="author" />
-            <NumberInput  source="quantity" validate={validateQuantity} />
-            <NumberInput  label="Price" source="sellPrice" validate={validateQuantity} />
-            <DateInput label="Publish at" source="publishedAt" />
+            <NumberInput label="Số lượng"  source="quantity" validate={validateQuantity} />
+            <NumberInput  label="Giá" source="sellPrice" validate={validateQuantity} />
+            <DateInput label="Ngày xuất bản" source="publishedAt" />
+            <BooleanInput label="Đang kinh doanh" source="enable" />
         </SimpleForm>
     </Create>
 );

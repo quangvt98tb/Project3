@@ -5,7 +5,7 @@ import './Profile.scss';
 import { getCurrentProfile } from '../../actions/profile.action';
 import FixedInfo from './FixedInfo';
 import UpdateInfo from './UpdateInfo';
-import UpdateDistrict from './UpdateDistrict';
+// import UpdateDistrict from './UpdateDistrict';
 import SwappingSquaresSpinner from '../common/SwappingSquaresSpinner';
 export class Profile extends Component {
 
@@ -21,17 +21,19 @@ export class Profile extends Component {
         <SwappingSquaresSpinner />
       ) : (
         <>
-          <div className="container bg-white">
-            <div className="tm-account bg-gray-lightest p-md-5 pt-md-4 p-3">
-              <FixedInfo profile={profile} />
-              <UpdateInfo profile={profile} />
+          <div style={{height: 30}}></div>
+            <div className="container bg-white">
+              <div className="tm-account bg-gray-lightest p-md-5 pt-md-4 p-3">
+                <FixedInfo profile={profile} />
+                <UpdateInfo profile={profile} />
+              </div>
             </div>
-          </div>
-          <div className="container py-5">
+          <div style={{height: 30}}></div>
+          {/* <div className="container py-5">
             <div className="tm-account bg-white p-md-5 pt-md-4 p-3">
                 <UpdateDistrict profile={profile} />
             </div>
-          </div>
+          </div> */}
         </>
       );
 

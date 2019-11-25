@@ -1,4 +1,3 @@
-// let to = require('await-to-js').to;
 app = require('../../server/server')
 'use_strict';
 
@@ -34,16 +33,42 @@ module.exports = function(Category) {
         }
     }
 
-    Category.listBook = async function(id, page, pageSize) {
+    Category.listBook = async function(genre, page, pageSize) {
         try {
             let Book = app.models.Book
-            const [data, total] = await Promise.all([
+            let Author = app.models.Author
+            let category = await Category.find({where: {name: genre}})
+            
+            let cId = category[0].id
+            let listId = [cId]
+            
+            const [data1, total] = await Promise.all([
                 Book.find({
-                    where: {categoryId : id, enable: 1}, 
-                    fields: {_id: true, name: true, imgURL: true, sellPrice: true}
+                    where: {categoryList : listId, enable: 1}, 
+                    fields: {
+                        id: true,
+                        name: true, 
+                        authorId: true, 
+                        imgURL: true, 
+                        sellPrice: true
+                    }
                 }),
-                Book.count({categoryId : id, enable: 1})
+                Book.count({categoryList : listId, enable: 1})
             ])
+            
+            let i
+            let data = []
+            for (i = 0; i < data1.length; i++){
+                let temp = {}
+                temp.id = data1[i].id
+                temp.title = data1[i].name
+                temp.imgUrl = data1[i].imgURL
+                temp.price = data1[i].sellPrice
+                author = await Author.findById(data1[i].authorId)
+                temp.author = author.name
+                data.push(temp)
+            }
+            
             return {
                 rows: data,
                 page: page,
@@ -77,12 +102,12 @@ module.exports = function(Category) {
 
     Category.remoteMethod(
         'listBook', {
-            http: {path: '/listBook', verb: 'get' },
+            http: {path: '/listBook', verb: 'post' },
             accepts: [
-                {arg: 'id', type: 'string', required: true},
+                {arg: 'genre', type: 'string', required: true},
                 {arg: 'page', type: 'number', default: '0'},
                 {arg: 'pageSize', type: 'number', default: '10'}],
-            returns: {arg: 'data', type: 'object'}
+            returns: {arg: 'data', type: 'object', root: true}
       }
     )
 }

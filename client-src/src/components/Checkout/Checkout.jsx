@@ -39,7 +39,7 @@ class Checkout extends Component {
         })
     }
 
-    onCheckOutConfirm = (profileData, cart, checkOutType) => {
+    async onCheckOutConfirm(profileData, cart, checkOutType) {
         let cart_ = {
             addedItems: cart.addedItems.reduce((all, value) => [...all, ...value], []),
             total: cart.total,
@@ -51,12 +51,13 @@ class Checkout extends Component {
             cart: cart_,
             checkOutType: checkOutType
         }
-        console.log(checkOutData)
-        this.props.checkOutConfirm(checkOutData);
-        this.setState({
-            ...this.state,
-            isVisible: true
-        })
+        await this.props.checkOutConfirm(checkOutData);
+        if (this.props.cart.isCheckOut === true){
+            this.setState({
+                ...this.state,
+                isVisible: true
+            })
+        }
     }
 
     onConfirm(){
@@ -106,26 +107,26 @@ class Checkout extends Component {
                             <div className="radio">
                             <label>
                                 <input type="radio" value="option1" checked={this.state.checkOutType === 1 ? true : false} onClick={this.onClick(1)}/>
-                                Direct Bank Transfer
+                                Chuyển khoản trực tiếp
                             </label>
                             </div>
                             <div className="radio">
                             <label>
                                 <input type="radio" value="option2" checked={this.state.checkOutType === 2 ? true : false} onClick={this.onClick(2)}/>
-                                Cheque Payment
+                                Thanh toán qua thẻ ngân hàng
                             </label>
                             </div>
                             <div className="radio">
                             <label>
                                 <input type="radio" value="option3" checked={this.state.checkOutType === 3 ? true : false} onClick={this.onClick(3)}/>
-                                Cash on Delivery
+                                COD
                             </label>
                             </div>
                         </form>
                     </div>
                     <div className="checkout col-12">
                         <div className="checkout__btn text-center">
-                            <a onClick={()=>{this.onCheckOutConfirm(this.state.profileData, this.props.cart, this.state.checkOutType)}}>Check Out</a>
+                            <a onClick={()=>{this.onCheckOutConfirm(this.state.profileData, this.props.cart, this.state.checkOutType)}}>Thanh toán</a>
                         </div>
                     </div>
                 </div>
@@ -138,51 +139,51 @@ class Checkout extends Component {
                         {Content}
                         <div class="col-lg-6 col-12 md-mt-40 sm-mt-40">
                             <div class="wn__order__box">
-                                <h3 class="onder__title">Your order</h3>
+                                <h3 class="onder__title">Đơn hàng của bạn</h3>
                                 <ul class="order__total">
-                                    <li>Product</li>
-                                    <li>Total</li>
+                                    <li>Sản phẩm</li>
+                                    <li>Tổng tiền</li>
                                 </ul>
                                 <ul class="order_product">
                                     {Items}
                                 </ul>
                                 <ul class="shipping__method">
-                                    <li>Cart Subtotal <span>${total}</span></li>
-                                    <li>Shipping <span>${shipping}</span></li>
+                                    <li>Tổng tiền sản phẩm <span>${total}</span></li>
+                                    <li>Giao hàng <span>${shipping}</span></li>
                                 </ul>
                                 <ul class="total__amount">
-                                    <li>Order Total <span>${total + shipping}</span></li>
+                                    <li>Tổng thanh toán <span>${total + shipping}</span></li>
                                 </ul>
                             </div>
                             <div id="accordion" class="checkout_accordion mt--30" role="tablist">
                                 <div class="payment">
                                     <div class="che__header" role="tab" id="headingOne">
                                         <a class="checkout__title" data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                            <span>Direct Bank Transfer</span>
+                                            <span>Chuyển khoản trực tiếp</span>
                                         </a>
                                     </div>
                                     <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
-                                        <div class="payment-body">Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</div>
+                                        <div class="payment-body">Chuyển tiền trực tiếp tới tài khoản ngân hàng của cửa hàng. Điền chi tiết những thông tin cần thiết để cửa hàng hỗ trợ nếu xảy ra sai sót. Đơn hàng của bạn sẽ không được giao nếu tiền chưa được chuyển vào tài khoản của chúng tôi.</div>
                                     </div>
                                 </div>
                                 <div class="payment">
                                     <div class="che__header" role="tab" id="headingTwo">
                                         <a class="collapsed checkout__title" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                            <span>Cheque Payment</span>
+                                            <span>Thanh toán qua thẻ ngân hàng</span>
                                         </a>
                                     </div>
                                     <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
-                                        <div class="payment-body">Please send your cheque to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</div>
+                                        <div class="payment-body">Sử dụng thẻ ngân hàng, điền thông tin cần thiết tương ứng với thẻ và tiến hành thanh toán đơn hàng của bạn </div>
                                     </div>
                                 </div>
                                 <div class="payment">
                                     <div class="che__header" role="tab" id="headingThree">
                                         <a class="collapsed checkout__title" data-toggle="collapse" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                            <span>Cash on Delivery</span>
+                                            <span>COD (Nhận tiền khi giao hàng)</span>
                                         </a>
                                     </div>
                                     <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree" data-parent="#accordion">
-                                        <div class="payment-body">Pay with cash upon delivery.</div>
+                                        <div class="payment-body">Giao dịch hoàn tất khi bạn nhận hàng và thanh toán với người giao hàng.</div>
                                     </div>
                                 </div>
                             </div>

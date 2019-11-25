@@ -33,17 +33,22 @@ export const getCurrentProfile = () => dispatch => {
 // update Profile
 export const updateProfile = ( profileData) => dispatch => {
   profileData.id = localStorage.userId;
-  if (profileData.receiveDistrict == null){
+  if (profileData.receiveDistrict === null){
     profileData.receiveDistrict= []
   }
   axios
     .post('/customer/updateProfile', profileData)
     .then(res => {
       console.log(res.data)
-      if (res.data.status == 400) {
+      if (res.data.status === 400) {
         dispatch({ 
           type: GET_ERRORS, 
           payload: res.data 
+        })
+      } else {
+        dispatch({
+          type: GET_ERRORS,
+          payload: res.data.errors
         })
       }
     })

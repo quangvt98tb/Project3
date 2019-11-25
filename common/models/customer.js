@@ -1,4 +1,5 @@
 let to = require('await-to-js').to
+let FD = require('../formatDate')
 var config = require('../../server/config.json')
 var path = require('path')
 var senderAddress = 'ngocanh2162@gmail.com'
@@ -44,12 +45,9 @@ module.exports = function(Customer) {
 
     // Customer update Profile
     Customer.updateProfile = async function(reqData){
-        console.log("1", reqData);
         const { errors, isValid } = validateUpdateCustomer(reqData);
-        console.log("err1", errors, "phone", reqData.phone)
         if (!isValid) {
             errors.status = 400
-            console.log("err1", errors)
             return errors
         }
 
@@ -59,18 +57,16 @@ module.exports = function(Customer) {
                 province: reqData.province,
                 district: reqData.district,
                 ward: reqData.ward,
-                details: reqData.details    
+                details: reqData.details, 
             },
             phone: reqData.phone,
-            //dateOfBirth: reqData.dateOfBirth,
             gender: reqData.gender,
             receiveDistrict: reqData.receiveDistrict,
-            id: reqData.id
+            id: reqData.id,
+            errors: [] 
         }
-        console.log("2", customerData)
         try {
             customer = await Customer.upsert(customerData)
-            console.log("3", customer)
             return customer
         } catch (err) {
             console.log('update Customer', err)
@@ -97,7 +93,7 @@ module.exports = function(Customer) {
             }),
             Customer.count()
           ])
-
+          //data.createdAt = FD.formatDate(data.createdAt)
           return {
             rows: data,
             page: page,
@@ -192,7 +188,7 @@ module.exports = function(Customer) {
                 province: reqData.province,
                 district: reqData.district
             },
-            createdAt: new Date(),
+            createdAt: FD.formatDate(new Date()),
             enable: true
         }
         try {

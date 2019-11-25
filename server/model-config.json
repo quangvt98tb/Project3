@@ -13,6 +13,17 @@
       "./mixins"
     ]
   },
+  "Author": {
+    "dataSource": "mydb",
+    "public": true,
+    "options": {
+      "remoting": {
+        "sharedMethods": {
+          "*": true
+        }
+      }
+    }
+  },
   "Book": {
     "dataSource": "mydb",
     "public": true,
@@ -69,6 +80,39 @@
     }
   },
   "ImportOrder": {
+    "dataSource": "mydb",
+    "public": true,
+    "options": {
+      "remoting": {
+        "sharedMethods": {
+          "*": true
+        }
+      }
+    }
+  },
+  "Promotion": {
+    "dataSource": "mydb",
+    "public": true,
+    "options": {
+      "remoting": {
+        "sharedMethods": {
+          "*": true
+        }
+      }
+    }
+  },
+  "Publisher": {
+    "dataSource": "mydb",
+    "public": true,
+    "options": {
+      "remoting": {
+        "sharedMethods": {
+          "*": true
+        }
+      }
+    }
+  },
+  "Rating": {
     "dataSource": "mydb",
     "public": true,
     "options": {

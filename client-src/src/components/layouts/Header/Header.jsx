@@ -4,11 +4,12 @@ import { connect } from 'react-redux';
 import { logoutUser } from '../../../actions/auth.action';
 
 import classnames from 'classnames';
-import Logo from '../../../image/core-img/bookstore-logo.png';
+import Logo from '../../../image/core-img/logo.png';
+import MiniCart from '../../Cart/MiniCart';
 // import Logo from '../../../image/core-img/logo.png';
 import Message from '../../../image/core-img/message.png';
 import Placeholder from '../../../image/core-img/placeholder.png';
-//import HeaderIcons from '@/HeaderIcons/HeaderIcons'
+//import HeaderIcons from '@/HeaderIcons/HeaderIcons';
 
 class Header extends Component {
   constructor(props) {
@@ -27,12 +28,12 @@ class Header extends Component {
     const { isShow } = this.state;
     const { isAuthenticated, user } = this.props.auth;
     const AuthButton2 = !isAuthenticated ? (
-      <Link to="/login">ĐĂNG NHẬP</Link>
+      <li><Link to="/login">ĐĂNG NHẬP</Link></li>
     ) : (
       <>
-        <Link to="/profile">TÀI KHOẢN</Link>
-        <Link to="/orders">ĐƠN HÀNG</Link>
-        <a onClick={e => this.onLogoutClick(e)}>ĐĂNG XUẤT</a>
+        <li><Link to="/profile">TÀI KHOẢN</Link></li>
+        <li><Link to="/orders">ĐƠN HÀNG</Link></li>
+        <li><a onClick={e => this.onLogoutClick(e)}>ĐĂNG XUẤT</a></li>
       </>
     );
     const Barcontent =
@@ -44,11 +45,11 @@ class Header extends Component {
           <li>
             <Link to="/cart">GIỎ HÀNG</Link>
           </li>
-          <li>{AuthButton2}</li>
+          {AuthButton2}
         </ul>
       );
     const LogoSource = (
-      <div className="logo" style={{ marginTop: "12px" }}>
+      <div className="logo" style={{ marginTop: "3px" }}>
         <Link to="/">
           <a>
             <img src={Logo} alt="" />
@@ -73,7 +74,7 @@ class Header extends Component {
                       title="25 th Street Avenue, Los Angeles, CA"
                     >
                       <img src={Placeholder} alt="" />
-                      <span>17th, Trần Đại Nghĩa, Hà Nội</span>
+                      {/* <span>17th, Trần Đại Nghĩa, Hà Nội</span> */}
                     </a>
                     <a
                       href="https://www.hust.edu.vn"
@@ -83,9 +84,19 @@ class Header extends Component {
                       title="www.hust.edu.vn"
                     >
                       <img src={Message} alt="" />
-                      <span>www.hust.edu.vn</span>
+                      {/* <span>www.hust.edu.vn</span> */}
                     </a>
+                    <div style={{width: 15}}></div>
+                    <Link to="/search">
+                      <a>
+                        <i class="fas fa-search" style={{color: "#ffbb38", fontSize: 20, marginTop: 4}}></i>
+                        {/* <span style={{marginLeft: 5}}>Tìm kiếm</span> */}
+                      </a>
+                    </Link>
                     {/* <HeaderIcons/> */}
+                    <a>
+                      <MiniCart/>
+                    </a>
                   </div>
                 </div>
             </div>

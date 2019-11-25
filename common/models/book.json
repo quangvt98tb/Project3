@@ -14,9 +14,8 @@
       "type": "string",
       "required": true
     },
-    "categoryId": {
-      "type": "string",
-      "required": true
+    "categoryList": {
+      "type": "array"
     },
     "description": {
       "type": "string",
@@ -26,15 +25,13 @@
       "type": "string",
       "required": false
     },
-    "publisher": {
+    "publisherId": {
       "type": "string",
       "required": true,
       "default": "unknow"
     },
-    "author": {
-      "type": "string",
-      "required": true,
-      "default": "unknow"
+    "authorId": {
+      "type": "string"
     },
     "quantity": {
       "type": "number",
@@ -60,18 +57,29 @@
       "model": "Comment",
       "foreignKey": "bookId"
     },
-    "belongsToCategory": {
+    "belongsToAuthor": {
       "type": "belongsTo",
-      "model": "Category",
-      "foreignKey": "categoryId"
+      "model": "Author",
+      "foreignKey": "authorId"
+    },
+    "belongsToPublisher": {
+      "type": "belongsTo",
+      "model": "Publisher",
+      "foreignKey": "publisherId"
     }
   },
   "foreignKeys": {
-    "categoryId": {
-      "name": "book_category",
-      "foreignKey": "categoryId",
+    "authorId": {
+      "name": "book_author",
+      "foreignKey": "authorId",
       "entityKey": "id",
-      "entity": "Category"
+      "entity": "Author"
+    },
+    "publisherId": {
+      "name": "book_publisher",
+      "foreignKey": "publisherId",
+      "entityKey": "id",
+      "entity": "Publisher"
     }
   },
   "acls": [],

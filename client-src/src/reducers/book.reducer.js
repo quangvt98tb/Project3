@@ -3,12 +3,15 @@ import {
     BOOK_LOADING,
     GET_ALL_BOOKS,
     GET_BY_GENRES,
+    GET_AUTOCOMPLETE,
+    SEARCH_BOOKS
   } from '../actions/actionTypes';
   
   const initialState = {
     book: null,
     books: null,
-    loading: false
+    loading: false,
+    dataAuto: null,
   };
   
   export default (state = initialState, { type, payload }) => {
@@ -36,7 +39,18 @@ import {
           books: payload,
           loading: false,
         }
-  
+      case GET_AUTOCOMPLETE:
+        return {
+          ...state,
+          dataAuto: payload,
+          loading: false
+        }
+      case SEARCH_BOOKS:
+        return {
+          ...state,
+          books: payload,
+          loading: false
+        }
       default:
         return state;
     }

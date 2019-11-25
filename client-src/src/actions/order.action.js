@@ -17,6 +17,7 @@ export const getOrders = () => async dispatch => {
 
 export const getOrderDetails = (orderCode) => async dispatch => {
     const res = await axios.post(`/ExportOrders/show`, {orderId: orderCode});
+    console.log(res.data.data)
     dispatch({
       type: GET_ORDER_DETAILS,
       payload: res.data.data,
@@ -37,7 +38,7 @@ export const deleteOrder = () => dispatch =>{
 }
 
 export const cancelOrder = (orderCode, status) =>  async dispatch =>{
-  const res = await axios.post(`/ExportOrders/cancelOrder`, {orderId: orderCode});
+  await axios.post(`/ExportOrders/cancelOrder`, {orderId: orderCode});
       dispatch({
           type: GET_ORDERS,
           status
