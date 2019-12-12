@@ -18,7 +18,13 @@
       }
     }
   },
-  "relations": {},
+  "relations": {
+    "hasManyBook": {
+      "type": "hasMany",
+      "model": "Book",
+      "foreignKey": "categoryId"
+    }
+  },
   "acls": [],
   "methods": {}
 }

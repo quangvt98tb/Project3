@@ -12,35 +12,31 @@
   "properties": {
     "name": {
       "type": "string",
-      "required": true
+      "required": true,
+      "index": {
+        "unique": true
+      }
     },
     "description": {
-      "type": "string",
-      "required": false
+      "type": "string"
+    },
+    "count": {
+      "type": "number",
+      "default": 1
     },
     "minus": {
       "type": "number",
-      "required": false
+      "default": 0
     },
     "divide": {
       "type": "number",
-      "required": false
+      "default": 1
     },
     "beginAt": {
-      "type": "Date",
-      "required": false
+      "type": "Date"
     },
     "endAt": {
-      "type": "Date",
-      "required": false
-    },
-    "createdAt": {
-      "type": "Date",
-      "required": true
-    },
-    "updatedAt": {
-      "type": "Date",
-      "required": false
+      "type": "Date"
     },
     "enable": {
       "type": "Boolean",
@@ -48,19 +44,6 @@
     }
   },
   "relations": {},
-  "acls": [
-    {
-      "accessType": "*",
-      "principalType": "ROLE",
-      "principalId": "$everyone",
-      "permission": "DENY"
-    },
-    {
-      "accessType": "*",
-      "principalType": "ROLE",
-      "principalId": "admin",
-      "permission": "ALLOW"
-    }
-  ],
+  "acls": [],
   "methods": {}
 }

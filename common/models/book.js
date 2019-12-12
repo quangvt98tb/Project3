@@ -8,23 +8,24 @@ module.exports = function(Book) {
     // Admin
     Book.addBook = async function(reqData){
         let i
-        let categoryList = []
-        for (i = 0; i < reqData.categoryList.length ; i++){
-            categoryList.push(reqData.categoryList[i])
-        }
+        // let categoryList = []
+        // for (i = 0; i < reqData.categoryList.length ; i++){
+        //     categoryList.push(reqData.categoryList[i])
+        // }
         const bookData = {
+            uid: reqData.uid,
             name : reqData.name,
             authorId : reqData.authorId,
             description : reqData.description,
             imgURL : reqData.imgURL,
-            categoryList: categoryList,
+            categoryId: reqData.categoryId,
             publisherId : reqData.publisherId,
             quantity : reqData.quantity,
             sellPrice : reqData.sellPrice,
             publishedAt : FD.formatDate(reqData.publishedAt)
         }
         try {
-            let [err, book] = await to(Book.findOne({where: {name: reqData.name}}))
+            let [err, book] = await to(Book.findOne({where: {uid: reqData.uid}}))
             if (book != null) {
                 return "Da ton tai cuon sach nay"
             }
@@ -38,23 +39,24 @@ module.exports = function(Book) {
 
     Book.updateBook = async function(reqData){
         let i
-        let categoryList = []
-        for (i = 0; i < reqData.categoryList.length ; i++){
-            categoryList.push(reqData.categoryList[i])
-        }
+        // let categoryList = []
+        // for (i = 0; i < reqData.categoryList.length ; i++){
+        //     categoryList.push(reqData.categoryList[i])
+        // }
         const bookData = {
+            uid: reqData.uid,
             name : reqData.name,
             authorId : reqData.authorId,
             description : reqData.description,
             imgURL : reqData.imgURL,
-            categoryList: categoryList,
+            categoryId: reqData.categoryId,
             publisherId : reqData.publisherId,
             quantity : reqData.quantity,
             sellPrice : reqData.sellPrice,
             publishedAt : FD.formatDate(reqData.publishedAt)
         }
         try{
-            book = await bookModel.findByIdAndUpdate({id: reqData.id}, bookData)
+            book = await Book.upsertWithWhere({id: reqData.id}, bookData)
             return book
         } catch (error) {
             throw error
@@ -68,28 +70,25 @@ module.exports = function(Book) {
             let Category = app.models.Category
             let Author = app.models.Author
             let Publisher = app.models.Publisher
-            author = await Author.findById(data1.authorId)
-            let i
-            let categoryList = []
-            for (i=0; i< data1.categoryList.length; i++){
-                categoryi =  await Category.findById(data1.categoryList[i],{fields: {name: true}})
-                categoryList.push(categoryi.name)
-            }
+            let author = await Author.findById(data1.authorId,{fields: {name: true}})
+            let category =  await Category.findById(data1.categoryId,{fields: {name: true}})
             let publisher = await Publisher.findById(data1.publisherId,{fields: {name: true}})
             let data = {  
                 id: data1.id,
+                uid: data1.uid,
                 title: data1.name,
                 imgUrl: data1.imgURL,
                 author: author.name,
                 price: data1.sellPrice,
-                categoryList: categoryList,
+                genres: category.name,
                 publisher: publisher.name,
-                description: data1.description
+                description: data1.description,
+                enable: data1.enable
             }
             return data
         } catch (err) {
             console.log('show Book', err)
-            throw err
+            return []
         }
     }
 
@@ -100,6 +99,7 @@ module.exports = function(Book) {
                     where: queryData,
                     fields: {
                         id: true,
+                        uid: true,
                         name: true, 
                         authorId: true, 
                         imgURL: true, 
@@ -113,6 +113,7 @@ module.exports = function(Book) {
             for (i = 0; i < data1.length; i++){
                 let temp = {}
                 temp.id = data1[i].id
+                temp.uid = data1[i].uid
                 temp.title = data1[i].name
                 temp.imgUrl = data1[i].imgURL
                 temp.price = data1[i].sellPrice
@@ -201,7 +202,7 @@ module.exports = function(Book) {
         }
         if (reqData.category != ''){
             let category = await Category.findOne({where: {name: reqData.category},fields: {id: true}})
-            queryField.categoryList = [category.id]
+            queryField.categoryId = category.id
         }
         if (reqData.book != ''){
             queryField.name = reqData.book
@@ -210,7 +211,50 @@ module.exports = function(Book) {
         return book
     }
 
+    Book.listWishList = async function(userId){
+        let Customer = app.models.Customer
+        let customer = await Customer.findById(userId)
+        let bookList = []
+        for (let i = 0; i < customer.wishList.length; i++){
+            let book = await Book.findById(customer.wishList[i])
+            let data = {
+                id: book.id,
+                title: book.name,
+                imgUrl : book.imgURL,
+                price : book.sellPrice
+            }
+            if (book.enable == false){
+                data.status = "Ngừng kinh doanh"
+            } else {
+                if (book.quantity > 0){
+                    data.status = "Còn hàng"
+                } else{
+                    data.status = "Hết hàng"
+                }
+            }
+            bookList.push(data)
+        }
+        return bookList
+    }
     
+    Book.addToWishList = async function(userId, bookId, action){
+        let Customer = app.models.Customer
+        try {
+            let customer = await Customer.findById(userId)
+            let wL = customer.wishList
+            if (action == 'add' & !wL.includes(bookId)){
+                wL.push(bookId)
+            } else if (action == 'remove' & wL.includes(bookId)){
+                wL.splice( wL.indexOf(bookId), 1 )
+            }
+            await Customer.upsertWithWhere({id: userId}, {wishList: wL})
+            return await Book.listWishList(userId)
+        } catch (err){
+            console.log("add to wishList", err)
+            return []
+        }
+    } 
+
     //
     Book.remoteMethod('addBook', 
     {
@@ -271,5 +315,23 @@ module.exports = function(Book) {
         http: {verb: 'post', path: '/search' },
         accepts: {arg: 'reqData', type: 'object'},
         returns: { arg: 'data', type: 'object'}
+    })
+
+    Book.remoteMethod('listWishList', 
+    {
+        http: {verb: 'post', path: '/listWishList' },
+        accepts: {arg: 'userId', type: 'string'},
+        returns: { arg: 'data', type: 'object'}
+    })
+
+    Book.remoteMethod('addToWishList', 
+    {
+        http: {path: '/addToWishList', verb: 'post'},
+        accepts: [
+            {arg: 'userId', type: 'string', required: true},
+            {arg: 'bookId', type: 'string', required: true},
+            {arg: 'action', type: 'string', required: true}
+        ],
+        returns: { arg: 'data', type: 'object' }
     })
 }

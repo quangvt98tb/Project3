@@ -1,0 +1,4 @@
+{"_id":{"$oid":"5dc2e6db382159331c5e4549"},"name":"Kho 4","email":"kho4@mail.com","address":"Bắc Ninh","phone":"84987456123","createdAt":{"$date":"2019-11-06T15:16:22.943Z"},"enable":true}
+{"_id":{"$oid":"5dc2e6e1382159331c5e454a"},"name":"Kho 3","email":"kho3@mail.com","address":"Nam Định","phone":"84123789456","createdAt":{"$date":"2019-11-06T15:16:22.943Z"},"enable":true}
+{"_id":{"$oid":"5dc2e73b382159331c5e454b"},"name":"Kho 2","email":"kho2@gmail.com","address":"Thái Bình","phone":"84322626266","enable":true}
+{"_id":{"$oid":"5dc2e73c382159331c5e454c"},"name":"Kho 1","email":"kho1@mail.com","address":"Nghệ An","phone":"84123456789","enable":true}

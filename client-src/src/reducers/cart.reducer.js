@@ -9,6 +9,7 @@ if (localStorage.cart === undefined) {
         shipping: 10,
         error: "",
         isCheckOut: false,
+        promo: {}
     }
 } else {
     const cart = JSON.parse(localStorage.cart);
@@ -18,6 +19,7 @@ if (localStorage.cart === undefined) {
         shipping: cart.shipping,
         error: "",
         isCheckOut: false,
+        promo: cart.promo
     }
 }
 
@@ -188,7 +190,10 @@ export default (state = initialState, { type, payload, productData, dataList, sh
                 error: ""
             }
         case CHECKOUT:
-            return state;
+            return {
+                ...state,
+                promo: payload
+            }
         case CHECKOUT_CONFIRM:
             const cart3 = {
                 addedItems: [],

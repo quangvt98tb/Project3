@@ -127,9 +127,11 @@ class Login extends Component {
                           Nhớ tài khoản
                         </span>
                       </label>
-                      <a className="text-primary fs-13" href="/">
-                        Quên mật khẩu
-                      </a>
+                      <Link className="text-primary" to="/forgetpassword">
+                        <a className="text-primary fs-13" href="/">
+                          Quên mật khẩu
+                        </a>
+                      </Link>
                     </div>
 
                     <button className="btn btn-lg btn-block btn-warning text-uppercase fs-13 rounded mt-5">

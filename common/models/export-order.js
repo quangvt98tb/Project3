@@ -40,14 +40,17 @@ module.exports = function(ExportOrder) {
             subtotal: {
                 total: checkOutData.cart.total,
                 shipping: checkOutData.cart.shipping,
+                sale: checkOutData.cart.sale,
+                saleValue: checkOutData.cart.saleValue,
                 grandTotal: checkOutData.cart.grandTotal
             },
+            promotionId: checkOutData.promotionId,
             bookList: orderDetailList,
             createdAt: Date(),
             updatedAt: Date()
         }
         try{
-            let exportOrder = await ExportOrder.create(data)
+            await ExportOrder.create(data)
             return "success"
         } catch (err){
             console.log('create ExportOrder', err)
@@ -59,8 +62,9 @@ module.exports = function(ExportOrder) {
         let Book = app.models.Book
         let Customer = app.models.Customer
         let Author = app.models.Author
+        let Promotion = app.models.Promotion
         try {
-            const data1 = await ExportOrder.findById(orderId);
+            const data1 = await ExportOrder.findById(orderId)
             let customer = await Customer.findById(data1.userId)
             let items = []
             let i
@@ -92,16 +96,18 @@ module.exports = function(ExportOrder) {
                     total: data1.subtotal.total,
                     shipping: data1.subtotal.shipping,
                     grandTotal: data1.subtotal.grandTotal,
+                    sale: data1.subtotal.sale,
+                    saleValue: data1.subtotal.saleValue
                 },
                 checkOutType: data1.paymentMethod,
                 orderDate: FD.formatDate(data1.createdAt),
                 shipDate: FD.formatDate(data1.updatedAt),
                 status: data1.status
             }
-            return data
+            return data 
         } catch (err) {
             console.log('show ExportOrder for User', err)
-            return [400, err]
+            return []
         }
     }
 
@@ -122,7 +128,7 @@ module.exports = function(ExportOrder) {
                     orderDate: FD.formatDate(data2[i].createdAt),
                     status: data2[i].status,
                     books: data2[i].bookList,
-                    fullName: customer.fullName
+                    fullName: data2[i].fullName
                 }
                 orderList.push(data)
             }
@@ -133,95 +139,42 @@ module.exports = function(ExportOrder) {
         }
     }
 
-    ExportOrder.UserCancelOrder = async function(orderId) {
-        const order = await ExportOrder.findById(orderId)
-        if (order.status == 'Confirmed'){
+    ExportOrder.UserEditOrder = async function(reqData, action) {
+        const order = await ExportOrder.findById(reqData.orderId)
+        if (order.status == 'Confirmed' ){
             try{
-                const data = await ExportOrder.upsertWithWhere({id: orderId}, {status: 'Canceled', updatedAt: Date()})
-                return "success"
+                if (action == "cancel"){
+                    await ExportOrder.upsertWithWhere({id: reqData.orderId}, {status: 'Canceled', updatedAt: Date()})
+                }
+                else if (action == "edit"){
+                    let data = {}
+                    if (reqData.phone){
+                        data.phone = reqData.phone
+                    }
+                    if (reqData.fullName){
+                        data.fullName = reqData.fullName
+                    }
+                    if (reqData.address){
+                        let addressShip =  {
+                            province: reqData.address.province,
+                            district: reqData.address.district,
+                            ward: reqData.address.ward,
+                            details: reqData.address.details
+                        }
+                        data.addressShip = addressShip
+                    }
+                    data.updatedAt = Date()
+                    await ExportOrder.upsertWithWhere({id: reqData.orderId}, data)
+                }
+                return "Confirmed"
             } catch (err) {
-                console.log('update ExportOrderStatus By User', err)
+                console.log('edit ExportOrder By User', err)
                 return []
             }
         }
         else {
             return []
         }
-    }
-
-    ExportOrder.AdminListByUser = async function(userId) {
-        try {
-            const [data, total] = await Promise.all([
-                ExportOrder.find({
-                    where: {userId :userId}, 
-                    fields: {
-                        id: true,
-                        userId: true,
-                        subtotal: true,
-                        createdAt: true,
-                        updatedAt: true, 
-                        status: true
-                    }}),
-                ExportOrder.count({userId : userId})
-            ])
-            return {
-                rows: data,
-                total: total
-            }
-        } catch (err) {
-            console.log('list ExportOrder of User', err)
-            return [400, err]
-        }
-    }
-
-    ExportOrder.AdminListByStatus = async function(status) {
-        try {
-            const [data, total] = await Promise.all([
-                ExportOrder.find({
-                    where: {status : status}, 
-                    fields: {
-                        userId: true,
-                        subtotal: true, 
-                        createdAt: true, 
-                        updatedAt: true,
-                        status: true
-                    }}),
-                ExportOrder.count({status : status})
-            ])
-            return {
-                rows: data,
-                total: total
-            }
-        } catch (err) {
-            console.log('list ExportOrder By Status', err)
-            return [400, err]
-        }
-    }
-
-    ExportOrder.AdminUpdateByStatus = async function(reqData){
-        if (reqData.status == "Confirmed"){
-            let order = await ExportOrder.findById(req.params.id)
-            let i
-            for (i = 0; i < order.bookList.length; i++){s
-                let book = await Book.findById(order.bookList[i].bookId)
-                if (book.quantity < order.bookList[i].quantity){
-                    ExportOrder.upsertWithWhere(req.params.id, {status: "Canceled"})
-                    return [400, 'Khong Du So Luong Sach Trong Kho']
-                }
-            }
-            for (i = 0; i < order.bookList.length; i++){
-                try{
-                    let book = await Book.findById(order.bookList[i].bookId)
-                    let newQuantity = book.quantity - order.bookList[i].quantity
-                    let bookUpdate = await Book.upsertWithWhere(book.id, {quantity: newQuantity})
-                } catch (error) {
-                    console.log('create Order Detail', error)
-                    return [400, error]
-                }
-            }
-        }
-        let exportUpdate = await ExportOrder.upsertWithWhere(req.params.id, {status: reqData.status})
-        return exportUpdate
     }
 
     ExportOrder.remoteMethod(
@@ -251,26 +204,62 @@ module.exports = function(ExportOrder) {
     )
 
     ExportOrder.remoteMethod(
-        'UserCancelOrder', {
-            http: {path: '/cancelOrder', verb: 'post' },
-            accepts: {arg: 'orderId', type: 'string'},
+        'UserEditOrder', {
+            http: {path: '/editOrder', verb: 'post' },
+            accepts: [
+                {arg: 'reqData', type: 'object'},
+                {arg: 'action', type: 'string'},
+            ],
             returns: { arg: 'data',type: 'object'}
       }
     )
 
-    ExportOrder.remoteMethod(
-        'AdminListByUser', {
-            http: {path: '/listOrdersOfUser', verb: 'post' },
-            accepts: {arg: 'userId', type: 'string'},
-            returns: { arg: 'data',type: 'object'}
-      }
-    )
+    ExportOrder.beforeRemote('replaceById', async function(ctx, next){
+            let data = ctx.args
+            let Book = app.models.Book
+            let order = await ExportOrder.findById(data.id) 
+            let dataBookList = order.bookList
+            let flag = true 
+            if (order.status == "Confirmed" & data.data.status == "Shipping" ){
+                for (let i = 0; i < dataBookList.length; i++){
+                    let book = await Book.findById(dataBookList[i].bookId)
+                    if (book.quantity < dataBookList[i].quantity){
+                        await ExportOrder.upsert({id: data.id}, {status: "Canceled"})
+                        next(new Error('must be logged in to update'))
+                    }
+                }
+                if (flag == true){
+                    for (let i = 0; i < dataBookList.length; i++){
+                        let book = await Book.findById(dataBookList[i].bookId)
+                        let newQuantity = book.quantity - parseInt(dataBookList[i].quantity)
+                        await Book.upsertWithWhere({id: book.id}, {quantity: newQuantity})  
+                    }
+                }
+            } else if (order.status == "Shipping" & data.data.status == "Canceled"){
+                flag == true
+                for (let i = 0; i < dataBookList.length; i++){
+                    let book = await Book.findById(dataBookList[i].bookId)
+                    let newQuantity = book.quantity + parseInt(dataBookList[i].quantity)
+                    await Book.upsertWithWhere({id: book.id}, {quantity: newQuantity})  
+                }
+            } else if (order.status == "Delivered" || order.status == "Canceled"){
+                flag = false
+            } else if (order.status == "Confirmed" & data.data.status == "Delivered"){
+                flag = false
+            } else if (order.status == "Shipping" & data.data.status == "Confirmed"){
+                flag = false
+            } 
+            if (flag == true){
+                await ExportOrder.upsertWithWhere({id: data.id}, {status: data.data.status})
+                return "success"
+            } else{
+                next(new Error('must be logged in to update'))
+            }
+    })
 
-    ExportOrder.remoteMethod(
-        'AdminListByStatus', {
-            http: {path: '/listOrderByStatus', verb: 'post' },
-            accepts: {arg: 'status', type: 'string'},
-            returns: { arg: 'data',type: 'object'}
-      }
-    )
+    ExportOrder.afterRemoteError('replaceById', function(ctx, next){
+        let data = ctx.error
+        console.log(data)
+        next()
+    })
 }

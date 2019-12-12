@@ -5,6 +5,9 @@ export const PROFILE_LOADING = 'PROFILE_LOADING';
 export const PROFILE_NOT_FOUND = 'PROFILE_NOT_FOUND';
 export const CLEAR_CURRENT_PROFILE = 'CLEAR_CURRENT_PROFILE';
 export const GET_PROFILES = 'GET_PROFILES';
+export const FORGET_PASSWORD = 'FORGET_PASSWORD';
+export const CHANGE_PASSWORD = 'CHANGE_PASSWORD';
+
 // ERROR
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 export const GET_ERRORS = 'GET_ERRORS';
@@ -16,6 +19,9 @@ export const GET_ALL_BOOKS = 'GET_ALL_BOOKS';
 export const GET_BY_GENRES = 'GET_BY_GENRES';
 export const GET_AUTOCOMPLETE = 'GET_AUTOCOMPLETE';
 export const SEARCH_BOOKS = 'SEARCH_BOOKS';
+export const GET_WISH_LIST = 'GET_WISH_LIST';
+export const REMOVE_BOOK_WISHLIST = 'REMOVE_BOOK_WISHLIST';
+export const ADD_TO_WISHLIST = 'ADD_TO_WISHLIST';
 
 //CART
 export const ADD_TO_CART = 'ADD_TO_CART';
@@ -32,10 +38,16 @@ export const GET_ORDERS = 'GET_ORDERS';
 export const GET_ORDER_DETAILS = 'GET_ORDER_DETAILS';
 export const ORDER_LOADING = 'ORDER_LOADING';
 export const DELETE_ORDER = 'DELETE_ORDER';
-export const CANCEL_ORDER = 'CANCEL_ORDER';
 
-//statistic
-export const COUNT_USER = 'COUNT_USER';
-export const COUNT_MONEY = 'COUNT_MONEY';
-export const SET_LOOK_UP_USER = 'SET_LOOK_UP_USER';
-export const CLEAR_LOOK_UP_USER = 'CLEAR_LOOK_UP_USER';
+//PROMO
+export const GET_PROMOS = 'GET_PROMOS';
+
+//comment
+export const GET_COMMENT = 'GET_COMMENT'
+export const COMMENT = 'COMMENT'
+export const COMMENT_LOADING = 'COMMENT_LOADING'
+
+//rating
+export const RATING = 'RATING'
+export const RATING_LOADING = 'RATING_LOADING'
+export const GET_RATING_USER = 'GET_RATING_USER'

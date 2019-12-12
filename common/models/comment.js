@@ -6,12 +6,11 @@ module.exports = function(Comment) {
 
   // list comment theo book 
   Comment.listComment = async function(bookId) {
-  	let Book = app.models.Book
     let Customer = app.models.Customer
       try {
           const [data, total] = await Promise.all([
-              Comment.find({where: { bookId: bookId}}),
-              Comment.count()
+            Comment.find({where: { bookId: bookId, display: true}}),
+            Comment.count({ bookId: bookId, display: true})
           ])
 
           for (var i = data.length - 1; i >= 0; i--) {
@@ -32,11 +31,12 @@ module.exports = function(Comment) {
 
     //tao 1 comment
     Comment.createComment = async function(bookId, userId, content) {
-    	
     	const dataComment = {
     		bookId: bookId,
     		userId: userId,
-    		content: content,
+            content: content,
+            enable: false,
+            display: true,
     		createdAt: Date()
     	} 
     	try {
@@ -48,11 +48,6 @@ module.exports = function(Comment) {
     	}
     }
 
-    //Xoa comment 
-    // Comment.deleteComment = async function(id) {
-
-    // }
-
     Comment.remoteMethod(
     	'createComment', 
     {
@@ -63,14 +58,14 @@ module.exports = function(Comment) {
         	{arg: 'content', type: 'string', required: true},
         ],
 
-        returns: { arg: 'data',type: 'object'}
+        returns: { arg: 'data',type: 'object', root: true}
     })
 
     Comment.remoteMethod(
         'listComment', {
             http: {path: '/list', verb: 'post'},
             accepts: {arg: 'bookId', type: 'string'},
-            returns: { arg: 'data',type: 'object'}
+            returns: { arg: 'data',type: 'object', root: true}
         }
     )
 

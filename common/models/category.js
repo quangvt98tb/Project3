@@ -36,45 +36,9 @@ module.exports = function(Category) {
     Category.listBook = async function(genre, page, pageSize) {
         try {
             let Book = app.models.Book
-            let Author = app.models.Author
             let category = await Category.find({where: {name: genre}})
-            
-            let cId = category[0].id
-            let listId = [cId]
-            
-            const [data1, total] = await Promise.all([
-                Book.find({
-                    where: {categoryList : listId, enable: 1}, 
-                    fields: {
-                        id: true,
-                        name: true, 
-                        authorId: true, 
-                        imgURL: true, 
-                        sellPrice: true
-                    }
-                }),
-                Book.count({categoryList : listId, enable: 1})
-            ])
-            
-            let i
-            let data = []
-            for (i = 0; i < data1.length; i++){
-                let temp = {}
-                temp.id = data1[i].id
-                temp.title = data1[i].name
-                temp.imgUrl = data1[i].imgURL
-                temp.price = data1[i].sellPrice
-                author = await Author.findById(data1[i].authorId)
-                temp.author = author.name
-                data.push(temp)
-            }
-            
-            return {
-                rows: data,
-                page: page,
-                pageSize: pageSize,
-                total: total
-            }
+            let queryData = {categoryId: category[0].id}
+            return await Book.listBook(queryData)
         } catch (err) {
             console.log('list Book of Category', err)
             throw err

@@ -32,7 +32,7 @@ export const SuppliersEdit = (props) => (
             <TextInput source="email" validate={validateEmail} />
             <TextInput label="Địa chỉ" source="address" />
             <NumberInput label="Số điện thoại" source="phone" validate={validatePhone} />
-            {/* <DisabledInput source="id" /> */}
+            <DisabledInput source="id" />
         </SimpleForm>
     </Edit>
 );

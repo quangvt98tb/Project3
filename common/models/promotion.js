@@ -3,184 +3,96 @@ let to = require('await-to-js').to;
 
 module.exports = function(Promotion){
     const Promise = require('bluebird')
-    Promotion.createPromotion = async function(
-        name, 
-        description, 
-        minus,
-        divide,
-        beginAt,
-        endAt) {
 
-        const PromotionData = {
-            name: name,
-            description: description,
-            minus: minus,
-            divide: divide,
-            beginAt: beginAt,
-            endAt: endAt,
-            createdAt: new Date()
+    Promotion.createPromotion = async function(reqData) {
+        let PromotionData = {
+            name: reqData.name,
+            description: reqData.description,
+            count: reqData.count,
+            minus: reqData.minus,
+            divide: reqData.divide,
+            beginAt: reqData.beginAt,
+            endAt: reqData.endAt,
+            enable: reqData.enable
         }
         try {
-            const data = await Promotion.create(PromotionData)
-            return data
+            let promotion = await Promotion.create(PromotionData)
+            return promotion
           } catch (err) {
             console.log('create Promotion', err)
-            throw err
+            return []
           }
         }
-    
-    //read Promotion
-    Promotion.readPromotion = async function(id) {
+  
+    Promotion.updatePromotion = async function(reqData) {
+        const data = {
+            name: reqData.name,
+            description: reqData.description,
+            count: reqData.count,
+            minus: reqData.minus,
+            divide: reqData.divide,
+            beginAt: reqData.beginAt,
+            endAt: reqData.endAt, 
+            enable: reqData.enable,
+        }
         try {
-            const data = await Promotion.findOne({where: {id: id}});
-            if (data == null)
-                return [200, "Not exsited Id Promotion"]
-            else
-                return data;
+          return await Promotion.upsertWithWhere(reqData.id, data)
         } catch (err) {
-            console.log('read Promotion', err)
-            throw err
+          console.log('update Promotion', err)
+          return []
         }
     }
 
-    //update Promotion
-    Promotion.updatePromotion = async function(
-        id, 
-        name, 
-        description, 
-        minus,
-        divide,
-        beginAt,
-        endAt) {
-    	
-        const PromotionData = {
-            name: name,
-            description: description,
-            minus: minus,
-            divide: divide,
-            beginAt: beginAt,
-            endAt: endAt,
-            updatedAt: new Date(),
-            enable: 1
-        }
-
-        try {
-            const data = await Promotion.upsertWithWhere(
-              {
-                id: Promotion.id
-              },
-              PromotionData
-            )
-            return data
-          } catch (err) {
-            console.log('update Promotion', err)
-            throw err
+    Promotion.listEnablePromotionForUser = async function(userId) {
+      const ExportOrder = app.models.ExportOrder
+      try {
+        let promotions = await Promotion.find({
+          where: { 
+            beginAt: {lt: Date.now()},
+            endAt: {gt: Date.now()},
+            enable: true
           }
-    }
-
-    //delete Promotion 
-    Promotion.deletePromotion = async function(id) {
-        let [err, promo] = await to(Promotion.findOne({where: {id: id}}))
-        if (promo == null) {
-            return [200, 'can not find supplier']
-        }
-        Promotion.destroyById(promo.id)
-        return [200, 'delete supplier sucess']
-    }
-
-    // list Promotions paganation(10)
-    Promotion.listPromotion = async function(page, pageSize) {
-        try {
-          const [data, total] = await Promise.all([
-            Promotion.find({
-              where: {
-                enable: 1
-              },
-              fields: {
-                name: true,
-                description: true,
-                minus: true,
-                divide: true,
-                beginAt:true,
-                endAt: true
-              }
-            }),
-            Promotion.count({
-              enable: 1
-            })
-          ])
-
-          return {
-            rows: data,
-            page: page,
-            pageSize: pageSize,
-            total: total
+        })
+        let enablePromotions = []
+        for (let i=0; i< promotions.length; i++){
+          let orders = await ExportOrder.find({
+            where: {
+              userId: userId,
+              promotionId: promotions[i].id,
+              status: {inq: ["Confirmed", "Shipping", "Delivered"]}
+            }
+          })
+          if (orders.length < promotions[i].count){
+            enablePromotions.push(promotions[i])
           }
-        } catch (err) {
-          console.log('list Promotion', err)
-          throw err
         }
+        return enablePromotions
+      } catch (err) {
+        console.log('list Enable Promotion For User', err)
+        throw err
+      }
     }
-    
+
     Promotion.remoteMethod('createPromotion', 
       {
-        http: {path: '/create', verb: 'post'},
-        accepts: [
-          {arg: 'uid', type: 'string', required: true},
-          {arg: 'name', type: 'string', required: true},
-          {arg: 'description', type: 'string', required: true},
-          {arg: 'minus', type: 'number', required: true},
-          {arg: 'divide', type: 'number', required: true},
-          {arg: 'beginAt', type: 'date', required: false},
-          {arg: 'endAt', type: 'date', required: false},
-        ],
+        http: {path: '/createPromotion', verb: 'post'},
+        accepts: {arg: 'reqData', type: 'object'},
         returns: { arg: 'data', root: true }
       }
-    )
-
-    Promotion.remoteMethod('readPromotion', 
-      {
-        http: {path: '/read', verb: 'post'},
-        accepts: [
-            {arg: 'id', type: 'string', required: true}],
-        returns: { arg: 'data', root: true }
-      },
     )
 
     Promotion.remoteMethod('updatePromotion', 
       {
-        http: {path: '/update', verb: 'post'},
-        accepts: [
-          {arg: 'id', type: 'string', required: true},
-          {arg: 'name', type: 'string', required: false},
-          {arg: 'description', type: 'string', required: false},
-          {arg: 'minus', type: 'number', required: false},
-          {arg: 'divide', type: 'number', required: false},
-          {arg: 'beginAt', type: 'date', required: false},
-          {arg: 'endAt', type: 'date', required: false},
-        ],
+        http: {path: '/updatePromotion', verb: 'post'},
+        accepts: {arg: 'reqData', type: 'object'},
         returns: { arg: 'data', root: true },
       },
     )
 
-    Promotion.remoteMethod('deletePromotion', 
+    Promotion.remoteMethod('listEnablePromotionForUser', 
       {
-        http: {path: '/delete', verb: 'delete'},
-        accepts: [
-            {arg: 'id', type: 'string', required: true}
-        ],
-        returns: [
-            {arg: 'status', type: 'number'},
-            {arg: 'message', type: 'string'}]
-      }
-    )
-
-    Promotion.remoteMethod('listPromotion', 
-      {
-        http: {verb: 'post', path: '/list' },
-        accepts: [
-          { arg: 'page', type: 'number', default: '0'},
-          { arg: 'pageSize', type: 'number', default: '10'}],
+        http: {verb: 'post', path: '/listEnablePromotionForUser' },
+        accepts: { arg: 'userId', type: 'string', required: true},
         returns: { arg: 'data', root: true }
       }
     )

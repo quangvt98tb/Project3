@@ -19,12 +19,13 @@ module.exports = function(Rating) {
                 } 
                 sum += data[i].rate
             }
+            let tong = data.length
             let rating = 0
-            if (total > 0) {
-                 rating = sum/total
-            } else if (total == 0)
+            if (tong > 0) {
+                 rating = Number(sum/tong)
+            } else if (tong == 0)
                 {
-                  rating = 0
+                  rating = 5
                 }
             return rating
         } catch (err) {
@@ -33,6 +34,18 @@ module.exports = function(Rating) {
         }
     }
 
+    Rating.getRateUser = async function(bookId, userId){
+        try {
+            let [err,rate] = await to(Rating.findOne({where: {userId: userId, bookId: bookId}}))
+            if (rate == null){
+                return {"err": "User chua rate book"}
+            }
+            return rate
+        } catch (err) {
+            console.log('getRateUser', err)
+            throw err
+        }
+    }
     //tao 1 Rating
     Rating.createRating = async function(bookId, userId, rate) {
     	
@@ -78,9 +91,20 @@ module.exports = function(Rating) {
     })
 
     Rating.remoteMethod(
+        'getRateUser', {
+            http: {path: '/getRateUser', verb: 'post'},
+            accepts: [
+                {arg: 'bookId', type: 'string', required: true},
+                {arg: 'userId', type: 'string', required: true}
+                ],
+            returns: { arg: 'data',type: 'object'}
+        }
+    )
+
+    Rating.remoteMethod(
         'rating', {
             http: {path: '/list', verb: 'post'},
-            accepts: {arg: 'bookId', type: 'string'},
+            accepts: {arg: 'bookId', type: 'string', required: true},
             returns: { arg: 'data',type: 'number'}
         }
     )

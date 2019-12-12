@@ -49,6 +49,9 @@
     "bookList": {
       "type": "array",
       "required": false
+    },
+    "promotionId": {
+      "type": "string"
     }
   },
   "relations": {
@@ -56,6 +59,11 @@
       "type": "belongsTo",
       "model": "Customer",
       "foreignKey": "userId"
+    },
+    "belongsToPromotion": {
+      "type": "belongsTo",
+      "model": "Promotion",
+      "foreignKey": "promotionId"
     }
   },
   "acls": [],

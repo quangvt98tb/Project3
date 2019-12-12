@@ -1,0 +1,2 @@
+{"_id":{"$oid":"5de00d2898b16a59cb5c5f22"},"name":"BlackFriday2019","description":"Sale 50% all book","count":1,"minus":30,"divide":1.0,"beginAt":{"$date":"2019-10-29T18:03:19.242Z"},"endAt":{"$date":"2019-12-30T18:03:19.242Z"},"enable":true}
+{"_id":{"$oid":"5de64383367a202ea50f28b6"},"name":"121219","description":"Giảm cho vui thôi chứ cũng không có gì","count":1,"minus":null,"divide":1,"beginAt":{"$date":"2019-12-12T00:00:00Z"},"endAt":{"$date":"2019-12-12T00:00:00Z"},"enable":true,"devide":0.5}

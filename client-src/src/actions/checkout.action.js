@@ -10,7 +10,7 @@ export const checkOutConfirm = (checkOutData) => async dispatch => {
     // .post('/ExportOrders/createOrder', {checkOutData: checkOutData, userId: localStorage.userId})
     // .then(res => {
     //     console.log(res.data.data)
-        if (res.data.data === "success" || res.data.data === []) {
+        if (res.data.data === "success" ) {
           dispatch({
             type: CHECKOUT_CONFIRM,
             payload: res.data.data,   

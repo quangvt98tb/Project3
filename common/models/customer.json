@@ -35,18 +35,16 @@
       "default": "Male"  
     },
     "receiveDistrict": {
-      "type": ["string"]
+      "type": "array"
+    },
+    "wishList": {
+      "type": "array"
     },
     "createdAt": {
       "type": "date",
       "required": false     
-    },
-    "enable": {
-      "type": "boolean",
-      "default": true
     }
   },
-  "protected": ["dateOfBirth", "gender", "createdAt",  "enable"],
   "relations": {
      "hasManyOrder": {
       "type": "hasMany",

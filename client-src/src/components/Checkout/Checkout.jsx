@@ -39,12 +39,14 @@ class Checkout extends Component {
         })
     }
 
-    async onCheckOutConfirm(profileData, cart, checkOutType) {
+    async onCheckOutConfirm(profileData, cart, checkOutType, promo, grandTotal) {
         let cart_ = {
             addedItems: cart.addedItems.reduce((all, value) => [...all, ...value], []),
             total: cart.total,
+            sale: promo.display,
+            saleValue: promo.value,
             shipping: cart.shipping,
-            grandTotal: cart.total + cart.shipping
+            grandTotal: grandTotal
         }
         let checkOutData = {
             profileData: profileData,
@@ -72,7 +74,12 @@ class Checkout extends Component {
         // const emailValidation = (/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i).test(String(email).toLowerCase())
         let { profile, loading } = this.props.profile;
         let addedItems = this.props.cart.addedItems.reduce((all, value) => [...all, ...value], []);
-        let {total, shipping} = this.props.cart;
+        let {total, shipping, promo} = this.props.cart;
+        if (promo === undefined){
+            promo = {
+                "value": 0
+            }
+        }
         let Content =
         loading || profile === null ? (
           <SwappingSquaresSpinner />
@@ -89,7 +96,7 @@ class Checkout extends Component {
         let alertSucc= (!this.state.isVisible) ? (
             <></>
         ) : (
-            <SweetAlert success title="Success!" onConfirm={()=>{this.onConfirm()}}>
+            <SweetAlert success title="Thành công!" onConfirm={()=>{this.onConfirm()}}>
             </SweetAlert>
         );
         let redirect = (!this.state.isRedirect) ? (
@@ -97,6 +104,8 @@ class Checkout extends Component {
         ) : (
             <Route><Redirect to="/login"/></Route>
         );
+        let grandTotal = total - promo.value;
+        if (grandTotal < 0){ grandTotal = 0 };
 
         let checkOutComp = (
             <div>
@@ -126,7 +135,7 @@ class Checkout extends Component {
                     </div>
                     <div className="checkout col-12">
                         <div className="checkout__btn text-center">
-                            <a onClick={()=>{this.onCheckOutConfirm(this.state.profileData, this.props.cart, this.state.checkOutType)}}>Thanh toán</a>
+                            <a onClick={()=>{this.onCheckOutConfirm(this.state.profileData, this.props.cart, this.state.checkOutType, promo, grandTotal + shipping)}}>Thanh toán</a>
                         </div>
                     </div>
                 </div>
@@ -150,9 +159,10 @@ class Checkout extends Component {
                                 <ul class="shipping__method">
                                     <li>Tổng tiền sản phẩm <span>${total}</span></li>
                                     <li>Giao hàng <span>${shipping}</span></li>
+                                    <li>Khuyến mãi <span>${promo.value}</span></li>
                                 </ul>
                                 <ul class="total__amount">
-                                    <li>Tổng thanh toán <span>${total + shipping}</span></li>
+                                    <li>Tổng thanh toán <span>${grandTotal + shipping}</span></li>
                                 </ul>
                             </div>
                             <div id="accordion" class="checkout_accordion mt--30" role="tablist">

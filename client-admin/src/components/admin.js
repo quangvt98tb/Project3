@@ -1,8 +1,8 @@
 import React from 'react';
-import {Filter, ReferenceInput, SelectInput, List, Datagrid,
+import {Filter, List, Datagrid,
         SimpleShowLayout, Show, Create, SimpleForm, DateField, 
         TextField, EditButton, DisabledInput, BooleanInput,
-        TextInput, DateInput, email, required } from 'react-admin';
+        TextInput, email, required } from 'react-admin';
 // export PostIcon from '@material-ui/core/svg-icons/action/book';
 // import {DateInput} from 'react-admin-date-inputs';
 const validateEmail= [email('Nhập đúng dạng email'), required('Không thể bỏ trống!')];
@@ -16,7 +16,7 @@ export const AdminList = (props) => (
     <List title="Danh sách quản trị viên" filters={<AdminFilter />} {...props}>
         <Datagrid>
             <TextField label="Email" source="email" type="email" />
-            <EditButton/>
+            <TextField label="RootAdmin" source="enable" />
         </Datagrid>
     </List>
 );
@@ -25,19 +25,19 @@ export const AdminList = (props) => (
 //     return <span>Post {record ? `"${record.title}"` : ''}</span>;
 // };
 
-export const AdminEdit = (props) => (
-    <Show  title="Xem thông tin tài khoản" {...props}>
-        <SimpleForm>
-            <DisabledInput  label="Email" source="email" />
-            <BooleanInput label="Trạng thái" source="enable" />
-        </SimpleForm>
-    </Show>
-);
+// export const AdminEdit = (props) => (
+//     <Show  title="Xem thông tin tài khoản" {...props}>
+//         <SimpleForm>
+//             <DisabledInput  label="Email" source="email" />
+//             <DisabledInput label="RootAdmin" source="enable" />
+//         </SimpleForm>
+//     </Show>
+// );
 
 export const AdminCreate = (props) => (
     <Create title="Thêm quản trị viên mới" {...props}>
         <SimpleForm>
-            <TextInput source="Email" type="email" validate={validateEmail}/>
+            <TextInput label="Email" source="email" type="email" validate={validateEmail}/>
             <TextInput label="Mật khẩu" source="password" />
         </SimpleForm>
     </Create>

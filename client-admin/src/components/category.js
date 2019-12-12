@@ -22,7 +22,7 @@ const CategoryFilter = (props) => (
 export const CategoryList = (props) => (
     <List title="Quản lý thể loại" {...props} filters={<CategoryFilter/>} >
         <Datagrid>
-            <TextField label="Thể loại" source="name" />
+            <TextField label="Thể loại" source="name" validate={validateName}/>
             <EditButton/>
         </Datagrid>
     </List>
@@ -40,7 +40,7 @@ export const CategoryEdit = (props) => (
 export const CategoryCreate = (props) => (
     <Create title="Thêm thể loại mới" {...props}>
         <SimpleForm>
-            <TextInput label="Thể loại" source="name" />
+            <TextInput label="Thể loại" source="name" validate={validateName}/>
         </SimpleForm>
     </Create>
 );

@@ -10,12 +10,19 @@
     }
   },
   "properties": {
+    "uid": {
+      "type": "string",
+      "required": true,
+      "index": {
+        "unique": true
+      }
+    },
     "name": {
       "type": "string",
       "required": true
     },
-    "categoryList": {
-      "type": "array"
+    "cetegoryId": {
+      "type": "string"
     },
     "description": {
       "type": "string",
@@ -46,6 +53,9 @@
       "type": "date",
       "required": false
     },
+    "aveRating":{
+      "type": "number"
+    },
     "enable": {
       "type": "boolean",
       "default": 1
@@ -66,6 +76,11 @@
       "type": "belongsTo",
       "model": "Publisher",
       "foreignKey": "publisherId"
+    },
+    "belongsToCategory": {
+      "type": "belongsTo",
+      "model": "Category",
+      "foreignKey": "categoryId"
     }
   },
   "foreignKeys": {

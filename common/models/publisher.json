@@ -17,7 +17,7 @@
           "unique": true
         }
       },
-      "descreption": {
+      "description": {
         "type": "string"
       }
     },

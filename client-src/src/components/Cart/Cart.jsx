@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 import TextInputAuth from '../../HOC/TextInputAuth'
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { changeQuantity, deleteAll, deleteFromCart, checkOut } from '../../actions/cart.action';
+import { changeQuantity, deleteAll, deleteFromCart, checkOut, getPromos } from '../../actions/cart.action';
 import { Link } from 'react-router-dom';
 import SweetAlert from 'react-bootstrap-sweetalert';
+import Modal from 'react-responsive-modal';
+import Promo from './Promo';
 
 class Cart extends Component {
     constructor(props){
@@ -22,6 +24,9 @@ class Cart extends Component {
             shipping: ship,
             deleteAllTrigger:false,
             deleteAllSuccess: false,
+            promos: [],
+            isShow: false,
+            selectedPromo: ''
         }
     }
 
@@ -74,14 +79,38 @@ class Cart extends Component {
         this.props.changeQuantity(dataList, shipping);
     }
 
-    onCheckOutClick(){
-        this.props.checkOut();
+    onCheckOutClick(promo){
+        this.props.checkOut(promo);
     }
 
     onTrigger(){
         let trig = this.state.deleteAllTrigger;
         this.setState({
             deleteAllTrigger: !trig,
+        })
+    }
+
+    async onPromo(){
+        await this.props.getPromos(localStorage.userId);
+        this.setState({
+            ...this.state,
+            isShow: true,
+            promos: this.props.promos.promos
+        })
+    }
+
+    handleCloseModal(){
+        this.setState({
+            ...this.state,
+            isShow: false
+        })
+    }
+
+    getChildState = (isShow, selectedPromo) => {
+        this.setState({
+            ...this.state,
+            isShow: isShow,
+            selectedPromo: selectedPromo
         })
     }
 
@@ -95,42 +124,65 @@ class Cart extends Component {
     render(){
         const { total, shipping, error } = this.props.cart;
         const shipType = this.state.shipping;
+        const { isShow, promos, selectedPromo } = this.state;
+        
+        let promo = promos.find(x=>x.id===selectedPromo);
+        if (promo !== undefined){
+            if (promo.minus === 0){
+                let divide = promo.divide * 100;
+                promo = {
+                    "display": "Giảm " + divide.toString() + "%",
+                    "value": promo.divide * (total + shipping)
+                }
+            } else {{
+                let minus = promo.minus;
+                promo = {
+                    "display": "Giảm " + minus.toString() + "$",
+                    "value": promo.minus
+                }
+            }}
+        } else {
+            promo = {
+                "display": "",
+                "value": 0
+            }
+        }
+
         let addedItems = this.state.addedItems;
         let Content =  (addedItems === undefined) || (addedItems.length === 0) ? (
             <h6>Giỏ hàng trống</h6>
         ) : (
             addedItems.map((product, index) => {
-                    
-                    return (
-                        <tr>
-                            <td className="product-thumbnail"><a href="#"><img src={product.imgUrl} alt="product img"/></a></td>
-                            <td className="product-name"><a href="#">{product.title}</a></td>
-                            <td className="product-price"><span className="amount">${product.price}</span></td>
-                            <td className="product-quantity">
-                                <div style={{width: 100, marginLeft:65}}>
-									<TextInputAuth
-                                        id="qty"
-                                        name="quantity"
-                                        className="form-control form-control-lg rounded"
-                                        type="input-text"
-                                        onChange={event => this.onChangeQuantity(event.target.value.replace(/\D/,''), product.id)}
-                                        value={product.quantity}
-                                        error={error[product.id]}
-                                    />
-								</div>
-                            </td>
-                            
-                            <td className="product-subtotal">${product.quantity * product.price}</td>
-                            <td className="product-remove"><a onClick={()=>{this.onDeleteClick(product.id)}}>X</a></td>
-                        </tr>
-                    )
-            }));
+                return (
+                    <tr>
+                        <td className="product-thumbnail"><a href="#"><img src={product.imgUrl} alt="product img"/></a></td>
+                        <td className="product-name"><a href="#">{product.title}</a></td>
+                        <td className="product-price"><span className="amount">${product.price}</span></td>
+                        <td className="product-quantity">
+                            <div style={{width: 100, marginLeft:65}}>
+                                <TextInputAuth
+                                    id="qty"
+                                    name="quantity"
+                                    className="form-control form-control-lg rounded"
+                                    type="input-text"
+                                    onChange={event => this.onChangeQuantity(event.target.value.replace(/\D/,''), product.id)}
+                                    value={product.quantity}
+                                    error={error[product.id]}
+                                />
+                            </div>
+                        </td>
+                        
+                        <td className="product-subtotal">${product.quantity * product.price}</td>
+                        <td className="product-remove"><a onClick={()=>{this.onDeleteClick(product.id)}}>X</a></td>
+                    </tr>
+                )
+        }));
 
         
         let alertSucc= (!this.state.deleteAllSuccess) ? (
             <></>
         ) : (
-            <SweetAlert success title="Success!" onConfirm={()=>{this.onConfirm()}}>
+            <SweetAlert success title="Thành công!" onConfirm={()=>{this.onConfirm()}}>
             </SweetAlert>
         );
 
@@ -168,12 +220,15 @@ class Cart extends Component {
             <div className="cartbox__btn">
                 <ul className="cart__btn__list d-flex flex-wrap flex-md-nowrap flex-lg-nowrap justify-content-between"> 
                     <li><a href="#" onClick={()=>{this.onTrigger()}}>Xóa tất cả</a></li>
-                    <li><a href="#">Dùng mã Code</a></li>
+                    <li><a href="#" onClick={()=>{this.onPromo()}}>Dùng mã Code</a></li>
                     <li><a href="#" onClick={()=>{this.onUpdateClick(this.state.dataList, this.state.shipping)}}>Cập nhật</a></li>
-                    <li><Link to="/checkout"><a href="#" onClick={()=>{this.onCheckOutClick()}}>Thanh toán</a></Link></li>
+                    <li><Link to="/checkout" onClick={()=>{this.onCheckOutClick(promo)}}>Thanh toán</Link></li>
                 </ul>
             </div>
             );
+        
+        let grandTotal = total - promo.value;
+        if (grandTotal < 0){ grandTotal = 0 };
 
         let CartAfter = (addedItems === undefined) || (addedItems.length === 0) ? (
                 <></>
@@ -220,9 +275,17 @@ class Cart extends Component {
                                     <li>{shipping}</li>
                                 </ul>
                             </div>
+                            <div className="cartbox-total d-flex justify-content-between">
+                                <ul className="cart__total__list">
+                                    <li>Khuyến mãi</li>
+                                </ul>
+                                <ul className="cart__total__tk">
+                                    <li>{promo.value}</li>
+                                </ul>
+                            </div>
                             <div className="cart__total__amount">
                                 <span>Tổng thanh toán</span>
-                                <span>{total + shipping}</span>
+                                <span>{grandTotal + shipping}</span>
                             </div>
                         </div>
                     </div>
@@ -231,6 +294,12 @@ class Cart extends Component {
         return(
             <div className="cart-main-area section-padding--lg" style={{backgroundColor: "white"}}>
                 <div className="container">
+                <Modal open={isShow} onClose={() => this.handleCloseModal()} center>
+                    <Promo
+                        promos={promos}
+                        getChildState={this.getChildState}
+                    />
+                </Modal>
                     <div className="row">
                         <div className="col-md-12 col-sm-12 ol-lg-12">
                             <form action="#">               
@@ -266,15 +335,18 @@ class Cart extends Component {
 }
 
 Cart.propTypes = {
-	cart: PropTypes.object.isRequired,
+    cart: PropTypes.object.isRequired,
+    promos: PropTypes.object.isRequired,
     changeQuantity: PropTypes.func.isRequired,
     deleteAll: PropTypes.func.isRequired,
     deleteFromCart: PropTypes.func.isRequired,
-	checkOut: PropTypes.func.isRequired,
+    checkOut: PropTypes.func.isRequired,
+    getPromos: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state=>({
     cart: state.cart,
+    promos: state.promos
 });
 
 const mapDispatchToProps = {
@@ -282,6 +354,7 @@ const mapDispatchToProps = {
     deleteAll,
     deleteFromCart,
     checkOut,
+    getPromos
 };
 
 export default connect(mapStateToProps,mapDispatchToProps)(Cart);

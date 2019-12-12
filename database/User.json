@@ -1,0 +1,3 @@
+{"_id":{"$oid":"5db2ffb39016226b384899ac"},"password":"$2b$10$IDXvZ6aRHmidUO6pI1o3KOUTV1Xc.RBCcaJj5IgMgvW3fQxR012r6","email":"admin@mail.com","enable":true}
+{"_id":{"$oid":"5de9046a67e9a457be9418c6"},"password":"$2b$10$P0W6ol5AZkh7FayEbfGPbOE2h198JuiV8TEZA/pdC01QM1ie/U2dO","email":"admin1@mail.com","enable":false}
+{"_id":{"$oid":"5de90961522b575f86c2f091"},"password":"$2b$10$UxmdHwx84zPu5FHXJNaJIOdOtmPgvunbs6tptcNc39t4WlbLd4VVi","email":"admin2@mail.com"}

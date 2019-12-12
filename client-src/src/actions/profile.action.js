@@ -22,7 +22,6 @@ export const getCurrentProfile = () => dispatch => {
       })
     })
     .catch(err => {
-      console.log("2", err)
       dispatch({
         type: GET_PROFILE,
         payload: {},

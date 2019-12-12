@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import TextInputAuth from '../../HOC/TextInputAuth'
 import './ProductDetails.scss';
+import { Link, withRouter } from 'react-router-dom';
 import { addToCart } from '../../actions/cart.action'
-import { getBookById } from '../../actions/book.action';
+import { getBookById, addToWishList, getWishList } from '../../actions/book.action';
+import { getCommentByIdBook } from '../../actions/comment.action'
+import { postComment } from '../../actions/comment.action'
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import SwappingSquaresSpinner from '../common/SwappingSquaresSpinner';
 import Button from '../common/Button';
-
+import Rating from '@material-ui/lab/Rating'
+import { ratingBook, getRatingBook, getRatingBookUser } from '../../actions/rating.action'
+import Comment from '../Product/Comment'
 class Product extends Component {
   constructor(props) {
     super(props)
@@ -15,12 +20,30 @@ class Product extends Component {
 			bookId: this.props.match.params.id,
 			quantity: 1,
 			isLoading: false,
+			value_rating: 0,
+			isAdded: false
 		}
-		// const isLoading = React.useState(false);
 	}
-	
-  componentWillMount() {		
-		this.props.getBookById(this.state.bookId);
+
+	setValue(value) {
+		this.setState({value_rating: value})
+	}
+
+    componentWillMount() {		
+	this.props.getBookById(this.state.bookId);
+	}
+
+	async componentDidMount() {
+		await this.props.getRatingBook(this.state.bookId)
+		await this.props.getWishList(localStorage.userId)
+		await this.props.getRatingBookUser(this.state.bookId, localStorage.userId)
+		let temp = this.props.books.books;
+		let a = temp.find(x=>x.id===this.props.match.params.id)
+		if (a !== undefined){
+			this.setState({
+				isAdded: true,
+			})
+		}
 	}
 	
 	onSetState(quantity){
@@ -32,6 +55,14 @@ class Product extends Component {
 		}
 	}
 
+	async onAddToWishList(bookId, userId){
+		await this.props.addToWishList(bookId, userId);
+		this.setState({
+			...this.state,
+			isAdded: true
+		})
+	}
+
 	handleClick = (productId, quantity, currentQuantity)=>{
 		if (quantity === ""){
 			quantity = 0;
@@ -40,35 +71,104 @@ class Product extends Component {
 			productId: productId,
 			quantity: parseInt(quantity),
 			currentQuantity: currentQuantity,
-			// cartQuantity: this.props.cart.
 		};
 		this.props.addToCart(productData);
 		
 	}
 
+	rating (bookId, value) {
+		let details = {
+			bookId : bookId,
+			rate : parseInt(value)
+		}
+		this.props.ratingBook(details)
+
+	}
+
   render() {
 		const { book, loading } = this.props.books;
+		const {rating, rating_user} = this.props.ratings
+		const {isAuthenticated} = this.props.auth
+		console.log(isAuthenticated)
+		const rate = isAuthenticated ? (<Rating
+			name="simple-controlled"
+			value={rating_user.rate}
+			onChange={(event, newValue) =>
+				{
+					this.setValue(newValue)
+					this.rating(this.state.bookId,newValue)
+				}
+			}
+			/>) : (<h6>Bạn cần <Link to="/login" style={{color: 'red'}}>ĐĂNG NHẬP</Link> để đánh giá sản phẩm này</h6>)
 		let error  = this.props.cart.error;
-		let Content =
-      loading || book === null ? (
-        <SwappingSquaresSpinner />
+		let enable = book === null ? (
+			<></>
+		) : (
+			book.enable
+			// false
+			// true
+		)
+		let Content = loading || book === null ? (
+        <></>
       ) : (
 			book
 		)
-		console.log(Content)
-	let genres = 
-		loading || book === null ? (
-			<SwappingSquaresSpinner/>
-		) : (
-			book.genre
-		)
 		const added = this.props.cart.addedItems;
-		let existedItem = added.find(item=> this.state.bookId === item[0].id);
+		let existedItem = added.find(item=> this.state.bookId === item[0].id); 
 		let currentQuantity;
 		if (existedItem !== undefined) {
 			currentQuantity = existedItem[0].quantity
 		} else {
 			currentQuantity = 0
+		}
+		let addToWishList = this.state.isAdded === false ? (
+			<a className="wishlist" onClick={()=>this.onAddToWishList(this.props.match.params.id, localStorage.userId)}></a>
+		) : (
+			<a className="wishlist" onClick={()=>this.onAddToWishList(this.props.match.params.id, localStorage.userId)} style={{backgroundColor: "#f8cb00"}}></a>
+		)
+		let addToCart = enable === true ? (
+			<>
+				<span>Số lượng</span>
+				<div style={{width: 100}}>
+					<TextInputAuth
+								id="qty"
+								name="quantity"
+								className="form-control form-control-lg rounded"
+								type="number"
+								onChange={event => this.onSetState(event.target.value.replace(/\D/,''))}
+								value={this.state.quantity}
+								error={error}
+							/>
+				</div>
+				<div className="addtocart__actions">
+					<Button className="tocart" type="submit" title="Add to Cart" onClick={()=> {
+						this.setState({
+							...this.state,
+							isLoading: true
+						});
+						setTimeout(() => {
+							this.setState({
+								...this.state,
+								isLoading: false
+							});
+						}, 600);
+						this.handleClick(this.state.bookId, this.state.quantity, currentQuantity)}}
+						isLoading = {this.state.isLoading}
+					>
+							Thêm vào giỏ
+					</Button>
+				</div>
+			</>
+		) : (
+			<>
+				<h6>Sản phẩm này chưa kinh doanh</h6>
+				<div style={{width: 20}}></div>
+			</>
+		)
+		if (book === null){
+			return (
+				<SwappingSquaresSpinner/>
+			)
 		}
     return (
       <>
@@ -85,59 +185,29 @@ class Product extends Component {
         					<h1>{Content.title}</h1>
 							<h6>{Content.author}</h6>
         					<div className="product-reviews-summary d-flex">
-        						<ul className="rating-summary d-flex">
-    								<li><i className="zmdi zmdi-star-outline"></i></li>
-    								<li><i className="zmdi zmdi-star-outline"></i></li>
-									<li><i className="zmdi zmdi-star-outline"></i></li>
-									<li className="off"><i className="zmdi zmdi-star-outline"></i></li>
-									<li className="off"><i className="zmdi zmdi-star-outline"></i></li>
-								</ul>
+								<Rating
+								name="read-only"
+								value={rating}
+								readOnly
+								/>
 							</div>
 							<div className="price-box">
 								<span>${Content.price}</span>
 							</div>
 							<div className="box-tocart d-flex">
-								<span>Số lượng</span>
-								{/* <input className="input-text" id="qty" value={this.state.quantity} type="number" max="19" min="1" onChange={event => this.onSetState(event.target.value.replace(/\D/,''))}/> */}
-								<div style={{width: 100}}>
-									<TextInputAuth
-												id="qty"
-												name="quantity"
-												className="form-control form-control-lg rounded"
-												type="number"
-												onChange={event => this.onSetState(event.target.value.replace(/\D/,''))}
-												value={this.state.quantity}
-												error={error}
-											/>
-								</div>
-								<div className="addtocart__actions">
-									{/* <button className="tocart" type="submit" title="Add to Cart" onClick={()=>{ */}
-									<Button className="tocart" type="submit" title="Add to Cart" onClick={()=> {
-										this.setState({
-											...this.state,
-											isLoading: true
-										});
-										setTimeout(() => {
-											this.setState({
-												...this.state,
-												isLoading: false
-											});
-										}, 600);
-										this.handleClick(this.state.bookId, this.state.quantity, currentQuantity)}}
-										isLoading = {this.state.isLoading}
-									>
-											Thêm vào giỏ
-									{/* </button> */}
-									</Button>
-								</div>
+								{addToCart}
 								<div className="product-addto-links clearfix">
-									<a className="wishlist" href="#"></a>
-									<a className="compare" href="#"></a>
+									{addToWishList}
+									{/* <a className="wishlist" onClick={()=>this.onAddToWishList(this.props.match.params.id, localStorage.userId)}></a> */}
+									{/* <a className="compare" href="#"></a> */}
 								</div>
 							</div>
-							{/* {error && <div className="invalid-feedback">{error}</div>} */}
 							<div className="product_meta">
-								<p className="posted_in">Thể loại: {genres}
+								<p className="posted_in">Thể loại: {Content.genres}
+								</p>
+							</div>
+							<div className="product_meta">
+								<p className="posted_in">Phát hành: {Content.publisher}
 								</p>
 							</div>
 							<div className="product-share">
@@ -176,12 +246,26 @@ class Product extends Component {
 				<div className="tab__container">
 					<div className="pro__tab_label tab-pane fade show active" id="nav-details" role="tabpanel">
 						<div className="description__attribute">
-							<p>Ideal for cold-weather training or work outdoors, the Chaz Hoodie promises superior warmth with every wear. Thick material blocks out the wind as ribbed cuffs and bottom band seal in body heat.Ideal for cold-weather training or work outdoors, the Chaz Hoodie promises superior warmth with every wear. Thick material blocks out the wind as ribbed cuffs and bottom band seal in body heat.Ideal for cold-weather training or work outdoors, the Chaz Hoodie promises superior warmth with every wear. Thick material blocks out the wind as ribbed cuffs and bottom band seal in body heat.Ideal for cold-weather training or work outdoors, the Chaz Hoodie promises superior warmth with every wear. Thick material blocks out the wind as ribbed cuffs and bottom band seal in body heat.</p>
+									<p>{Content.description}</p>
 						</div>
 					</div>
 				</div>
 				<div style={{ height: 50 }}></div>
 			</div>
+			<div className="product__info__detailed">
+				<div className="pro_details_nav nav justify-content-start" role="tablist">
+					<a className="nav-item nav-link active" data-toggle="tab" href="#nav-details" role="tab">Đánh giá</a>
+				</div>
+				<div className="tab__container">
+					<div className="pro__tab_label tab-pane fade show active" id="nav-details" role="tabpanel">
+						<div className="description__attribute">
+							{rate}
+						</div>
+					</div>
+				</div>
+				<div style={{ height: 50 }}></div>
+			</div>
+			<Comment bookId={this.state.bookId} />
 			</div>
 				}
 			</>
@@ -194,19 +278,37 @@ Product.propTypes = {
 	getBookById: PropTypes.func.isRequired,
 	addToCart: PropTypes.func.isRequired,
 	cart: PropTypes.object.isRequired,
+	comments: PropTypes.object.isRequired,
+	getCommentByIdBook: PropTypes.func.isRequired,
+	postComment: PropTypes.func.isRequired,
+	ratingBook: PropTypes.func.isRequired,
+	addToWishList: PropTypes.func.isRequired,
+	getWishList: PropTypes.func.isRequired,
+	getRatingBook: PropTypes.func.isRequired,
+	getRatingBookUser: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
 	books: state.books,
-	cart: state.cart
+	cart: state.cart,
+	comments: state.comments,
+	ratings: state.ratings,
+	auth: state.auth
 });
   
 const mapDispatchToProps = {
 	getBookById,
 	addToCart,
+	getCommentByIdBook,
+	postComment,
+	ratingBook,
+	addToWishList,
+	getWishList,
+	getRatingBook,
+	getRatingBookUser
 };
   
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps,
-  )(Product);
+  )(withRouter(Product));

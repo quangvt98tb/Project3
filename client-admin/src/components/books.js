@@ -1,18 +1,16 @@
 import React from 'react';
 import { List, Datagrid, Edit, Create, SimpleForm, DateField, TextField, 
         EditButton, TextInput, ReferenceField , ReferenceInput, minValue,
-        LongTextInput, DateInput, SelectInput, NumberInput , ArrayField,
+        LongTextInput, DateInput, SelectInput, NumberInput , ArrayField,DisabledInput,
         required, number, BooleanInput, Filter} from 'react-admin';
 
+const validateUid = [required('Không được bỏ trống!')]; 
 const validateName = [required('Không được bỏ trống!')];
 const validateQuantity = [ number(),minValue(0)];
 
 const BookFilter = (props) => (
     <Filter {...props}>
-        <TextInput label="Tên sách" source="name" alwaysOn />
-        <ReferenceInput label="Thể loại" source="categoryId" reference="Categories" alwaysOn>
-            <SelectInput optionText="name" />
-        </ReferenceInput>
+        <TextInput label="Tên sách" source="name" alwaysOn/>
         <TextInput label="Tác giả" source="author" alwaysOn />
     </Filter>
 );
@@ -23,6 +21,12 @@ export const BookList = (props) => (
             <TextField label="UID sách" source="uid" />
             <TextField label="Tên sách" source="name" />
             <ReferenceField  label="Tác giả" reference="Authors" source="authorId">
+                <TextField source="name" />
+            </ReferenceField>
+            <ReferenceField  label="Thể loại" reference="Categories" source="categoryId">
+                <TextField source="name" />
+            </ReferenceField>
+             <ReferenceField  label="Nhà xuất bản" reference="Publishers" source="publisherId">
                 <TextField source="name" />
             </ReferenceField>
             <TextField label="Ảnh" source="imgURL" />
@@ -37,16 +41,16 @@ export const BookList = (props) => (
 export const BookEdit = (props) => (
     <Edit title="Thông tin chi tiết" {...props}>
         <SimpleForm>
-            <TextInput label="UID sách" source="uid"  />
+            <DisabledInput label="UID sách" source="uid" />
             <TextInput label="Tên sách" source="name" validate={validateName} />
-            {/* <ReferenceInput   label="Thể loại" reference="Categories" source="categoryId">
+            <ReferenceInput   label="Thể loại" reference="Categories" source="categoryId">
                 <SelectInput optionText="name" />
-            </ReferenceInput> */}
+            </ReferenceInput>
             <LongTextInput label="Giới thiệt" source="description" />
             <TextInput label="Ảnh" source="imgURL" />
-            {/* <ReferenceInput   label="Nhà xuất bản" reference="Publishers" source="publisherId">
+            <ReferenceInput   label="Nhà xuất bản" reference="Publishers" source="publisherId">
                 <SelectInput optionText="name" />
-            </ReferenceInput> */}
+            </ReferenceInput> 
              <ReferenceInput   label="Tác giả" reference="Authors" source="authorId">
                 <SelectInput optionText="name" />
             </ReferenceInput>
@@ -60,16 +64,16 @@ export const BookEdit = (props) => (
 export const BookCreate = (props) => (
     <Create title="Thêm sách mới" {...props}>
         <SimpleForm>
-            <TextInput label="UID sách" source="uid"  />
+            <TextInput label="UID sách" source="uid" validate={validateUid} />
             <TextInput label="Tên sách" source="name" validate={validateName} />
-            {/* <ReferenceInput   label="Thể loại" reference="Categories" source="categoryId">
+            <ReferenceInput   label="Thể loại" reference="Categories" source="categoryId">
                 <SelectInput optionText="name" />
-            </ReferenceInput> */}
+            </ReferenceInput> 
             <TextInput label="Miêu tả" source="description" />
             <TextInput label="Ảnh" source="imgURL" />
-            {/* <ReferenceInput   label="Nhà xuất bản" reference="Publishers" source="publisherId">
+            <ReferenceInput   label="Nhà xuất bản" reference="Publishers" source="publisherId">
                 <SelectInput optionText="name" />
-            </ReferenceInput> */}
+            </ReferenceInput> 
              <ReferenceInput   label="Tác giả" reference="Authors" source="authorId">
                 <SelectInput optionText="name" />
             </ReferenceInput>

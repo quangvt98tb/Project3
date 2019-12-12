@@ -93,16 +93,18 @@ const SwappingSquaresSpinner = ({
   style,
   ...props
 }) => (
-  <SwappingSquare
-    size={size}
-    color={color}
-    animationDuration={animationDuration}
-    className={`swapping-squares-spinner${className ? ' ' + className : ''}`}
-    style={style}
-    {...props}
-  >
-    {generateSpinners(4)}
-  </SwappingSquare>
+  <div className="d-flex justify-content-center align-items-center" style={{height: 200}}>
+    <SwappingSquare
+      size={size}
+      color={color}
+      animationDuration={animationDuration}
+      className={`swapping-squares-spinner${className ? ' ' + className : ''}`}
+      style={style}
+      {...props}
+    >
+      {generateSpinners(4)}
+    </SwappingSquare>
+  </div>
 );
 
 SwappingSquaresSpinner.propTypes = propTypes;

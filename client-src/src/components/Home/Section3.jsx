@@ -11,37 +11,6 @@ import { getAllBooks, getByGenres } from '../../actions/book.action'
 import PropTypes from 'prop-types';
 import SwappingSquaresSpinner from '../common/SwappingSquaresSpinner';
 
-// const settings1 = {
-//   dots: true,
-//   infinite: true,
-//   centerPadding: "50px",
-//   speed: 500,
-//   focusOnSelect: true,
-//   slidesToShow: 8,
-//   slidesToScroll: 1,
-//   autoplay: true,
-//   swipeToSlide: true,
-//   draggable: true,
-//   centerMode: true,
-//   responsive: [
-//     {
-//     breakpoint: 1000,
-//     settings: {
-//     arrows: false,
-//     centerMode: true,
-//     centerPadding: '50px',
-//     slidesToShow: 3
-//     }
-//     },
-//     {
-//     breakpoint: 600,
-//     settings: {
-//     arrows: false,
-//     centerMode: true,
-//     centerPadding: '50px',
-//     slidesToShow: 1
-//     }} ]
-// };
 const settings2 = {
   dots: true,
   infinite: false,
@@ -89,7 +58,7 @@ class Section3 extends Component {
   }
   
   render(){
-    const Genres = ["Tiểu thuyết", "Khoa học", "Kinh doanh", "Lãng mạn"]
+    const Genres = ["Tiểu thuyết", "Triết học", "Truyện ngắn", "Kinh doanh"]
     const { books, loading } = this.props.books;
 
     let Content =

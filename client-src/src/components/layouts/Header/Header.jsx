@@ -6,6 +6,7 @@ import { logoutUser } from '../../../actions/auth.action';
 import classnames from 'classnames';
 import Logo from '../../../image/core-img/logo.png';
 import MiniCart from '../../Cart/MiniCart';
+import MiniProfile from '../../Profile/MiniProfile';
 // import Logo from '../../../image/core-img/logo.png';
 import Message from '../../../image/core-img/message.png';
 import Placeholder from '../../../image/core-img/placeholder.png';
@@ -35,6 +36,13 @@ class Header extends Component {
         <li><Link to="/orders">ĐƠN HÀNG</Link></li>
         <li><a onClick={e => this.onLogoutClick(e)}>ĐĂNG XUẤT</a></li>
       </>
+    );
+    const profileMini = !isAuthenticated ? (
+      <></>
+    ) : (
+      <a>
+        <MiniProfile/>
+      </a>
     );
     const Barcontent =
     (
@@ -88,15 +96,17 @@ class Header extends Component {
                     </a>
                     <div style={{width: 15}}></div>
                     <Link to="/search">
-                      <a>
-                        <i class="fas fa-search" style={{color: "#ffbb38", fontSize: 20, marginTop: 4}}></i>
-                        {/* <span style={{marginLeft: 5}}>Tìm kiếm</span> */}
-                      </a>
+                      <i class="fas fa-search" style={{color: "#ffbb38", fontSize: 20, marginTop: 4}}></i>
                     </Link>
-                    {/* <HeaderIcons/> */}
+                    <div style={{width: 15}}></div>
                     <a>
                       <MiniCart/>
                     </a>
+                    <div style={{width: 15}}></div>
+                    {/* <a>
+                      <MiniProfile/>
+                    </a> */}
+                    {profileMini}
                   </div>
                 </div>
             </div>

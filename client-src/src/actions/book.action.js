@@ -6,6 +6,9 @@ import {
     GET_ERRORS,
     GET_AUTOCOMPLETE,
     SEARCH_BOOKS,
+    GET_WISH_LIST,
+    REMOVE_BOOK_WISHLIST,
+    ADD_TO_WISHLIST,
   } from './actionTypes';
 import axios from 'axios'
 
@@ -28,14 +31,13 @@ export const getAllBooks = () => async dispatch => {
   };
 
 export const getByGenres = (genre) => dispatch => {
-  console.log(1,genre);
   dispatch(setBookLoading());
   axios
     .post('/Categories/listBook', {genre: genre})
     .then(res => {
       dispatch({
         type: GET_BY_GENRES,
-        payload: res.data.rows,
+        payload: res.data,
       })  
     })
     .catch(err =>
@@ -46,23 +48,6 @@ export const getByGenres = (genre) => dispatch => {
     );
 }
 
-export const get5Genres = () => dispatch => {
-  dispatch(setBookLoading());
-  axios
-    .get(`/Categories/list`)
-    .then(res =>
-      dispatch({
-        type: GET_ALL_BOOKS,
-        payload: res.data.data.rows,
-      }),     
-    )
-    .catch(err =>
-      dispatch({
-        type: GET_ALL_BOOKS,
-        payload: {},
-      }),
-    );
-};
 
 export const getBookById = (bookId) => dispatch => {
   dispatch(setBookLoading());
@@ -73,6 +58,7 @@ export const getBookById = (bookId) => dispatch => {
         type: GET_BOOK,
         payload: res.data.data,
       })
+      // console.log(res.data.data)
     })
     .catch(err =>
       dispatch({
@@ -102,3 +88,32 @@ export const setBookLoading = () => {
       type: BOOK_LOADING,
     };
   };
+
+export const getWishList = (userId) => async dispatch => {
+  const res = await axios.post(`/Books/listWishList`, {userId: userId});
+  dispatch({
+    type: GET_WISH_LIST,
+    payload: res.data.data
+  })
+}
+
+export const addToWishList = (bookId, userId) => async dispatch => {
+  const res = await axios.post(`/Books/addToWishList`, {userId: userId, bookId: bookId, action: "add"});
+  dispatch({
+    type: ADD_TO_WISHLIST,
+    payload: 'success'
+  })
+  // dispatch({})
+}
+
+export const removeBookWishList = (bookId) => async dispatch => {
+  let userId = localStorage.userId
+  const res = await axios.post(`Books/addToWishList`, {userId: userId, bookId: bookId, action: "remove"});
+  // console.log(res)
+  dispatch({
+    type: REMOVE_BOOK_WISHLIST,
+    payload: res.data.data
+  })
+  
+}
+

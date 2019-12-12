@@ -14,7 +14,7 @@
         "type": "string",
         "required": true
       },
-      "descreption": {
+      "description": {
         "type": "string"
       }
     },

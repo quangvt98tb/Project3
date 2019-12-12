@@ -1,20 +1,19 @@
 import React from 'react';
 import { List, Datagrid, Edit, Create, 
-        SimpleForm, DateField, TextField, EditButton, DisabledInput, 
+        SimpleForm, DateField, TextField, EditButton, DisabledInput, NumberInput,BooleanInput,
         TextInput, LongTextInput, DateInput } from 'react-admin';
 
 export const PromotionList = (props) => (
     <List {...props}>
         <Datagrid>
-            <TextField source="name" />
-            <TextField source="description" />
-            <TextField source="minus" />
-            <TextField source="devide" />
-            <TextField source="beginAt" />
-            <TextField source="endAt" />
-            <TextField source="createdAt" />
-            <TextField source="updateAt" />
-            <TextField source="enable" />
+            <TextField label="Mã giảm giá" source="name"/>
+            <TextField label="Chi tiết" source="description" />
+            <TextField label="Số lần sử dụng" source="count" />
+            <TextField label="Số tiền được trừ" source="minus" />
+            <TextField label="Phần trăm" source="devide" />
+            <TextField label="Ngày bắt đầu" source="beginAt" />
+            <TextField label="Ngày kết thúc" source="endAt" />
+            <TextField label="Khả dụng " source="enable" />
             <EditButton/>
         </Datagrid>
     </List>
@@ -23,32 +22,28 @@ export const PromotionList = (props) => (
 export const PromotionEdit = (props) => (
     <Edit {...props}>
         <SimpleForm>
-            <DisabledInput source="uid" />
-            <TextInput source="name" />
-            <TextInput source="description" />
-            <TextInput source="minus" />
-            <TextInput source="devide" />
-            <TextInput source="beginAt" />
-            <TextInput source="endAt" />
-            <TextInput source="createdAt" />
-            <TextInput source="updateAt" />
-            <TextInput source="enable" />
+            <TextInput label="Mã giảm giá" source="name"/>
+            <LongTextInput label="Chi tiết" source="description" />
+            <NumberInput label="Số lần sử dụng" source="count" />
+            <NumberInput label="Số tiền được trừ" source="minus" />
+            <NumberInput label="Phần trăm" source="devide" />
+            <DateInput label="Ngày bắt đầu" source="beginAt" />
+            <DateInput label="Ngày kết thúc" source="endAt" />
+            <BooleanInput label="Khả dụng " source="enable" />
         </SimpleForm>
     </Edit>
 );
 export const PromotionCreate = (props) => (
     <Create {...props}>
         <SimpleForm>
-            <DisabledInput source="uid" />
-            <TextInput source="name" />
-            <TextInput source="description" />
-            <TextInput source="minus" />
-            <TextInput source="devide" />
-            <TextInput source="beginAt" />
-            <TextInput source="endAt" />
-            <TextInput source="createdAt" />
-            <TextInput source="updateAt" />
-            <TextInput source="enable" />
+            <TextInput label="Mã giảm giá" source="name"/>
+            <LongTextInput label="Chi tiết" source="description" />
+            <NumberInput label="Số lần sử dụng" source="count" />
+            <NumberInput label="Số tiền được trừ" source="minus" />
+            <NumberInput label="Phần trăm" source="devide"/>
+            <DateInput label="Ngày bắt đầu" source="beginAt" />
+            <DateInput label="Ngày kết thúc" source="endAt" />
+            <BooleanInput label="Khả dụng " source="enable" />
         </SimpleForm>
     </Create>
 );

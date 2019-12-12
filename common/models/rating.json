@@ -30,7 +30,7 @@
   "relations": {
     "belongsToUser": {
       "type": "belongsTo",
-      "model": "User",
+      "model": "Customer",
       "foreignKey": "userId"
     },
     "belongsToBook": {
@@ -41,10 +41,10 @@
   },
   "foreignKeys": {
     "userId": {
-      "name": "comment_user",
+      "name": "comment_customer",
       "foreignKey": "userId",
       "entityKey": "id",
-      "entity": "User"
+      "entity": "Customer"
     },
     "bookId": {
       "name": "comment_book",
@@ -53,13 +53,6 @@
       "entity": "Book"
     }
   },
-  "acls": [
-    {
-      "accessType": "READ",
-      "principalType": "ROLE",
-      "principalId": "$everyone",
-      "permission": "ALLOW"
-    }
-  ],
+  "acls": [],
   "methods": {}
 }

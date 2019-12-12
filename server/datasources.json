@@ -1,7 +1,13 @@
 {
   "mydb": {
-    "connector": "loopback-connector-mongodb",
-    "url": "mongodb+srv://ngocanh2162:26121997@project3-wz8nw.mongodb.net/Project3?retryWrites=true&w=majority"
+      "host": "localhost",
+      "port": 27017,
+      "url":  "",
+      "database": "BookStore",
+      "password": "123456",
+      "name": "mydb",
+      "user": "nhom13thayhieunk",
+      "connector": "mongodb"
   },
   "emailDs": {
     "name": "emailDs",
@@ -16,8 +22,8 @@
           "rejectUnauthorized": false
         },
         "auth": {
-          "user": "email@address.com",
-          "pass": "password"
+          "user": "project1.20181k61@gmail.com",
+          "pass": "project1baochay"
         }
       }
     ]

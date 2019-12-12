@@ -1,9 +1,9 @@
 import React from 'react';
-import { List, Datagrid, Edit, Create, SimpleForm, ArrayInput, SimpleFormIterator,
-        TextField, EditButton, DisabledInput, NumberInput, minValue, number,
+import { List, Datagrid, Create, SimpleForm, ArrayInput, SimpleFormIterator,ShowButton,Show,SimpleShowLayout,
+        TextField, DisabledInput, NumberInput, minValue, number, required, DateField, DateInput,
         TextInput, ReferenceInput, SelectInput, ReferenceField, Filter, ArrayField } from 'react-admin';
 
-const vaildatesNumber = [number('Nhập số'), minValue(0)]
+const vaildatesNumber = [required('Không được bỏ trống!'), number('Nhập số'), minValue(0)]
 const choices = [
     { status: 'Đã thanh toán'},
     { status: 'Chưa thanh toán' }
@@ -23,17 +23,16 @@ export const ImportOrderList = (props) => (
             <ReferenceField  label="Nhà cung cấp" reference="Suppliers" source="supplierId">
                 <TextField source="name" />
             </ReferenceField>
-            <TextField label="Ngày nhập" source="createdAt" />
+            <TextField label="Ngày nhập" source="createdAt"/>
             <TextField label="Tổng giá" source="subtotal" />
-            <TextField label="Trạng thái" source="status" />
-            <EditButton/>
+            <ShowButton/>
         </Datagrid>
     </List>
 );
 
-export const ImportOrderEdit = (props) => (
-    <Edit title="Thông tin chi tiết" {...props}>
-        <SimpleForm>
+export const ImportOrderShow = (props) => (
+    <Show title="Thông tin chi tiết" {...props}>
+        <SimpleShowLayout>
             <ReferenceField label="Nhà cung cấp" reference="Suppliers" source="supplierId">
                 <TextField source="name" />
             </ReferenceField>
@@ -46,14 +45,13 @@ export const ImportOrderEdit = (props) => (
                         <TextField source="name" />
                     </ReferenceField>
                     <TextField label="Số lượng" source="quantity" />
-                    <TextField label="Giá" source="price" />
+                    <TextField label="Giá nhập" source="price" />
                </Datagrid>
             </ArrayField>
             <TextField label="Tổng giá" source="subtotal" />
-            <TextField label="Ngày nhập" source="createdAt" />
-            <TextField label="Trạng thái" source="status" />
-        </SimpleForm>
-    </Edit>
+            <DateField label="Ngày nhập" source="createdAt" />
+        </SimpleShowLayout>
+    </Show>
 );
 export const ImportOderCreate = (props) => (
     <Create title="Thêm đơn nhập hàng mới" {...props}>
@@ -66,14 +64,11 @@ export const ImportOderCreate = (props) => (
                 <ReferenceInput  label="UID sách" reference="Books" source="bookId">
                     <SelectInput optionText="uid" />
                 </ReferenceInput>
-                {/* <ReferenceField  label="Tên sách" reference="Books" source="bookId">
-                    <TextField source="name" />
-                </ReferenceField> */}
                 <TextInput label="Số lượng" source="quantity" validate={vaildatesNumber} />
-                <TextInput label="Giá" source="price" validate={vaildatesNumber}/>
+                <TextInput label="Giá nhập" source="price" validate={vaildatesNumber} />
             </SimpleFormIterator>
         </ArrayInput>
-        <SelectInput label="Trạng thái" source="status" choices={choices} optionText="status" optionValue="status" />
+        <DateInput label="Ngày nhập" source="createdAt" />
         <NumberInput label="Tổng giá" source="subtotal" validate={vaildatesNumber} />
         </SimpleForm>
     </Create>

@@ -107,6 +107,20 @@ module.exports = function(ImportOrder) {
         }
     }
 
+    ImportOrder.deleteIO = async function(id) {
+        let [err, importOrder] = await to(ImportOrder.findOne({where: {id: id}}))
+        if (importOrder == null) {
+            return [200, 'can not find import order']
+        }
+        ImportOrder.destroyById(importOrder.id)
+        return [200, 'success']
+    }
+
+    ImportOrder.listIO = async function() {
+        let data = await to(ImportOrder.find())
+        return data
+    }
+
     ImportOrder.remoteMethod(
         'ListBySupplier', {
             http: {path: '/listBySupplier', verb: 'post' },
@@ -133,10 +147,49 @@ module.exports = function(ImportOrder) {
 
     ImportOrder.remoteMethod(
         'createIO', {
-            http: {path: '/createIO', verb: 'post' },
+            http: {path: '/create', verb: 'post' },
             accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
             returns: { arg: 'data',type: 'object'}
       }
     )
+    
+    ImportOrder.remoteMethod(
+        'deleteIO', {
+            http: {path: '/delete', verb: 'delete'},
+            accepts: [
+                {arg: 'id', type: 'string', required: true}
+            ],
+            returns: [
+                {arg: 'status', type: 'number'},
+                {arg: 'message', type: 'string'}],
+        },
+    )
+
+    ImportOrder.remoteMethod(
+        'listIO', {
+            http: {path: '/list', verb: 'get'},
+            returns: [
+                {arg: 'status', type: 'number'},
+                {arg: 'message', type: 'string'}],
+        },
+    )
+
+    ImportOrder.observe('after save', async function(ctx){
+        let data = ctx.instance
+        let dataBookList = data.bookList
+        console.log(1,dataBookList)
+        let Book = app.models.Book
+
+        for (var i=0; i< dataBookList.length; i++) {
+            let book = await Book.findById(dataBookList[i].bookId)
+            let newQuantity = book.quantity + parseInt(dataBookList[i].quantity)
+            let bookData = {
+                id: book.id,
+                quantity: newQuantity
+            }
+            await Book.upsert(bookData)
+        }
+        
+    })
 
 }

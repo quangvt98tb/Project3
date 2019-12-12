@@ -4,7 +4,7 @@ import {
   GET_ORDER_DETAILS,
   ORDER_LOADING,
   DELETE_ORDER,
-  CANCEL_ORDER,
+  GET_ERRORS
 } from './actionTypes';
 
 export const getOrders = () => async dispatch => {
@@ -38,9 +38,26 @@ export const deleteOrder = () => dispatch =>{
 }
 
 export const cancelOrder = (orderCode, status) =>  async dispatch =>{
-  await axios.post(`/ExportOrders/cancelOrder`, {orderId: orderCode});
+  let data = {}
+  data.orderId = orderCode
+  await axios.post(`/ExportOrders/editOrder`, {reqData: data, action: 'cancel'});
       dispatch({
           type: GET_ORDERS,
           status
       })
+}
+
+export const editOrder = (newInfo) => async dispatch => {
+  const res = await axios.post(`/ExportOrders/editOrder`, {reqData: newInfo, action: 'edit'});
+  if (res.data.data == "Confirmed"){
+    dispatch({
+      type: GET_ORDERS,
+      payload: res.data.data
+    })
+  } else {
+    dispatch({
+      type: GET_ERRORS,
+      payload: res.data.data
+    })
+  }
 }

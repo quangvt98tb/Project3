@@ -1,7 +1,7 @@
 import axios from 'axios';
 import setAuthToken from '../utils/setAuthToken';
 // import jwt_decode from 'jwt-decode';
-import { GET_ERRORS, SET_CURRENT_USER } from './actionTypes';
+import { GET_ERRORS, SET_CURRENT_USER, FORGET_PASSWORD, CHANGE_PASSWORD } from './actionTypes';
 import { clearCurrentProfile } from './profile.action';
 
 export const registerUser = (userData, history) => dispatch => {
@@ -30,7 +30,6 @@ export const loginUser = userData => dispatch => {
     .then(res => {
       // save to LocalStorageno
       if (res.data.status !== 400) {
-        console.log(res.data)
         const token = res.data.id;
         const user_id = res.data.userId;
         const cart = {
@@ -38,6 +37,7 @@ export const loginUser = userData => dispatch => {
           total: 0,
           shipping: 10,
           error: "",
+          promo: {}
         }
         //set token to ls
         localStorage.setItem('jwtToken', token);
@@ -56,7 +56,6 @@ export const loginUser = userData => dispatch => {
       }
     })
     .catch(err => {
-      console.log(err)
       return dispatch({
         type: GET_ERRORS,
         payload: err.data,
@@ -71,12 +70,57 @@ export const setCurrentUser = token => {
   };
 };
 
+export const forgetPassword = (email) => dispatch => {
+  axios.post(`customer/forgotPass`, {email: email})
+  .then(res => {
+    console.log(res)
+    if (res.data.status === 400){
+      dispatch({
+        type: GET_ERRORS,
+        payload: res.data
+      })
+    } else{
+      dispatch({
+        type: GET_ERRORS,
+        payload: {}
+      })
+      dispatch({
+        type: FORGET_PASSWORD,
+        payload: 'success'
+      })
+    }
+  })
+}
+export const changePassword = (password1, password2, passwordOld) => async dispatch => {
+  const userId = localStorage.userId
+  const res = await axios.post(`customer/resetPass`, {userId: userId, pass1: password1, pass2: password2, passOld: passwordOld})
+  if (res.status === 204){
+    dispatch({
+      type: CHANGE_PASSWORD,
+      payload: 'success'
+    })
+    dispatch({
+      type: GET_ERRORS,
+      payload: {}
+    })
+  } else{
+    dispatch({
+      type: CHANGE_PASSWORD,
+      payload: 'failed'
+    })
+    dispatch({
+      type: GET_ERRORS,
+      payload: res.data
+    }) 
+  }
+  // })
+}
+
 // Log user out
 export const logoutUser = () => dispatch => {
   axios
   .post('customer/logout')
   .then( res => {
-    console.log(res)
   // Remove token from localStorage
   localStorage.removeItem('jwtToken');
   localStorage.removeItem('userId')

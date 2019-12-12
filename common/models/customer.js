@@ -2,10 +2,12 @@ let to = require('await-to-js').to
 let FD = require('../formatDate')
 var config = require('../../server/config.json')
 var path = require('path')
-var senderAddress = 'ngocanh2162@gmail.com'
+var senderAddress = 'project1.20181k61@gmail.com'
 const validateRegisterInput = require('../validation/register');
 const validateLoginInput = require('../validation/login');
 const validateUpdateCustomer = require('../validation/updateCustomer');
+const validateResetPass = require('../validation/resetPassword');
+
 'use_strict';
 
 module.exports = function(Customer) {
@@ -107,70 +109,35 @@ module.exports = function(Customer) {
     }
 
     // Admin block User
-    Customer.blockCustomer = async function(reqData){
-        try {
-            customer = await Customer.findByIdAndUpdate({id: reqData.id}, reqData.enable)
-            return customer
-        } catch (err) {
-            console.log('block Customer', err)
-            throw err
-        }
-    }
-
-    // Amdin create Admin
-    Customer.createAdmin = async function(reqData){
-        const { errors, isValid } = validateRegisterInput(reqData);
-        if (!isValid) {
-            errors.status = 400
-            return [400, errors]
-        }
-        let RoleMapping = app.models.RoleMapping
-        let Role = app.models.Role
-        let User = app.models.User
-        let adminData = {
-            email: reqData.email,
-            password: reqData.password
-        }
-        try {
-            let [err, roleAdmin] = await to(Role.findOne({where: {name: "admin"}}))
-            admin = await User.create(adminData)
-            const roleData = {
-                principalType: RoleMapping.USER,
-                principalId: admin.id,
-                roleId: roleAdmin.id
-            }
-            try{
-                roleMapping = await to(RoleMapping.create(roleData))
-                return roleData
-            } catch(err){
-                console.log('create Admin roleMapping', err)
-                throw err
-            }
-        } catch (error) {
-            console.log('create Admin', error)
-            throw error
-        }
-    }
+    // Customer.blockCustomer = async function(reqData){
+    //     try {
+    //         customer = await Customer.findByIdAndUpdate({id: reqData.id}, reqData.enable)
+    //         return customer
+    //     } catch (err) {
+    //         console.log('block Customer', err)
+    //         throw err
+    //     }
+    // }
 
     //Login Customer validateLoginInput
     Customer.loginCustomer = async function(reqData){
         const { errors, isValid } = validateLoginInput(reqData);
         if (!isValid) {
             errors.status = 400
-            return [400, errors]
+            return errors
         }
         try {
             let [err, customer] = await to(Customer.findOne({where: {email: reqData.email}}))
             if (customer == null) {
                 errors.status = 400
                 errors.email = "Email này chưa đăng ký là thành viên"
-                return [400, errors]
+                return errors
             }
             let data = await Customer.login(reqData)
-            return [200, data]
+            return data
         } catch (error) {
             console.log('login Customer', error)
-            throw error
+            return {status: 400, login: "Đăng nhập không thành công"}
         }
     }
     // Guest create Customer (Register)
@@ -199,14 +166,50 @@ module.exports = function(Customer) {
                 return [400, errors]
             }
             customerData = await Customer.create(customerData)
-            // let Cart = app.models.Cart
-            // var CartData = {}
-            // CartData.userId = customerData.id
-            // cart = Cart.create(CartData)
             return [200, 'Thanh Cong']
         } catch (error) {
             console.log('create Customer', error)
             throw error
+        }
+    }
+
+    Customer.forgotPass = async function(email){
+        const { errors, isValid } = validateLoginInput({email, password: "123"});
+        if (!isValid) {
+            errors.status = 400
+            return errors
+        }
+        let [err, customer] = await to(Customer.findOne({where: {email: email}}))
+        if (customer == null) {
+            errors.status = 400
+            errors.email = "Email này chưa đăng ký là thành viên"
+            return errors
+        }
+        let newpass = Array(10).fill("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz").map(function(x) { return x[Math.floor(Math.random() * x.length)] }).join('')
+        Customer.setPassword(customer.id, newpass)
+        Customer.app.models.Email.send({
+          to: email,
+          from: senderAddress,
+          subject: '[BOOKSTOR] Password reset',
+          text: 'Your new password is: "' + `${newpass}` + '"'
+        }, function(err) {
+          if (err) return console.log('> error sending password reset email');
+          console.log('> sending password reset email to:', email);
+        });
+        return []
+    }
+    
+    Customer.resetPass = async function(userId, pass1, pass2, passwOld){
+        const { errors, isValid } = validateResetPass(pass1, pass2, passwOld);
+        if (!isValid) {
+            errors.status = 400
+            return errors
+        }
+        try{
+            await Customer.changePassword(userId, passwOld, pass1)
+        } catch (err){
+            err.passwordOld = err.message
+            return err
         }
     }
     
@@ -245,22 +248,11 @@ module.exports = function(Customer) {
         returns: { arg: 'data', root: true }
     })
 
-    Customer.remoteMethod('createAdmin', 
-    {
-        http: {path: '/createAdmin', verb: 'post'},
-        accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
-        returns: { arg: 'data', root: true }
-    })
-
-
     Customer.remoteMethod('loginCustomer', 
     {
         http: {path: '/loginCustomer', verb: 'post'},
         accepts: {arg: 'reqData', type: 'Object', http: {source: 'body'}},
-        returns: [
-            { arg: 'status', root: true },
-            { arg: 'data', root: true }
-        ]   
+        returns: { arg: 'data', root: true }
     })
 
     Customer.remoteMethod('createCustomer', 
@@ -273,49 +265,22 @@ module.exports = function(Customer) {
         ]   
     })
 
-
-    //send password reset link when requested
-    Customer.on('resetPasswordRequest', function(info) {
-      var url = 'http://' + config.host + ':' + config.port + '/reset-password';
-      var html = 'Click <a href="' + url + '?access_token=' +
-          info.accessToken.id + '">here</a> to reset your password';
-
-      Customer.app.models.Email.send({
-        to: info.email,
-        from: senderAddress,
-        subject: 'Password reset',
-        html: html
-      }, function(err) {
-        if (err) return console.log('> error sending password reset email');
-        console.log('> sending password reset email to:', info.email);
-      });
-    });
-
-    //render UI page after password change
-    Customer.afterRemote('changePassword', function(context, Customer, next) {
-      context.res.render('response', {
-        title: 'Password changed successfully',
-        content: 'Please login again with new password',
-        redirectTo: '/',
-        redirectToLinkText: 'Log in'
-      })
-    })
-    
-    //render UI page after password reset
-    Customer.afterRemote('setPassword', function(context, Customer, next) {
-      context.res.render('response', {
-        title: 'Password reset success',
-        content: 'Your password has been reset successfully',
-        redirectTo: '/',
-        redirectToLinkText: 'Log in'
-      })
+    Customer.remoteMethod('forgotPass', 
+    {
+        http: {path: '/forgotPass', verb: 'post'},
+        accepts: {arg: 'email', type: 'string'},
+        returns: { arg: 'data', root: true }
     })
 
-    Customer.beforeRemote('login', function(context, Customer, next){
-        const { errors, isValid } = validateRegisterInput(context);
-        if (!isValid) {
-            errors.status = 400
-            return [400, errors]
-        }
+    Customer.remoteMethod('resetPass', 
+    {
+        http: {path: '/resetPass', verb: 'post'},
+        accepts: [
+            {arg: 'userId', type: 'string', required: true},
+            {arg: 'pass1', type: 'string'},
+            {arg: 'pass2', type: 'string'},
+            {arg: 'passOld', type: 'string'},
+        ],
+        returns: { arg: 'data', root: true }
     })
 }

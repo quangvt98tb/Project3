@@ -2,8 +2,6 @@ import {
     GET_ORDERS,
     GET_ORDER_DETAILS,
     ORDER_LOADING,
-    DELETE_ORDER,
-    CANCEL_ORDER,
   } from '../actions/actionTypes';
   
 const initialState = {
@@ -33,21 +31,6 @@ export default (state = initialState, { type, payload, status }) => {
                 order: payload,
                 loading: false
             };
-        case CANCEL_ORDER:
-            console.log(status)
-            if (status === "Confirmed"){
-                state.order.status = "Canceled";  
-                return{
-                    ...state,
-                    error: "success"
-                }
-            }
-            else {
-                return{
-                    ...state,
-                    error: "error",
-                }
-            }
 
         default:
             return state;

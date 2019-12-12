@@ -5,6 +5,7 @@ import {
   DELETE_ALL_FROM_CART,
   CHANGE_QUANTITY,
   CHECKOUT,
+  GET_PROMOS
 } from './actionTypes';
 
 export const addToCart = (productData) => async dispatch =>{
@@ -50,10 +51,28 @@ export const changeQuantity = (dataList, shipping) => dispatch =>{
     )
 };
 
-export const checkOut = () => dispatch =>{
+export const checkOut = (promo) => dispatch =>{
   dispatch({
     type: CHECKOUT,
-    payload: "success",
+    payload: promo,
     // payload: [],
   })
+}
+
+export const getPromos = (userId) => async dispatch => {
+  const res = await axios.post(`Promotions/listEnablePromotionForUser`, {userId: userId});
+  dispatch({
+    type: GET_PROMOS,
+    payload: res.data
+  })
+  // dispatch({
+  //   type: GET_PROMOS,
+  //   payload: [
+  //     {
+  //       "total": 1,
+  //       "minus": 0,
+  //       "divide": 0.5
+  //     }
+  //   ]
+  // })
 }

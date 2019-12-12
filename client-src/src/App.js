@@ -17,6 +17,9 @@ import Checkout from './components/Checkout/Checkout';
 import TableP from './components/Order/TablePagination';
 import OrderDetails from './components/Order/OrderDetails';
 import Search from './components/Search/Search';
+import ForgetPassword from './components/auth/ForgetPassword/ForgetPassword';
+import ChangePassword from './components/Profile/ChangePassword';
+import WishList from './components/WishList/WishList';
 
 if (localStorage.jwtToken) {
   setAuthToken(localStorage.jwtToken);
@@ -24,7 +27,7 @@ if (localStorage.jwtToken) {
   store.dispatch(setCurrentUser(localStorage.jwtToken));
   // Check for expried token
   const currentTime = Date.now() / 1000;
-  console.log(localStorage.ttl)
+  // console.log(localStorage.ttl)
   // if (localStorage.ttl < currentTime) {
   //   console.log("11111111111111111111111111111");
 
@@ -43,6 +46,7 @@ function App() {
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
+          <Route exact path="/forgetpassword" component={ForgetPassword} />
           <Route exact path="/books/:id" component={ProductDetails} />
           <Route exact path="/cart" component={Cart} />
           <Route exact path="/search" component={Search} />
@@ -50,6 +54,8 @@ function App() {
           <PrivateRoute exact path="/checkout" component={Checkout} />
           <PrivateRoute exact path="/orders" component={TableP} />
           <PrivateRoute exact path="/orderdetails/:id" component={OrderDetails} />
+          <PrivateRoute exact path="/changepassword" component={ChangePassword} />
+          <PrivateRoute exact path="/wishlist" component={WishList} />
         </BrowserRouter>
         <Footer />
 

@@ -4,7 +4,10 @@ import {
     GET_ALL_BOOKS,
     GET_BY_GENRES,
     GET_AUTOCOMPLETE,
-    SEARCH_BOOKS
+    SEARCH_BOOKS,
+    GET_WISH_LIST,
+    REMOVE_BOOK_WISHLIST,
+    ADD_TO_WISHLIST
   } from '../actions/actionTypes';
   
   const initialState = {
@@ -51,6 +54,21 @@ import {
           books: payload,
           loading: false
         }
+      case GET_WISH_LIST:
+        return {
+          ...state,
+          books: payload,
+          loading: false
+        }
+      case REMOVE_BOOK_WISHLIST:
+        return {
+          ...state,
+          books: payload,
+          loading: false
+        }
+      case ADD_TO_WISHLIST:
+        console.log(payload)
+        return state;
       default:
         return state;
     }

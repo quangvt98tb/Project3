@@ -1,0 +1,8 @@
+{"_id":{"$oid":"5dc915ab04582001ef43bc82"},"name":"NXB Trẻ"}
+{"_id":{"$oid":"5dc915b604582001ef43bc83"},"name":"NXB Tổng hợp TP.HCM","description":"string"}
+{"_id":{"$oid":"5dc915c304582001ef43bc84"},"name":"NXB Văn Học","description":"string"}
+{"_id":{"$oid":"5dc915d404582001ef43bc85"},"name":"Nhã Nam","description":"string"}
+{"_id":{"$oid":"5dc915fa04582001ef43bc86"},"name":"NXB Thế Giới","description":"string"}
+{"_id":{"$oid":"5dc9160904582001ef43bc87"},"name":"NXB Tri thức","description":"string"}
+{"_id":{"$oid":"5dc916a66123df02ce73d14b"},"name":"NXB Hội Nhà Văn","description":"string"}
+{"_id":{"$oid":"5df1288cace4622f9c53cada"},"name":"NXB Kim Đồng","description":"Kim Đồng"}

@@ -23,6 +23,7 @@ export const OrderList = (props) => (
         <Datagrid>
             <TextField source="id" />
             <TextField label="Ngày tạo" source="createdAt" />
+            <TextField label="Ngày update" source="updatedAt" />
             <ReferenceField  label="Khách hàng" reference="customer" source="userId">
                 <TextField source="email" />
             </ReferenceField>
@@ -57,7 +58,10 @@ export const OrderEdit = (props) => (
                   <TextField source="uid" />
                 </ReferenceField>
                 <TextField label="Tiêu đề" source="title" />
-                <TextField label="Số lượng" source="quantity" />
+                <TextField label="Số lượng mua" source="quantity" />
+                <ReferenceField  label="Số lượng sách trong kho" reference="Books" source="bookId">
+                  <TextField source="quantity" />
+                </ReferenceField>
                 <TextField label="Giá" source="price" />
                </Datagrid>
            </ArrayField>
@@ -65,13 +69,3 @@ export const OrderEdit = (props) => (
         </SimpleForm>
     </Edit>
 );
-// export const OrderCreate = (props) => (
-//     <Create {...props}>
-//         <SimpleForm>
-//         <TextInput source="id" />
-//             <TextInput source="createdAt" />
-//             <TextInput source="userId" />
-//             <TextInput source="status" />
-//         </SimpleForm>
-//     </Create>
-// );

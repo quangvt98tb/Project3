@@ -18,7 +18,7 @@ export default class Section1 extends Component {
                 <div className="section-heading">
                   <div className="line" />
                   <p>Tổng quan về</p>
-                  <h2>Cửa hàng sách</h2>
+                  <h3>Cửa hàng sách</h3>
                   <p>của chúng tôi</p>
                 </div>
                 <h6>
