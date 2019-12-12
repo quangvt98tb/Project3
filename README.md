@@ -11,12 +11,12 @@ và cài đặt trong tiện ích mở rộng của trình duyệt: *"React Deve
 # Cài đặt backend và Frontend 
 
 # Cài đặt Server Backend
-1. Tải source code về (*13_hieunk.zip*) hoặc thực hiện lệnh: 
+1. 
 ```
-git clone https://gitlab.com/is_soict/it4421_20191/13_hieunk.git
+git clone 
 ```
 
-2. Sau khi tải về và giải nén
+2. Sau khi tải về
 ```
 cd 13_hieunk
 ```
