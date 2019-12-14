@@ -2,7 +2,7 @@ import React from 'react';
 import { List, Datagrid, Edit, Create, SimpleForm, DateField, TextField, 
         EditButton, TextInput, ReferenceField , ReferenceInput, minValue,
         LongTextInput, DateInput, SelectInput, NumberInput , ArrayField,DisabledInput,
-        required, number, BooleanInput, Filter} from 'react-admin';
+        required, number, BooleanInput, Filter, UrlField} from 'react-admin';
 
 const validateUid = [required('Không được bỏ trống!')]; 
 const validateName = [required('Không được bỏ trống!')];
@@ -29,7 +29,7 @@ export const BookList = (props) => (
              <ReferenceField  label="Nhà xuất bản" reference="Publishers" source="publisherId">
                 <TextField source="name" />
             </ReferenceField>
-            <TextField label="Ảnh" source="imgURL" />
+            <UrlField  label="Ảnh" source="imgURL" />
             <TextField label="Số lượng" source="quantity" />
             <TextField label="Giá" source="sellPrice" />
             <TextField label="Đang kinh doanh" source="enable" />

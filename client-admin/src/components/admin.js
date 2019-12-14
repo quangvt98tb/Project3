@@ -16,7 +16,7 @@ export const AdminList = (props) => (
     <List title="Danh sách quản trị viên" filters={<AdminFilter />} {...props}>
         <Datagrid>
             <TextField label="Email" source="email" type="email" />
-            <TextField label="RootAdmin" source="enable" />
+            <TextField label="RootAdmin" source="root" />
         </Datagrid>
     </List>
 );
@@ -32,7 +32,7 @@ export const AdminList = (props) => (
 //             <DisabledInput label="RootAdmin" source="enable" />
 //         </SimpleForm>
 //     </Show>
-// );
+// ); 
 
 export const AdminCreate = (props) => (
     <Create title="Thêm quản trị viên mới" {...props}>

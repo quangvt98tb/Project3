@@ -12,6 +12,10 @@ export const checkOutConfirm = (checkOutData) => async dispatch => {
     //     console.log(res.data.data)
         if (res.data.data === "success" ) {
           dispatch({
+            type: GET_ERRORS,
+            payload: {},   
+          })
+          dispatch({
             type: CHECKOUT_CONFIRM,
             payload: res.data.data,   
           })

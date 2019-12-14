@@ -134,6 +134,17 @@
       }
     }
   },
+  "Admin": {
+    "dataSource": "mydb",
+    "public": true,
+    "options": {
+      "remoting": {
+        "sharedMethods": {
+          "*": true
+        }
+      }
+    }
+  },
   "User": {
     "dataSource": "mydb",
     "public": true

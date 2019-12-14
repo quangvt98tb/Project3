@@ -1,4 +1,4 @@
-import {RATING, RATING_LOADING, GET_RATING_USER} from '../actions/actionTypes'
+import {RATING, RATING_LOADING, GET_RATING_USER, GET_RATING_BOOK} from '../actions/actionTypes'
 
 const initialState = {
     rating: null,
@@ -16,6 +16,11 @@ export default (state = initialState, {type, payload}) => {
         case RATING:
             return {
                 ...state,
+                rating_loading: false
+            }
+        case GET_RATING_BOOK:
+            return {
+                ...state,
                 rating: payload,
                 rating_loading: false
             }
@@ -23,7 +28,7 @@ export default (state = initialState, {type, payload}) => {
             console.log(payload)
             return {
                 ...state,
-                rating_user: payload,
+                rating_user: payload.rate,
                 rating_loading: false
             }
         default: return state

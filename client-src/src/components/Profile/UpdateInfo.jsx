@@ -47,8 +47,16 @@ class UpdateInfo extends Component {
   }
 
   onChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
+    if (e.target.name === "province"){
+      this.setState({ 
+        [e.target.name]: e.target.value,
+        district: getDistricts(e.target.value)[0][0]
+      });
+    } else{
+      this.setState({ [e.target.name]: e.target.value });
+    }
   }
+
   onSubmit(e) {
     e.preventDefault();
     const {
@@ -83,6 +91,8 @@ class UpdateInfo extends Component {
       details,
       errors,
     } = this.state;
+
+    console.log(province, district)
 
     return (
       <div className="accinfo-2">
@@ -308,6 +318,7 @@ class UpdateInfo extends Component {
                 value="CẬP NHẬT"
               />
             </div>
+            <div style={{height: 30}}></div>
         </form>
       </div>
     );

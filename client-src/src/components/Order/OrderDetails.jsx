@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import SwappingSquaresSpinner from '../common/SwappingSquaresSpinner.jsx';
 import TextInputAuth from '../../HOC/TextInputAuth';
+import { getCities, getDistricts } from '../../utils/getVNdata';
+const Cities = getCities();
 
 class OrderDetails extends Component {
     constructor(props) {
@@ -20,8 +22,11 @@ class OrderDetails extends Component {
             loading: true,
             fullName: '',
             phone: '',
-            address: '',
-            errors: {}
+            province: '',
+            district: '',
+            ward: '',
+            details: '',
+            errors: {},
         }
 	}
     
@@ -33,24 +38,29 @@ class OrderDetails extends Component {
 
     async componentDidMount(){
         await this.props.getOrderDetails(this.state.orderCode);
-        let address = (this.props.orders.order === null) ? (
-            ''
-        ) : (
-            String(this.props.orders.order.profileData.details + ', ' + this.props.orders.order.profileData.ward + ', ' + this.props.orders.order.profileData.district + ', ' +this.props.orders.order.profileData.province)
-        );
         this.setState({
             ...this.state,
             order: this.props.orders.order,
             loading: this.props.orders.loading,
             fullName: this.props.orders.order.profileData.fullName,
             phone: this.props.orders.order.profileData.phone,
-            address: address
+            details: this.props.orders.order.profileData.details,
+            ward: this.props.orders.order.profileData.ward,
+            district: this.props.orders.order.profileData.district,
+            province: this.props.orders.order.profileData.province,
         })
     }
 
     onChange(e) {
-        this.setState({ [e.target.name]: e.target.value });
-    }
+        if (e.target.name === "province"){
+          this.setState({ 
+            [e.target.name]: e.target.value,
+            district: getDistricts(e.target.value)[0][0]
+          });
+        } else{
+          this.setState({ [e.target.name]: e.target.value });
+        }
+      }
 
     onTrigger(){
         let trig = this.state.cancelTriggered;
@@ -59,16 +69,28 @@ class OrderDetails extends Component {
         })
     }
 
-    onSubmit(e){
+    onSubmit(e, status){
         e.preventDefault();
         const {
-            phone, fullName, address, orderCode
+            phone, fullName, details, ward, district, province, orderCode
         } = this.state;
         let orderId = orderCode;
+        let address = {
+            details, ward, district, province
+        }
         const newInfo = {
             phone, fullName, address, orderId
         };
-        this.props.editOrder(newInfo);
+        if (status === "Confirmed"){
+            this.props.editOrder(newInfo);
+        } else {
+            this.setState({
+                ...this.state,
+                // cancelTriggered: false,
+                isError: true,
+            })
+        }
+        
     }
 
     onConfirm(){
@@ -105,8 +127,9 @@ class OrderDetails extends Component {
 
     render() {
         // const { loading } = this.props.orders;
-        const { order, loading, address, errors, fullName, phone } = this.state;
+        const { order, loading, address, errors, fullName, phone, province, district, ward, details } = this.state;
         let orderData = order;
+        console.log(orderData)
         let profileData = order.profileData;
         let cart = order.cart;
         let payment = null;
@@ -169,7 +192,7 @@ class OrderDetails extends Component {
         let alertFailed= (!this.state.isError) ? (
             <></>
         ) : (
-            <SweetAlert title="Không thể xóa đơn này!" onConfirm={()=>{this.onCancel()}}>
+            <SweetAlert title="Thao tác không thành công do đơn đã qua trạng thái chấp nhận!" onConfirm={()=>{this.onCancel()}}>
             </SweetAlert>
         );
 
@@ -221,7 +244,7 @@ class OrderDetails extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <form noValidate onSubmit={e => this.onSubmit(e)}>
+                            <form noValidate onSubmit={e => this.onSubmit(e, orderData.status)}>
                             <div className="card-body">
                                 <div className="row">
                                     <div className="col-sm-6 col-lg-6 col-md-6">
@@ -380,27 +403,114 @@ class OrderDetails extends Component {
                                     </div>
                                 </div>
                                 <div className="row">
+                                    <div className="col-sm-9 col-lg-9 col-md-9">
+                                        <div className="row">
+                                            <div className="col-sm-6 col-lg-6 col-md-6">
+                                                <div className="">
+                                                    <label style={{fontSize: 15}}>Thành phố<span>:</span></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-xl-8 col-sm-7">
+                                            <select
+                                            className="form-control"
+                                            id="cbCity"
+                                            
+                                            name="province"
+                                            value={province}
+                                            onChange={e => this.onChange(e)}
+                                            >
+                                            {Cities.map((city, index) => {
+                                                return (
+                                                <option key={index} value={city[0]}>
+                                                    {city[1]}
+                                                </option>
+                                                );
+                                            })}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-sm-9 col-lg-9 col-md-9">
+                                        <div className="row">
+                                            <div className="col-sm-6 col-lg-6 col-md-6">
+                                                <div className="">
+                                                    <label style={{fontSize: 15}}>Quận/huyện<span>:</span></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-xl-8 col-sm-7">
+                                            <select
+                                            className="form-control"
+                                            id="cbDistrict"
+                                            
+                                            name="district"
+                                            value={district}
+                                            onChange={e => this.onChange(e)}
+                                            >
+                                            {province &&
+                                                getDistricts(province).map((dis, index) => {
+                                                return (
+                                                    <option key={index} value={dis[0]}>
+                                                    {dis[1]}
+                                                    </option>
+                                                );
+                                                })}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="row">
                                     <div className="col-sm-6 col-lg-6 col-md-6">
                                         <div className="row">
                                             <div className="col-sm-6 col-lg-6 col-md-6">
                                                 <div className="">
-                                                    <label style={{fontSize: 15}}>Địa chỉ giao hàng<span>:</span></label>
+                                                    <label style={{fontSize: 15}}>Phường/xã<span>:</span></label>
                                                 </div>
                                             </div>
+                                            <div className="col-sm-6 col-lg-6 col-md-6">
+                                                <TextInputAuth
+                                                    id="ward"
+                                                    name="ward"
+                                                    className="form-control form-control-lg fs-13 px-3 rounded"
+                                                    placeholder="Phường/Xã"
+                                                    title="Ward"
+                                                    type="text"
+                                                    onChange={e => this.onChange(e)}
+                                                    value={ward}
+                                                    error={errors.ward}
+                                                    
+                                                />
+                                            </div>
                                         </div>
-                                        <div className="col-sm-12">
-                                            <TextInputAuth
-                                                id="address"
-                                                name="address"
-                                                className="form-control form-control-lg fs-13 px-3 rounded"
-                                                placeholder="Địa chỉ"
-                                                title="address"
-                                                type="address"
-                                                onChange={e => this.onChange(e)}
-                                                value={address}
-                                                error={errors.address}
-                                            />
+                                        
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-sm-6 col-lg-6 col-md-6">
+                                        <div className="row">
+                                            <div className="col-sm-6 col-lg-6 col-md-6">
+                                                <div className="">
+                                                    <label style={{fontSize: 15}}>Địa chỉ<span>:</span></label>
+                                                </div>
+                                            </div>
+                                            <div className="col-sm-6 col-lg-6 col-md-6">
+                                                <TextInputAuth
+                                                    id="details"
+                                                    name="details"
+                                                    className="form-control form-control-lg fs-13 px-3 rounded"
+                                                    placeholder="Địa chỉ"
+                                                    title="Details"
+                                                    type="text"
+                                                    onChange={e => this.onChange(e)}
+                                                    value={details}
+                                                    error={errors.details}
+                                                    
+                                                />
+                                            </div>
                                         </div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -411,6 +521,7 @@ class OrderDetails extends Component {
                                     value="CẬP NHẬT THÔNG TIN"
                                 />
                                 </div>
+                                <div style={{height: 30}}></div>
                             </form>
                             <br/>
                             <br/>

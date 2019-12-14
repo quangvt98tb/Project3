@@ -24,6 +24,9 @@
       "type": "number",
       "default": 1
     },
+    "total": {
+      "type": "number"
+    },
     "minus": {
       "type": "number",
       "default": 0

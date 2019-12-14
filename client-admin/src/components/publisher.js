@@ -31,7 +31,7 @@ export const PublisherList = (props) => (
 export const PublisherEdit = (props) => (
     <Edit title="Chỉnh sửa chi tiết" {...props}>
         <SimpleForm>
-            <TextInput label="Nhà xuất bản" source="name" validate={validateName} />
+            <TextInput label="Nhà xuất bản" source="name" />
             <TextInput label="Miêu tả" source="description" />
         </SimpleForm>
     </Edit>
@@ -40,7 +40,7 @@ export const PublisherEdit = (props) => (
 export const PublisherCreate = (props) => (
     <Create title="Thêm nhà xuất bản mới" {...props}>
         <SimpleForm>
-            <TextInput label="Nhà xuất bản" source="name" validate={validateName} />
+            <TextInput label="Nhà xuất bản" source="name" />
             <TextInput label="Miêu tả" source="description" />
         </SimpleForm>
     </Create>

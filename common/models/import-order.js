@@ -177,9 +177,7 @@ module.exports = function(ImportOrder) {
     ImportOrder.observe('after save', async function(ctx){
         let data = ctx.instance
         let dataBookList = data.bookList
-        console.log(1,dataBookList)
         let Book = app.models.Book
-
         for (var i=0; i< dataBookList.length; i++) {
             let book = await Book.findById(dataBookList[i].bookId)
             let newQuantity = book.quantity + parseInt(dataBookList[i].quantity)
@@ -189,7 +187,5 @@ module.exports = function(ImportOrder) {
             }
             await Book.upsert(bookData)
         }
-        
     })
-
 }

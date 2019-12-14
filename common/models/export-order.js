@@ -50,6 +50,16 @@ module.exports = function(ExportOrder) {
             updatedAt: Date()
         }
         try{
+            if (data.promotionId){
+                let Promotion = app.models.Promotion
+                console.log(data.promotionId)
+                let promo = await Promotion.findById(data.promotionId)
+                if (promo.total >= 0){
+                    let newTotal = promo.total - 1 
+                    await Promotion.upsertWithWhere({id: data.promotionId}, {total: newTotal})
+                    console.log(newTotal)
+                }
+            }
             await ExportOrder.create(data)
             return "success"
         } catch (err){
@@ -103,6 +113,12 @@ module.exports = function(ExportOrder) {
                 orderDate: FD.formatDate(data1.createdAt),
                 shipDate: FD.formatDate(data1.updatedAt),
                 status: data1.status
+            }
+            if (data1.promotionId){
+                let promo = await Promotion.findById(data1.promotionId)
+                data.promotion = promo.name
+            } else {
+                data.promotion = ""
             }
             return data 
         } catch (err) {

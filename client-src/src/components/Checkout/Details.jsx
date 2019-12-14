@@ -57,11 +57,23 @@ class Details extends Component {
     }
 
     onChange(e) {
-        this.setState({ [e.target.name]: e.target.value });
-        this.props.getChildState({
-            ...this.state,
-            [e.target.name]: e.target.value,
-        });
+        if (e.target.name === "province"){
+            this.setState({ 
+              [e.target.name]: e.target.value,
+              district: getDistricts(e.target.value)[0][0]
+            });
+            this.props.getChildState({
+                ...this.state,
+                [e.target.name]: e.target.value,
+                district: getDistricts(e.target.value)[0][0]
+            });
+          } else{
+            this.setState({ [e.target.name]: e.target.value });
+            this.props.getChildState({
+                ...this.state,
+                [e.target.name]: e.target.value,
+            });
+          }
     }
 
     render(){

@@ -36,7 +36,8 @@ class Product extends Component {
 	async componentDidMount() {
 		await this.props.getRatingBook(this.state.bookId)
 		await this.props.getWishList(localStorage.userId)
-		await this.props.getRatingBookUser(this.state.bookId, localStorage.userId)
+		await this.props.getRatingBookUser(this.state.bookId, localStorage.userId)	
+		this.setValue(this.props.ratings.rating_user)
 		let temp = this.props.books.books;
 		let a = temp.find(x=>x.id===this.props.match.params.id)
 		if (a !== undefined){
@@ -88,11 +89,12 @@ class Product extends Component {
   render() {
 		const { book, loading } = this.props.books;
 		const {rating, rating_user} = this.props.ratings
+		console.log(this.state.value_rating)
 		const {isAuthenticated} = this.props.auth
 		console.log(isAuthenticated)
 		const rate = isAuthenticated ? (<Rating
 			name="simple-controlled"
-			value={rating_user.rate}
+			value={this.state.value_rating}
 			onChange={(event, newValue) =>
 				{
 					this.setValue(newValue)

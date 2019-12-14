@@ -1,7 +1,7 @@
 import React from 'react';
 import { List, Datagrid, Create, SimpleForm, ArrayInput, SimpleFormIterator,ShowButton,Show,SimpleShowLayout,
         TextField, DisabledInput, NumberInput, minValue, number, required, DateField, DateInput,
-        TextInput, ReferenceInput, SelectInput, ReferenceField, Filter, ArrayField } from 'react-admin';
+        TextInput, ReferenceInput, SelectInput, ReferenceField, Filter, ArrayField, Edit } from 'react-admin';
 
 const vaildatesNumber = [required('Không được bỏ trống!'), number('Nhập số'), minValue(0)]
 const choices = [

@@ -58,6 +58,11 @@ class MiniProfile extends Component {
                     </Row>
                     <Row>
                         <Col>
+                            <Link to="/wishlist" style={styles.centerButtons}><Button outline color="secondary" size="lg" onClick={()=>{this.onClick()}}>Danh sách ưa thích</Button></Link>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
                             <div className="d-flex justify-content-center"><Button onClick={e => this.onLogoutClick(e)}>ĐĂNG XUẤT</Button></div>
                         </Col>
                     </Row>

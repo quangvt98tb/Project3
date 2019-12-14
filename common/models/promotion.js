@@ -9,6 +9,7 @@ module.exports = function(Promotion){
             name: reqData.name,
             description: reqData.description,
             count: reqData.count,
+            total: reqData.total,
             minus: reqData.minus,
             divide: reqData.divide,
             beginAt: reqData.beginAt,
@@ -50,20 +51,28 @@ module.exports = function(Promotion){
           where: { 
             beginAt: {lt: Date.now()},
             endAt: {gt: Date.now()},
-            enable: true
+            enable: true,
           }
         })
         let enablePromotions = []
         for (let i=0; i< promotions.length; i++){
-          let orders = await ExportOrder.find({
-            where: {
-              userId: userId,
-              promotionId: promotions[i].id,
-              status: {inq: ["Confirmed", "Shipping", "Delivered"]}
+          let flag = true
+          if (promotions[i].total){
+            if (promotions[i].total <= 0){
+              flag = false
             }
-          })
-          if (orders.length < promotions[i].count){
-            enablePromotions.push(promotions[i])
+          } 
+          if (flag == true){
+            let orders = await ExportOrder.find({
+              where: {
+                userId: userId,
+                promotionId: promotions[i].id,
+                status: {inq: ["Confirmed", "Shipping", "Delivered"]}
+              }
+            })
+            if (orders.length < promotions[i].count){
+              enablePromotions.push(promotions[i])
+            }
           }
         }
         return enablePromotions

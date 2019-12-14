@@ -1,0 +1,15 @@
+{
+    "name": "Admin",
+    "base": "User",
+    "idInjection": true,
+    "properties": {
+        "root": {
+          "type": "Boolean",
+          "default": false
+        }
+    },
+    "validations": [],
+    "relations": {},
+    "methods": []
+ }
+  

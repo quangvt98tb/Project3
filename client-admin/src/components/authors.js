@@ -1,7 +1,7 @@
 import React from 'react';
 import { List, Datagrid, Edit, Create, SimpleForm, 
     TextField, EditButton, DisabledInput, LongTextInput,
-    TextInput, required, Filter } from 'react-admin';
+    TextInput, required, Filter, Show, SimpleShowLayout} from 'react-admin';
 
 
 const validateName = [required('Không được bỏ trống')];

@@ -59,7 +59,7 @@ class MiniCart extends Component {
                         addedItems.slice(0,5).map(x=> 
                             <div className="item01 d-flex mt--20">
                                 <div className="thumb">
-                                    <a href="product-details.html"><img src="images/product/sm-img/3.jpg" alt="product images"/></a>
+                                    <a href="product-details.html"><img src={x.imgUrl} alt="product images"/></a>
                                 </div>
                                 <div className="content">
                                     <h6><a href="product-details.html" style={{color: "black"}}>{x.title}</a></h6>
@@ -77,9 +77,9 @@ class MiniCart extends Component {
                     </ListGroupItem>
                     <ListGroupItem>
                         <Row>
-                            <Col>
+                            {/* <Col>
                                 <Link to="/checkout" style={styles.centerButtons}><Button outline color="secondary" size="lg" onClick={()=>{this.onClick()}}>Thanh toán</Button></Link>
-                            </Col>
+                            </Col> */}
                             <Col>
                                 <Link to="/cart" style={styles.centerButtons}><Button outline color="secondary" size="lg" onClick={()=>{this.onClick()}}>Giỏ hàng</Button></Link>
                             </Col>

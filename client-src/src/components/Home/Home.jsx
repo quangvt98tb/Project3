@@ -6,8 +6,8 @@ export default class Home extends Component {
   render() {
     return (
       <>
-        <Section1 />
         <Section3 />
+        <Section1 />
       </>
     );
   }
