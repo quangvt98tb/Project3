@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # 13_HieuNK
 =======
 Để chạy chương trình thì máy tính phải cài đặt 
@@ -119,5 +119,5 @@ npm start
 ```
 6. Vào địa chỉ http://localhost:3001 để truy cập vào trang web BookStore
 
->>>>>>> 5c943920aaace96f2218440f5ee5980981fe175e
+
 
